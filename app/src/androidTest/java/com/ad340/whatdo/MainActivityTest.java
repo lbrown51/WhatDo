@@ -23,16 +23,28 @@ public class MainActivityTest {
     public ActivityScenarioRule<MainActivity> activityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
+    /*
+        Tests whether the app bar is displayed
+     */
+    @Test
+    public void hasHeader() {
+        onView(withId(R.id.top_app_bar))
+                .check(matches(isDisplayed()));
+    }
+
+    /*
+        Tests whether the app loads the recycler view
+    */
     @Test
     public void hasRecyclerView() {
         onView(withId(R.id.todo_list_recycler_view))
                 .check(matches(isDisplayed()));
     }
 
-    public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
-        return new RecyclerViewMatcher(recyclerViewId);
-    }
-
+    /*
+        Tests whether the recycler view has at least one of the tasks
+        we expect it to.
+    */
     @Test
     public void hasAtLeastOneTask() {
         onView(withId(R.id.todo_list_recycler_view))

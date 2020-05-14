@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">WhatDo</string>
+    <string name="app_bar_title">Tasks Today</string>
 </resources>
