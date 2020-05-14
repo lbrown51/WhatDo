@@ -28,6 +28,10 @@ public class ToDoItemRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(@NonNull ToDoItemViewHolder holder, int position) {
+        if (toDoList != null && position < toDoList.size()) {
+            ToDoItem toDo = toDoList.get(position);
+            holder.toDoTaskName.setText(toDo.taskName);
+        }
 
     }
 
