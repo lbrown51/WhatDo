@@ -8,14 +8,17 @@ import android.os.Bundle;
 import android.text.Layout;
 import android.widget.TextView;
 
+import com.google.android.material.appbar.MaterialToolbar;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     private List<ToDoItem> toDoList;
-    private TextView dateView;
+    private MaterialToolbar displayMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +41,14 @@ public class MainActivity extends AppCompatActivity {
         int smallPadding = getResources().getDimensionPixelSize(R.dimen.small_item_spacing);
         toDoRecyclerView.addItemDecoration(new ToDoItemDecoration(largePadding, smallPadding));
 
-        dateView = findViewById(R.id.todays_date);
         Calendar today = Calendar.getInstance();
-        dateView.setText(
-                String.format("%02d - %02d - %04d",
-                        today.get(Calendar.DAY_OF_MONTH),
-                        today.get(Calendar.MONTH ) + 1,
-                        today.get(Calendar.YEAR)));
+        displayMessage = findViewById(R.id.top_app_bar);
+        StringBuilder displayText = new StringBuilder(displayMessage.getTitle());
+        displayText.append("\t");
+        displayText.append(today.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH));
+        displayText.append(String.format(" %02d, %04d",
+                today.get(Calendar.DAY_OF_MONTH),
+                today.get(Calendar.YEAR)));
+        displayMessage.setTitle(displayText);
     }
 }
