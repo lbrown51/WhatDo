@@ -12,6 +12,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private List<ToDoItem> toDoList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView toDoRecyclerView = findViewById(R.id.todo_list_recycler_view);
         toDoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        List<ToDoItem> toDoList = new ArrayList<>();
+        toDoList = new ArrayList<>();
         toDoList.add(new ToDoItem("Test"));
         toDoList.add(new ToDoItem("Test"));
         toDoList.add(new ToDoItem("Test"));
