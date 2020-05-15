@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="small_item_spacing">6dp</dimen>
+    <dimen name="large_item_spacing">16dp</dimen>
+    <dimen name="divider_height">1dp</dimen>
+    <dimen name="todo_item_padding">16dp</dimen>
+    <dimen name="recycler_view_padding">8dp</dimen>
+</resources>
