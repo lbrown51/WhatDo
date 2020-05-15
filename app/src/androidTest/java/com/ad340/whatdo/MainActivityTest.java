@@ -1,14 +1,19 @@
 package com.ad340.whatdo;
 
-import android.view.View;
+import android.util.Log;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import org.hamcrest.Matcher;
+import com.google.android.material.appbar.MaterialToolbar;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.Calendar;
+import java.util.Locale;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -16,6 +21,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
@@ -30,6 +37,26 @@ public class MainActivityTest {
     public void hasHeader() {
         onView(withId(R.id.top_app_bar))
                 .check(matches(isDisplayed()));
+    }
+
+    /*
+        Tests whether the header has the correct date
+     */
+    @Test
+    public void headerTextUpdates() {
+        AppCompatActivity activity = (AppCompatActivity) TestUtils.getActivity();
+        Calendar today = Calendar.getInstance();
+        StringBuilder expectedText = new StringBuilder(TestUtils.getString(R.string.app_bar_title));
+        expectedText.append("      ");
+        expectedText.append(today.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH));
+        expectedText.append(String.format(" %02d, %04d",
+                today.get(Calendar.DAY_OF_MONTH),
+                today.get(Calendar.YEAR)));
+        MaterialToolbar appBar = activity.findViewById(R.id.top_app_bar);
+        String displayText = appBar.getTitle().toString();
+        Log.e("displayText", displayText);
+        Log.e("expectedText", expectedText.toString());
+        assertEquals(displayText, expectedText.toString());
     }
 
     /*
