@@ -18,7 +18,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     private List<ToDoItem> toDoList;
-    private MaterialToolbar displayMessage;
+    private MaterialToolbar header;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +42,15 @@ public class MainActivity extends AppCompatActivity {
         toDoRecyclerView.addItemDecoration(new ToDoItemDecoration(largePadding, smallPadding));
 
         Calendar today = Calendar.getInstance();
-        displayMessage = findViewById(R.id.top_app_bar);
-        StringBuilder displayText = new StringBuilder(displayMessage.getTitle());
-        displayText.append("\t");
+        header = findViewById(R.id.top_app_bar);
+        StringBuilder displayText = new StringBuilder(header.getTitle());
+        // probably a more elegant way of doing this
+        // if you save whitespace as a string, it comes out with quotation marks :(
+        displayText.append("      ");
         displayText.append(today.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH));
         displayText.append(String.format(" %02d, %04d",
                 today.get(Calendar.DAY_OF_MONTH),
                 today.get(Calendar.YEAR)));
-        displayMessage.setTitle(displayText);
+        header.setTitle(displayText);
     }
 }
