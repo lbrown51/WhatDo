@@ -16,6 +16,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -76,5 +77,20 @@ public class MainActivityTest {
     public void hasAtLeastOneTask() {
         onView(withId(R.id.todo_list_recycler_view))
                 .check(matches(hasDescendant(withText("Test"))));
+    }
+
+    /*
+        Tests whether the tasks have the correct content.
+    */
+    @Test
+    public void tasksHaveCorrectContent() {
+        onView(withId(R.id.todo_list_recycler_view))
+                .check(matches(hasDescendant(withId(R.id.todo_item_task_name))));
+
+        onView(withId(R.id.todo_list_recycler_view))
+                .check(matches(hasDescendant(withId(R.id.todo_item_due_datetime))));
+
+        onView(withId(R.id.todo_list_recycler_view))
+                .check(matches(hasDescendant(withId(R.id.todo_item_finished_checkbox))));
     }
 }

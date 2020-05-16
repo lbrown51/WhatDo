@@ -1,16 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="@dimen/todo_item_padding">
+    android:layout_marginBottom="@dimen/small_item_spacing"
+    android:layout_margin="@dimen/small_item_spacing">
+
+    <CheckBox
+        android:id="@+id/todo_item_finished_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/todo_item_task_name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="HELLO"
-        style="@style/TextAppearance.MaterialComponents.Headline4" />
+        style="@style/TextAppearance.MaterialComponents.Headline5"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/todo_item_finished_checkbox" />
 
-    <View style="@style/Divider" />
-</LinearLayout>
+    <TextView
+        android:id="@+id/todo_item_due_datetime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12/1/19"
+        style="@style/TextAppearance.Datetime.Body"
+        app:layout_constraintTop_toBottomOf="@id/todo_item_task_name"
+        app:layout_constraintStart_toEndOf="@id/todo_item_finished_checkbox" />
+
+    <View
+        style="@style/Divider"
+        app:layout_constraintTop_toBottomOf="@id/todo_item_due_datetime"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
