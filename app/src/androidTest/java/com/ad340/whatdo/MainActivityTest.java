@@ -93,4 +93,13 @@ public class MainActivityTest {
         onView(withId(R.id.todo_list_recycler_view))
                 .check(matches(hasDescendant(withId(R.id.todo_item_finished_checkbox))));
     }
+
+    /*
+        Tests whether the floating action button is displayed.
+    */
+    @Test
+    public void hasFloatingActionButton() {
+        onView(withId(R.id.fab))
+                .check(matches(isDisplayed()));
+    }
 }
