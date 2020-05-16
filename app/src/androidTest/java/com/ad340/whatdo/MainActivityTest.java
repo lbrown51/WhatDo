@@ -83,7 +83,7 @@ public class MainActivityTest {
         Tests whether the tasks have the correct content.
     */
     @Test
-    public void tasksHaveCorrectContent() {
+    public void tasksDisplayCorrectViews() {
         onView(withId(R.id.todo_list_recycler_view))
                 .check(matches(hasDescendant(withId(R.id.todo_item_task_name))));
 
