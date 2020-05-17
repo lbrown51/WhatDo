@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -60,9 +59,9 @@
                 android:id="@+id/set_date_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/small_item_spacing"
+                android:layout_marginStart="@dimen/small_item_spacing"
                 android:layout_marginTop="@dimen/small_item_spacing"
-                android:text="Set Date:     DATE_PICKER"
+                android:text="@string/date_picker_placeholder"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -70,19 +69,19 @@
                 android:id="@+id/set_time_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/small_item_spacing"
+                android:layout_marginStart="@dimen/small_item_spacing"
                 android:layout_marginTop="@dimen/small_item_spacing"
-                android:text="Set Time:     TIME_PICKER"
+                android:text="@string/time_picker_placeholder"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/set_date_text" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/task_submit_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/small_item_spacing"
-                android:layout_marginRight="@dimen/small_item_spacing"
-                android:text="Mark Complete"
+                android:layout_marginEnd="@dimen/small_item_spacing"
+                android:text="@string/mark_complete"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/set_time_text" />
         </androidx.constraintlayout.widget.ConstraintLayout>
