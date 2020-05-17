@@ -46,14 +46,26 @@ public class ToDoItemRecyclerViewAdapter extends RecyclerView.Adapter<ToDoItemRe
 
     public class ToDoItemViewHolder extends RecyclerView.ViewHolder {
         public TextView toDoTaskName;
+        public TextView toDoTaskDatetime;
         ConstraintLayout todoDetail;
 
         public ToDoItemViewHolder(@NonNull View itemView) {
             super(itemView);
             toDoTaskName = itemView.findViewById(R.id.todo_item_task_name);
             todoDetail = itemView.findViewById(R.id.todo_detail);
+            todoDetail = itemView.findViewById(R.id.todo_detail);
+            toDoTaskDatetime = itemView.findViewById(R.id.todo_item_due_datetime);
 
             toDoTaskName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ToDoItem toDoItem = toDoList.get(getAdapterPosition());
+                    toDoItem.setExpanded(!toDoItem.isExpanded());
+                    notifyItemChanged(getAdapterPosition()); // calls onBindViewHolder for position
+                }
+            });
+
+            toDoTaskDatetime.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     ToDoItem toDoItem = toDoList.get(getAdapterPosition());
