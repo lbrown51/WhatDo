@@ -3,6 +3,7 @@ package com.ad340.whatdo;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -20,16 +21,22 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertTrue;
+
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
     @Rule
     public ActivityScenarioRule<MainActivity> activityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
+
+
+    public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
+        return new RecyclerViewMatcher(recyclerViewId);
+    }
 
     /*
         Tests whether the app bar is displayed
@@ -101,5 +108,60 @@ public class MainActivityTest {
     public void hasFloatingActionButton() {
         onView(withId(R.id.fab))
                 .check(matches(isDisplayed()));
+    }
+
+    /*
+        Tests whether tasks can be expanded or not
+     */
+    @Test
+    public void tasksExpandAndCollapse() {
+        // Date, time, and button are invisible
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(4, R.id.set_date_text))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(4, R.id.set_time_text))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(4, R.id.task_submit_btn))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+
+        // Expand fifth task
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(4, R.id.todo_item_task_name))
+                .perform(click());
+
+        // Date, time, and button are visible
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(4, R.id.set_date_text))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(4, R.id.set_time_text))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(4, R.id.task_submit_btn))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+
+        // Collapse fifth task
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(4, R.id.todo_item_task_name))
+                .perform(click());
+
+        // Date, time, and button are invisible
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(4, R.id.set_date_text))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(4, R.id.set_time_text))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(4, R.id.task_submit_btn))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
     }
 }
