@@ -60,10 +60,31 @@
                 android:id="@+id/set_date_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Set Date:"
+                android:layout_marginLeft="@dimen/small_item_spacing"
+                android:layout_marginTop="@dimen/small_item_spacing"
+                android:text="Set Date:     DATE_PICKER"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/set_time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/small_item_spacing"
+                android:layout_marginTop="@dimen/small_item_spacing"
+                android:text="Set Time:     TIME_PICKER"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/set_date_text" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_item_spacing"
+                android:layout_marginRight="@dimen/small_item_spacing"
+                android:text="Mark Complete"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/set_time_text" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
