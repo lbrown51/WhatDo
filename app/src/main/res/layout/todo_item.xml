@@ -24,9 +24,10 @@
         <TextView
             android:id="@+id/todo_item_task_name"
             style="@style/TextAppearance.MaterialComponents.Headline5"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
             android:text="HELLO"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/todo_item_finished_checkbox"
             app:layout_constraintTop_toTopOf="parent" />
 
