@@ -164,4 +164,57 @@ public class MainActivityTest {
                 .atPositionOnView(4, R.id.task_submit_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
     }
+
+    /*
+        Tests whether tasks have a Mark Complete option
+
+    */
+    @Test
+    public void hasMarkCompleteOption() {
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(2, R.id.todo_item_task_name))
+                .perform(click());
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(2, R.id.task_submit_btn))
+                .perform(click());
+
+        onView(withText(R.string.mark_complete)).perform(click());
+    }
+
+
+    /*
+    Tests whether tasks have a Cancel option
+
+    */
+    @Test
+    public void hasCancelOption() {
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(2, R.id.todo_item_task_name))
+                .perform(click());
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(2, R.id.task_submit_btn))
+                .perform(click());
+
+        onView(withText(R.string.cancel)).perform(click());
+    }
+
+
+    /*
+    Tests whether tasks have a Reschedule option
+
+    */
+    @Test
+    public void hasRescheduleOption() {
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(2, R.id.todo_item_task_name))
+                .perform(click());
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(2, R.id.task_submit_btn))
+                .perform(click());
+
+        onView(withText(R.string.reschedule)).perform(click());
+    }
 }
