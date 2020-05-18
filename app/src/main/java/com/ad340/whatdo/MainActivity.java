@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         toDoList.add(new ToDoItem("Test"));
         toDoList.add(new ToDoItem("Test"));
 
-        ToDoItemRecyclerViewAdapter adapter = new ToDoItemRecyclerViewAdapter(toDoList);
+        ToDoItemRecyclerViewAdapter adapter = new ToDoItemRecyclerViewAdapter(toDoList, this);
         toDoRecyclerView.setAdapter(adapter);
         int largePadding = getResources().getDimensionPixelSize(R.dimen.large_item_spacing);
         int smallPadding = getResources().getDimensionPixelSize(R.dimen.small_item_spacing);
