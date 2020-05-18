@@ -36,13 +36,15 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        app:layout_constraintTop_toBottomOf="@id/app_bar_layout"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/todo_list_recycler_view"
-        android:layout_height="@dimen/match_constraint"
         android:layout_width="match_parent"
+        android:layout_height="@dimen/match_constraint"
+        android:clipToPadding="false"
         android:paddingTop="@dimen/recycler_view_padding"
         android:paddingBottom="@dimen/recycler_view_padding"
-        android:clipToPadding="false" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/app_bar_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
