@@ -92,7 +92,6 @@ public class ToDoItemRecyclerViewAdapter extends RecyclerView.Adapter<ToDoItemRe
             super(itemView);
             toDoTaskName = itemView.findViewById(R.id.todo_item_task_name);
             todoDetail = itemView.findViewById(R.id.todo_detail);
-            todoDetail = itemView.findViewById(R.id.todo_detail);
             toDoTaskDatetime = itemView.findViewById(R.id.todo_item_due_datetime);
             submitButton = itemView.findViewById(R.id.task_submit_btn);
 
