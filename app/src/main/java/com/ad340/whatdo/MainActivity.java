@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.text.Layout;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -22,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private List<ToDoItem> toDoList;
     private MaterialToolbar header;
-    private FloatingActionButton fab;
+    public FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,12 @@ public class MainActivity extends AppCompatActivity {
         int smallPadding = getResources().getDimensionPixelSize(R.dimen.small_item_spacing);
         toDoRecyclerView.addItemDecoration(new ToDoItemDecoration(largePadding, smallPadding));
 
+        fab = findViewById(R.id.fab);
+        fab.setOnClickListener(view -> {
+                Toast toast = Toast.makeText(view.getContext(), "Add new To-Do", Toast.LENGTH_SHORT);
+                toast.show();
+            });
+
         Calendar today = Calendar.getInstance();
         header = findViewById(R.id.top_app_bar);
         StringBuilder displayText = new StringBuilder(header.getTitle());
@@ -56,15 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 today.get(Calendar.DAY_OF_MONTH),
                 today.get(Calendar.YEAR)));
         header.setTitle(displayText);
-
-        fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Add new To-Do", Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
-            }
-        });
-
     }
+
+
 }
