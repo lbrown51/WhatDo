@@ -4,9 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Layout;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,8 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
-                Toast toast = Toast.makeText(view.getContext(), "Add new To-Do", Toast.LENGTH_SHORT);
-                toast.show();
+                showCreateDialog();
             });
 
         Calendar today = Calendar.getInstance();
@@ -66,5 +73,69 @@ public class MainActivity extends AppCompatActivity {
         header.setTitle(displayText);
     }
 
+    private void showCreateDialog() {
+        final View createView = View.inflate(this, R.layout.create_todo_dialog, null);
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(createView);
+
+        ImageButton closeButton = (ImageButton) dialog.findViewById(R.id.close_dialog);
+        closeButton.setOnClickListener((view) -> {
+            revealShow(createView, false, dialog);
+        });
+
+        dialog.setOnShowListener((view) -> {
+            revealShow(createView, true, null);
+        });
+
+        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
+                if (i == KeyEvent.KEYCODE_BACK){
+                    revealShow(createView, false, dialog);
+                    return true;
+                };
+                return false;
+            };
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.show();
+    };
+
+    private void revealShow(View dialogView, boolean open, final Dialog dialog) {
+
+        final View view = dialogView.findViewById(R.id.create_todo_dialog);
+        int w = view.getWidth();
+        int h = view.getHeight();
+
+        int endRadius = (int) Math.hypot(w, h);
+
+        int cx = (int)(fab.getX() + (fab.getWidth())/2);
+        int cy = (int) fab.getY() + fab.getHeight() + 56;
+
+        if(open){
+            Animator revealAnimator = ViewAnimationUtils.createCircularReveal(view, cx,cy, 0, endRadius);
+
+            view.setVisibility(View.VISIBLE);
+            revealAnimator.setDuration(700);
+            revealAnimator.start();
+        } else {
+            Animator closeAnimator =
+                    ViewAnimationUtils.createCircularReveal(view, cx, cy, endRadius, 0);
+
+            closeAnimator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    dialog.dismiss();
+                    view.setVisibility(View.INVISIBLE);
+                }
+            });
+            closeAnimator.setDuration(700);
+            closeAnimator.start();
+        };
+    };
 
 }
