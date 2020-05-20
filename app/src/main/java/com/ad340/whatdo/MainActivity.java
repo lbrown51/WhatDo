@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 today.get(Calendar.DAY_OF_MONTH),
                 today.get(Calendar.YEAR)));
         header.setTitle(displayText);
-    }
+}
 
     private void showCreateDialog() {
         final View createView = View.inflate(this, R.layout.create_todo_dialog, null);
