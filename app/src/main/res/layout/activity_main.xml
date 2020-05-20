@@ -28,9 +28,10 @@
         android:id="@+id/fab"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_add_circle_fab"
+        android:layout_width="@dimen/add_button_dimen"
+        android:layout_height="@dimen/add_button_dimen"
+        android:backgroundTint="@color/colorAccent"
+        android:src="@drawable/ic_add_24dp"
         android:contentDescription="@string/floating_action_button"
         android:layout_margin="@dimen/large_item_spacing" />
 

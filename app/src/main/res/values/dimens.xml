@@ -6,4 +6,5 @@
     <dimen name="todo_item_padding">16dp</dimen>
     <dimen name="recycler_view_padding">8dp</dimen>
     <dimen name="match_constraint">0dp</dimen>
+    <dimen name="add_button_dimen">100dp</dimen>
 </resources>
