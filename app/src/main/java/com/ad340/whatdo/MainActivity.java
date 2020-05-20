@@ -76,67 +76,23 @@ public class MainActivity extends AppCompatActivity {
     private void showCreateDialog() {
         final View createView = View.inflate(this, R.layout.create_todo_dialog, null);
 
-        final Dialog dialog = new Dialog(this);
+        final Dialog dialog = new Dialog(this, android.R.style.Theme_DeviceDefault_NoActionBar_Overscan);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(createView);
 
         ImageButton closeButton = (ImageButton) dialog.findViewById(R.id.close_dialog);
         closeButton.setOnClickListener((view) -> {
-            revealShow(createView, false, dialog);
+            view.setVisibility(View.INVISIBLE);
+            dialog.dismiss();
         });
 
-        dialog.setOnShowListener((view) -> {
-            revealShow(createView, true, null);
-        });
-
-        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-            @Override
-            public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
-                if (i == KeyEvent.KEYCODE_BACK){
-                    revealShow(createView, false, dialog);
-                    return true;
-                };
-                return false;
-            };
+        dialog.setOnKeyListener((dialogInterface, key, keyEvent) -> {
+            if (key == KeyEvent.KEYCODE_BACK) {
+                dialogInterface.dismiss();
+                return true;
+            } else return false;
         });
 
         dialog.show();
     };
-
-    private void revealShow(View dialogView, boolean open, final Dialog dialog) {
-
-        final View view = dialogView.findViewById(R.id.create_todo_dialog);
-//        int w = view.getWidth();
-//        int h = view.getHeight();
-//
-//        int endRadius = (int) Math.hypot(w, h);
-//
-//        int cx = (int)(fab.getX() + (fab.getWidth())/2);
-//        int cy = (int) fab.getY() + fab.getHeight() + 56;
-
-        if(open){
-            // animation not working - try something else
-            // Animator revealAnimator = ViewAnimationUtils.createCircularReveal(view, cx,cy, 0, endRadius);
-            view.setVisibility(View.VISIBLE);
-//            revealAnimator.setDuration(700);
-//            revealAnimator.start();
-        } else {
-            dialog.dismiss();
-            view.setVisibility(View.INVISIBLE);
-//            Animator closeAnimator =
-//                    ViewAnimationUtils.createCircularReveal(view, cx, cy, endRadius, 0);
-
-//            closeAnimator.addListener(new AnimatorListenerAdapter() {
-//                @Override
-//                public void onAnimationEnd(Animator animation) {
-//                    super.onAnimationEnd(animation);
-//                    dialog.dismiss();
-//                    view.setVisibility(View.INVISIBLE);
-//                }
-//            });
-//            closeAnimator.setDuration(700);
-//            closeAnimator.start();
-        };
-    };
-
 }
