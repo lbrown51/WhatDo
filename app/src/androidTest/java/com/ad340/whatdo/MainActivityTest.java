@@ -3,6 +3,7 @@ package com.ad340.whatdo;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -118,11 +119,31 @@ public class MainActivityTest {
         and the x button in the dialog closes the dialog
      */
     @Test
-    public void openCloseDialog() {
+    public void openCloseDialogWithButton() {
         onView(withId(R.id.fab)).perform(click());
         onView(withId(R.id.create_todo_dialog))
                 .check(matches(isDisplayed()));
         onView(withId(R.id.close_dialog)).perform(click());
+        try {
+            onView(withId(R.id.create_todo_dialog))
+                    .check(matches(not(isDisplayed())));
+            onView(withId(R.id.placeholder_text))
+                    .check(matches(withText(R.string.placeholder_text)));
+        } catch (NoMatchingViewException e) {
+            onView(withId(R.id.fab))
+                    .check(matches(isDisplayed()));
+        }
+    }
+
+    /*
+    Tests whether the create to-do dialog closes with back button
+ */
+    @Test
+    public void openCloseDialogWithBackKey() {
+        onView(withId(R.id.fab)).perform(click());
+        onView(withId(R.id.create_todo_dialog))
+                .check(matches(isDisplayed()));
+        Espresso.pressBack();
         try {
             onView(withId(R.id.create_todo_dialog))
                     .check(matches(not(isDisplayed())));
