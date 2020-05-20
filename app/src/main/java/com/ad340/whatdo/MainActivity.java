@@ -100,41 +100,42 @@ public class MainActivity extends AppCompatActivity {
             };
         });
 
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.show();
     };
 
     private void revealShow(View dialogView, boolean open, final Dialog dialog) {
 
         final View view = dialogView.findViewById(R.id.create_todo_dialog);
-        int w = view.getWidth();
-        int h = view.getHeight();
-
-        int endRadius = (int) Math.hypot(w, h);
-
-        int cx = (int)(fab.getX() + (fab.getWidth())/2);
-        int cy = (int) fab.getY() + fab.getHeight() + 56;
+//        int w = view.getWidth();
+//        int h = view.getHeight();
+//
+//        int endRadius = (int) Math.hypot(w, h);
+//
+//        int cx = (int)(fab.getX() + (fab.getWidth())/2);
+//        int cy = (int) fab.getY() + fab.getHeight() + 56;
 
         if(open){
-            Animator revealAnimator = ViewAnimationUtils.createCircularReveal(view, cx,cy, 0, endRadius);
-
+            // animation not working - try something else
+            // Animator revealAnimator = ViewAnimationUtils.createCircularReveal(view, cx,cy, 0, endRadius);
             view.setVisibility(View.VISIBLE);
-            revealAnimator.setDuration(700);
-            revealAnimator.start();
+//            revealAnimator.setDuration(700);
+//            revealAnimator.start();
         } else {
-            Animator closeAnimator =
-                    ViewAnimationUtils.createCircularReveal(view, cx, cy, endRadius, 0);
+            dialog.dismiss();
+            view.setVisibility(View.INVISIBLE);
+//            Animator closeAnimator =
+//                    ViewAnimationUtils.createCircularReveal(view, cx, cy, endRadius, 0);
 
-            closeAnimator.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    dialog.dismiss();
-                    view.setVisibility(View.INVISIBLE);
-                }
-            });
-            closeAnimator.setDuration(700);
-            closeAnimator.start();
+//            closeAnimator.addListener(new AnimatorListenerAdapter() {
+//                @Override
+//                public void onAnimationEnd(Animator animation) {
+//                    super.onAnimationEnd(animation);
+//                    dialog.dismiss();
+//                    view.setVisibility(View.INVISIBLE);
+//                }
+//            });
+//            closeAnimator.setDuration(700);
+//            closeAnimator.start();
         };
     };
 

@@ -25,11 +25,13 @@
 
         <ImageButton
             android:id="@+id/close_dialog"
-            android:layout_width="@dimen/add_button_dimen"
-            android:layout_height="@dimen/add_button_dimen"
+            android:layout_width="@dimen/close_button_dimen"
+            android:layout_height="@dimen/close_button_dimen"
             android:src="@drawable/ic_close_black"
             android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/large_item_spacing"
             android:layout_marginEnd="@dimen/large_item_spacing"
+            android:background="?attr/selectableItemBackgroundBorderless"
             />
 
     </RelativeLayout>

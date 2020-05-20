@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
 import androidx.fragment.app.DialogFragment;
 
@@ -29,7 +30,8 @@ public class CreateToDoDialog extends DialogFragment {
         if (dialog != null) {
             int width = ViewGroup.LayoutParams.MATCH_PARENT;
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
-            dialog.getWindow().setLayout(width, height);
+            Window window = dialog.getWindow();
+            if (window != null) { window.setLayout(width, height); };
         }
     }
 }
