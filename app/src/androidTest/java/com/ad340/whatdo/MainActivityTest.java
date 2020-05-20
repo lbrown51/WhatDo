@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -114,6 +115,27 @@ public class MainActivityTest {
     public void hasFloatingActionButton() {
         onView(withId(R.id.fab))
                 .check(matches(isDisplayed()));
+    }
+
+    /*
+        Tests whether the floating action button opens a dialog on click,
+        and the x button in the dialog closes the dialog
+     */
+    @Test
+    public void openCloseDialog() {
+        onView(withId(R.id.fab)).perform(click());
+        onView(withId(R.id.create_todo_dialog))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.close_dialog)).perform(click());
+        try {
+            onView(withId(R.id.create_todo_dialog))
+                    .check(matches(not(isDisplayed())));
+            onView(withId(R.id.placeholder_text))
+                    .check(matches(withText(R.string.placeholder_text)));
+        } catch (NoMatchingViewException e) {
+            onView(withId(R.id.fab))
+                    .check(matches(isDisplayed()));
+        }
     }
 
     /*
