@@ -6,9 +6,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.text.Layout;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private List<ToDoItem> toDoList;
     private MaterialToolbar header;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,5 +56,15 @@ public class MainActivity extends AppCompatActivity {
                 today.get(Calendar.DAY_OF_MONTH),
                 today.get(Calendar.YEAR)));
         header.setTitle(displayText);
+
+        fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Add new To-Do", Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null).show();
+            }
+        });
+
     }
 }
