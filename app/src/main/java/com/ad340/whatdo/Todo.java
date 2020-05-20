@@ -5,6 +5,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "todo_table")
@@ -12,7 +13,8 @@ public class Todo {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    private int id;
+    private Integer id;
+    public Integer getId() { return id; }
 
     @NonNull
     @ColumnInfo(name = "title")
@@ -27,6 +29,7 @@ public class Todo {
     private String time;
     public String getTime() { return this.time; }
 
+    @Ignore
     @ColumnInfo(name = "isCompleted")
     private boolean isCompleted;
     public boolean getCompleted() { return this.isCompleted; }
@@ -35,7 +38,8 @@ public class Todo {
     private String notes;
     public String getNotes() { return this.notes; }
 
-    public Todo(@NonNull String title, String date, String time, String notes) {
+    public Todo(Integer id, @NonNull String title, String date, String time, String notes) {
+        this.id = id;
         this.title = title;
         this.date = date;
         this.time = time;
@@ -43,7 +47,8 @@ public class Todo {
         this.isCompleted = false;
     }
 
+    @Ignore
     public Todo(@NonNull String title) {
-        this(title, null, null, null);
+        this(null, title, null, null, null);
     }
 }

@@ -8,4 +8,5 @@
     <string name="date_picker_placeholder">Set Date: DATE_PICKER</string>
     <string name="reschedule">Reschedule</string>
     <string name="cancel">Cancel</string>
+    <string name="text_whitespace">"      "</string>
 </resources>

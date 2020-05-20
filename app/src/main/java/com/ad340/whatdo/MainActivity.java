@@ -1,6 +1,8 @@
 package com.ad340.whatdo;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
 
     private List<ToDoItem> toDoList;
     private MaterialToolbar header;
+    private TodoViewModel mTodoViewModel;
+    public static final int NEW_TODO_ACTIVITY_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,14 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView toDoRecyclerView = findViewById(R.id.todo_list_recycler_view);
         toDoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mTodoViewModel = new ViewModelProvider(this).get(TodoViewModel.class);
+        mTodoViewModel.getAllTodos().observe(this, new Observer<List<Todo>>() {
+            @Override
+            public void onChanged(List<Todo> todos) {
+
+            }
+        });
+
 
         toDoList = new ArrayList<>();
         toDoList.add(new ToDoItem("Test"));
@@ -46,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         StringBuilder displayText = new StringBuilder(header.getTitle());
         // probably a more elegant way of doing this
         // if you save whitespace as a string, it comes out with quotation marks :(
-        displayText.append("      ");
+        displayText.append(getString(R.string.text_whitespace));
         displayText.append(today.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH));
         displayText.append(String.format(" %02d, %04d",
                 today.get(Calendar.DAY_OF_MONTH),
