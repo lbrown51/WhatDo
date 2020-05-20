@@ -8,4 +8,5 @@
     <dimen name="match_constraint">0dp</dimen>
     <dimen name="add_button_dimen" tools:override="true">100dp</dimen>
     <dimen name="close_button_dimen">24dp</dimen>
+    <dimen name="default_text_size">24sp</dimen>
 </resources>

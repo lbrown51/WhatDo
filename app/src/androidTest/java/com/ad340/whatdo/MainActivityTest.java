@@ -126,6 +126,8 @@ public class MainActivityTest {
         try {
             onView(withId(R.id.create_todo_dialog))
                     .check(matches(not(isDisplayed())));
+            onView(withId(R.id.placeholder_text))
+                    .check(matches(withText(R.string.placeholder_text)));
         } catch (NoMatchingViewException e) {
             onView(withId(R.id.fab))
                     .check(matches(isDisplayed()));
