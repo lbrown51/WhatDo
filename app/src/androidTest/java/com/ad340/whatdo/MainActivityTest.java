@@ -239,18 +239,6 @@ public class MainActivityTest {
         Tests whether tasks have a Mark Complete option
 
     */
-    @Test
-    public void hasMarkCompleteOption() {
-        onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(2, R.id.todo_item_task_name))
-                .perform(click());
-
-        onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(2, R.id.task_submit_btn))
-                .perform(click());
-
-        onView(withText(R.string.mark_complete)).perform(click());
-    }
 
 
     /*
