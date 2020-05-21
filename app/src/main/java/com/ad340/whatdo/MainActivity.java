@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
 //            Todo todo = new Todo()
 //        }
 //    }
-}
 
     private void showCreateDialog() {
         final View createView = View.inflate(this, R.layout.create_todo_dialog, null);
