@@ -90,7 +90,7 @@ public class MainActivityTest {
     @Test
     public void hasAtLeastOneTask() {
         onView(withId(R.id.todo_list_recycler_view))
-                .check(matches(hasDescendant(withText("Test"))));
+                .check(matches(hasDescendant(withText("First Todo"))));
     }
 
     /*
