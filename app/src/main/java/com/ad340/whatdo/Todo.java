@@ -37,11 +37,6 @@ public class Todo {
     public String getNotes() { return this.notes; }
 
     @Ignore
-    private boolean expanded;
-    public boolean isExpanded() { return this.expanded; }
-    public void setExpanded(boolean expanded) { this.expanded = expanded; }
-
-    @Ignore
     public void setDate(String date) { this.date = date; }
 
     public Todo(Integer id, @NonNull String title, String date, String time, String notes) {
@@ -51,12 +46,10 @@ public class Todo {
         this.time = time;
         this.notes = notes;
         this.isCompleted = false;
-        this.expanded = false;
     }
 
 //    @Ignore
 //    public Todo(@NonNull String title) {
 //        this.title = title;
-//        this.expanded = false;
 //    }
 }
