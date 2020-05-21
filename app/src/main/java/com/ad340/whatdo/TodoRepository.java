@@ -20,6 +20,6 @@ public class TodoRepository {
     LiveData<List<Todo>> getAllTodos() { return allTodos; }
 
     void insert(Todo todo) {
-        TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.insert(todo));
+        TodoRoomDatabase.databaseWriteExecutor.execute(() -> { todoDao.insert(todo);});
     }
 }

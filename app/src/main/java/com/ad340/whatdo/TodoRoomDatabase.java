@@ -11,7 +11,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Todo.class}, version = 1, exportSchema = false)
+@Database(entities = {Todo.class}, version = 3, exportSchema = false)
 public abstract class TodoRoomDatabase extends RoomDatabase {
 
     public abstract TodoDao todoDao();
@@ -27,6 +27,7 @@ public abstract class TodoRoomDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             TodoRoomDatabase.class, "todo_database")
+                            .fallbackToDestructiveMigration() //
                             .addCallback(sRoomDatabaseCallback)
                             .build();
                 }
@@ -39,6 +40,23 @@ public abstract class TodoRoomDatabase extends RoomDatabase {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
+
+            databaseWriteExecutor.execute(() -> {
+                TodoDao dao = INSTANCE.todoDao();
+                dao.deleteAll();
+                Todo todo = new Todo(null, "First Todo", null, null, null);
+                dao.insert(todo);
+                todo = new Todo(null, "Second Todo", null, null, null);
+                dao.insert(todo);
+                todo = new Todo(null, "Third Todo", null, null, null);
+                dao.insert(todo);
+                todo = new Todo(null, "Fourth Todo", null, null, null);
+                dao.insert(todo);
+                todo = new Todo(null, "Fifth Todo", null, null, null);
+                dao.insert(todo);
+            });
+
+
         }
     };
 

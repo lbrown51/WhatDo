@@ -13,7 +13,7 @@ public interface TodoDao {
     @Insert
     void insert(Todo todo);
 
-    @Query("SELECT * from todo_table ORDER BY date ASC")
+    @Query("SELECT * from todo_table ORDER BY title ASC")
     LiveData<List<Todo>> getAllTodos();
 
     @Query("DELETE FROM todo_table")

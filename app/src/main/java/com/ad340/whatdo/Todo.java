@@ -1,7 +1,5 @@
 package com.ad340.whatdo;
 
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -38,6 +36,11 @@ public class Todo {
     private String notes;
     public String getNotes() { return this.notes; }
 
+    @Ignore
+    private boolean expanded;
+    public boolean isExpanded() { return this.expanded; }
+    public void setExpanded(boolean expanded) { this.expanded = expanded; }
+
     public Todo(Integer id, @NonNull String title, String date, String time, String notes) {
         this.id = id;
         this.title = title;
@@ -45,10 +48,12 @@ public class Todo {
         this.time = time;
         this.notes = notes;
         this.isCompleted = false;
+        this.expanded = false;
     }
 
-    @Ignore
-    public Todo(@NonNull String title) {
-        this(null, title, null, null, null);
-    }
+//    @Ignore
+//    public Todo(@NonNull String title) {
+//        this.title = title;
+//        this.expanded = false;
+//    }
 }
