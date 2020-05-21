@@ -87,7 +87,7 @@ public class ToDoItemRecyclerViewAdapter extends RecyclerView.Adapter<ToDoItemRe
 
     public class ToDoItemViewHolder extends RecyclerView.ViewHolder {
         public TextView toDoTaskName;
-        public TextView toDoTaskDatetime;
+        public TextView toDoTime;
         ConstraintLayout todoDetail;
         public ImageButton rescheduleButton;
 
@@ -95,7 +95,7 @@ public class ToDoItemRecyclerViewAdapter extends RecyclerView.Adapter<ToDoItemRe
             super(itemView);
             toDoTaskName = itemView.findViewById(R.id.todo_item_task_name);
             todoDetail = itemView.findViewById(R.id.todo_detail);
-            toDoTaskDatetime = itemView.findViewById(R.id.date_text);
+            toDoTime = itemView.findViewById(R.id.todo_item_time);
             rescheduleButton = itemView.findViewById(R.id.reschedule_btn);
 
             toDoTaskName.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +107,7 @@ public class ToDoItemRecyclerViewAdapter extends RecyclerView.Adapter<ToDoItemRe
                 }
             });
 
-            toDoTaskDatetime.setOnClickListener(new View.OnClickListener() {
+            toDoTime.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Todo todo = todos.get(getAdapterPosition());
