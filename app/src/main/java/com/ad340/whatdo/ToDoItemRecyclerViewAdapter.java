@@ -17,11 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class ToDoItemRecyclerViewAdapter extends RecyclerView.Adapter<ToDoItemRecyclerViewAdapter.ToDoItemViewHolder> {
-    private List<ToDoItem> toDoList;
     private Context context;
+    private List<Todo> todos;
 
-    ToDoItemRecyclerViewAdapter(List<ToDoItem> toDoList, Context context) {
-        this.toDoList = toDoList;
+    ToDoItemRecyclerViewAdapter(Context context) {
         this.context = context;
     }
 
@@ -36,11 +35,11 @@ public class ToDoItemRecyclerViewAdapter extends RecyclerView.Adapter<ToDoItemRe
 
     @Override
     public void onBindViewHolder(@NonNull final ToDoItemViewHolder holder, int position) {
-        if (toDoList != null && position < toDoList.size()) {
-            ToDoItem toDo = toDoList.get(position);
-            holder.toDoTaskName.setText(toDo.taskName);
+        if (todos != null && position < todos.size()) {
+            Todo todo = todos.get(position);
+            holder.toDoTaskName.setText(todo.getTitle());
 
-            boolean isExpanded = toDoList.get(position).isExpanded();
+            boolean isExpanded = todos.get(position).isExpanded();
             holder.todoDetail.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
             holder.submitButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -79,7 +78,15 @@ public class ToDoItemRecyclerViewAdapter extends RecyclerView.Adapter<ToDoItemRe
 
     @Override
     public int getItemCount() {
-        return toDoList.size();
+        if (todos != null)
+            return todos.size();
+        else
+            return 0;
+    }
+
+    void setTodos(List<Todo> todos) {
+        this.todos = todos;
+        notifyDataSetChanged();
     }
 
     public class ToDoItemViewHolder extends RecyclerView.ViewHolder {
@@ -98,8 +105,8 @@ public class ToDoItemRecyclerViewAdapter extends RecyclerView.Adapter<ToDoItemRe
             toDoTaskName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ToDoItem toDoItem = toDoList.get(getAdapterPosition());
-                    toDoItem.setExpanded(!toDoItem.isExpanded());
+                    Todo todo = todos.get(getAdapterPosition());
+                    todo.setExpanded(!todo.isExpanded());
                     notifyItemChanged(getAdapterPosition()); // calls onBindViewHolder for position
                 }
             });
@@ -107,8 +114,8 @@ public class ToDoItemRecyclerViewAdapter extends RecyclerView.Adapter<ToDoItemRe
             toDoTaskDatetime.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ToDoItem toDoItem = toDoList.get(getAdapterPosition());
-                    toDoItem.setExpanded(!toDoItem.isExpanded());
+                    Todo todo = todos.get(getAdapterPosition());
+                    todo.setExpanded(!todo.isExpanded());
                     notifyItemChanged(getAdapterPosition()); // calls onBindViewHolder for position
                 }
             });
