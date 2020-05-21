@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,12 +43,12 @@ public class ToDoItemRecyclerViewAdapter extends RecyclerView.Adapter<ToDoItemRe
 
             boolean isExpanded = toDoList.get(position).isExpanded();
             holder.todoDetail.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
-            holder.submitButton.setOnClickListener(new View.OnClickListener() {
+            holder.rescheduleButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
                     //make popup menu
-                    PopupMenu popup = new PopupMenu(context, holder.submitButton);
+                    PopupMenu popup = new PopupMenu(context, holder.rescheduleButton);
                     //inflating menu
                     popup.inflate(R.menu.submit_menu);
                     //add click listener
@@ -55,9 +56,6 @@ public class ToDoItemRecyclerViewAdapter extends RecyclerView.Adapter<ToDoItemRe
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
                             switch (item.getItemId()) {
-                                case R.id.mark_complete:
-                                    //handle mark_complete click
-                                    break;
                                 case R.id.reschedule:
                                     //handle reschedule click
                                     break;
@@ -86,14 +84,14 @@ public class ToDoItemRecyclerViewAdapter extends RecyclerView.Adapter<ToDoItemRe
         public TextView toDoTaskName;
         public TextView toDoTaskDatetime;
         ConstraintLayout todoDetail;
-        public Button submitButton;
+        public ImageButton rescheduleButton;
 
         public ToDoItemViewHolder(@NonNull View itemView) {
             super(itemView);
             toDoTaskName = itemView.findViewById(R.id.todo_item_task_name);
             todoDetail = itemView.findViewById(R.id.todo_detail);
-            toDoTaskDatetime = itemView.findViewById(R.id.todo_item_due_datetime);
-            submitButton = itemView.findViewById(R.id.task_submit_btn);
+            toDoTaskDatetime = itemView.findViewById(R.id.date_text);
+            rescheduleButton = itemView.findViewById(R.id.reschedule_btn);
 
             toDoTaskName.setOnClickListener(new View.OnClickListener() {
                 @Override

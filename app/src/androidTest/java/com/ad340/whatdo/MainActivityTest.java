@@ -102,7 +102,7 @@ public class MainActivityTest {
                 .check(matches(hasDescendant(withId(R.id.todo_item_task_name))));
 
         onView(withId(R.id.todo_list_recycler_view))
-                .check(matches(hasDescendant(withId(R.id.todo_item_due_datetime))));
+                .check(matches(hasDescendant(withId(R.id.date_text))));
 
         onView(withId(R.id.todo_list_recycler_view))
                 .check(matches(hasDescendant(withId(R.id.todo_item_finished_checkbox))));
@@ -187,15 +187,15 @@ public class MainActivityTest {
     public void tasksExpandAndCollapse() {
         // Date, time, and button are invisible
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.set_date_text))
+                .atPositionOnView(4, R.id.date_text))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.set_time_text))
+                .atPositionOnView(4, R.id.todo_item_time))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.task_submit_btn))
+                .atPositionOnView(4, R.id.reschedule_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         // Expand fifth task
@@ -205,15 +205,15 @@ public class MainActivityTest {
 
         // Date, time, and button are visible
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.set_date_text))
+                .atPositionOnView(4, R.id.date_text))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.set_time_text))
+                .atPositionOnView(4, R.id.todo_item_time))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.task_submit_btn))
+                .atPositionOnView(4, R.id.reschedule_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
         // Collapse fifth task
@@ -223,15 +223,15 @@ public class MainActivityTest {
 
         // Date, time, and button are invisible
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.set_date_text))
+                .atPositionOnView(4, R.id.date_text))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.set_time_text))
+                .atPositionOnView(4, R.id.todo_item_time))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.task_submit_btn))
+                .atPositionOnView(4, R.id.reschedule_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
     }
 
@@ -252,7 +252,7 @@ public class MainActivityTest {
                 .perform(click());
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(2, R.id.task_submit_btn))
+                .atPositionOnView(2, R.id.reschedule_btn))
                 .perform(click());
 
         onView(withText(R.string.cancel)).perform(click());
@@ -270,7 +270,7 @@ public class MainActivityTest {
                 .perform(click());
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(2, R.id.task_submit_btn))
+                .atPositionOnView(2, R.id.reschedule_btn))
                 .perform(click());
 
         onView(withText(R.string.reschedule)).perform(click());
