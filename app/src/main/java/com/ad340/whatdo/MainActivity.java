@@ -1,33 +1,22 @@
 package com.ad340.whatdo;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
+
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.Window;
 import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,12 +36,7 @@ public class MainActivity extends AppCompatActivity {
         toDoRecyclerView.setAdapter(adapter);
         toDoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mTodoViewModel = new ViewModelProvider(this).get(TodoViewModel.class);
-        mTodoViewModel.getAllTodos().observe(this, new Observer<List<Todo>>() {
-            @Override
-            public void onChanged(List<Todo> todos) {
-                adapter.setTodos(todos);
-            }
-        });
+        mTodoViewModel.getAllTodos().observe(this, adapter::setTodos);
 
         int largePadding = getResources().getDimensionPixelSize(R.dimen.large_item_spacing);
         int smallPadding = getResources().getDimensionPixelSize(R.dimen.small_item_spacing);

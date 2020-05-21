@@ -41,6 +41,9 @@ public class Todo {
     public boolean isExpanded() { return this.expanded; }
     public void setExpanded(boolean expanded) { this.expanded = expanded; }
 
+    @Ignore
+    public void setDate(String date) { this.date = date; }
+
     public Todo(Integer id, @NonNull String title, String date, String time, String notes) {
         this.id = id;
         this.title = title;
