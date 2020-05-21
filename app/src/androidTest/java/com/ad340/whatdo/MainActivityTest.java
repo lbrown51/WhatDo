@@ -1,8 +1,11 @@
 package com.ad340.whatdo;
 
 import android.util.Log;
+import android.view.KeyEvent;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.test.espresso.NoMatchingViewException;
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -19,6 +22,7 @@ import java.util.Locale;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.pressKey;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -123,6 +127,48 @@ public class MainActivityTest {
         onView(withId(R.id.create_todo_dialog))
                 .check(matches(isDisplayed()));
         onView(withId(R.id.close_dialog)).perform(click());
+        try {
+            onView(withId(R.id.create_todo_dialog))
+                    .check(matches(not(isDisplayed())));
+            onView(withId(R.id.placeholder_text))
+                    .check(matches(withText(R.string.placeholder_text)));
+        } catch (NoMatchingViewException e) {
+            onView(withId(R.id.fab))
+                    .check(matches(isDisplayed()));
+        }
+    }
+
+    /*
+        Tests whether the floating action button opens a dialog on click,
+        and the x button in the dialog closes the dialog
+     */
+    @Test
+    public void openCloseDialogWithButton() {
+        onView(withId(R.id.fab)).perform(click());
+        onView(withId(R.id.create_todo_dialog))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.close_dialog)).perform(click());
+        try {
+            onView(withId(R.id.create_todo_dialog))
+                    .check(matches(not(isDisplayed())));
+            onView(withId(R.id.placeholder_text))
+                    .check(matches(withText(R.string.placeholder_text)));
+        } catch (NoMatchingViewException e) {
+            onView(withId(R.id.fab))
+                    .check(matches(isDisplayed()));
+        }
+    }
+
+    /*
+    Tests whether the create to-do dialog closes with back button
+ */
+    @Test
+    public void openCloseDialogWithBackKey() {
+        onView(withId(R.id.fab)).perform(click());
+        onView(withId(R.id.create_todo_dialog))
+                .check(matches(isDisplayed()));
+        pressKey(KeyEvent.KEYCODE_0);
+        Espresso.pressBack();
         try {
             onView(withId(R.id.create_todo_dialog))
                     .check(matches(not(isDisplayed())));
