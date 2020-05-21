@@ -1,7 +1,9 @@
 package com.ad340.whatdo;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +16,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class ToDoItemRecyclerViewAdapter
         extends RecyclerView.Adapter<ToDoItemRecyclerViewAdapter.ToDoItemViewHolder>{
@@ -42,10 +46,10 @@ public class ToDoItemRecyclerViewAdapter
 
         if (todos != null && position < todos.size()) {
             Todo todo = todos.get(position);
+            Calendar c = Calendar.getInstance();
             final boolean isExpanded = position==mExpandedPosition;
 
             // user sets date in DatePicker
-            Calendar c = Calendar.getInstance();
             final DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
                 c.set(Calendar.YEAR, year);
                 c.set(Calendar.MONTH, monthOfYear);
@@ -56,10 +60,23 @@ public class ToDoItemRecyclerViewAdapter
                 todo.setDate(currentDateString);
             };
 
+            // user sets time in TimePicker
+            final TimePickerDialog.OnTimeSetListener time = (view, hourOfDay, minute) -> {
+                c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                c.set(Calendar.MINUTE, minute);
+
+                SimpleDateFormat sdf = new SimpleDateFormat("h:mm a", Locale.US);
+                String timeString = sdf.format(c.getTime());
+
+                holder.toDoTime.setText(timeString);
+                todo.setTime(timeString);
+            };
 
             holder.todoDetail.setVisibility(isExpanded?View.VISIBLE:View.GONE);
+            holder.itemView.setActivated(isExpanded);
             holder.toDoTaskName.setText(todo.getTitle());
             holder.toDoDate.setText(todo.getDate());
+            holder.toDoTime.setText(todo.getTime());
             holder.rescheduleButton.setOnClickListener(view -> {
 
                 //make popup menu
@@ -82,7 +99,6 @@ public class ToDoItemRecyclerViewAdapter
                 popup.show();
             });
 
-            holder.itemView.setActivated(isExpanded);
 
             // show DatePicker
             holder.toDoDateButton.setOnClickListener(view ->
@@ -92,7 +108,13 @@ public class ToDoItemRecyclerViewAdapter
                         c.get(Calendar.DAY_OF_MONTH)).show()
             );
 
-            // if current task is expanded...
+            // show TimePicker
+            holder.toDoTimeButton.setOnClickListener(view ->
+                    new TimePickerDialog(context, time,
+                        c.get(Calendar.HOUR_OF_DAY),
+                        c.get(Calendar.MINUTE), false).show());
+
+            // if current task is expanded, previous = current
             if (isExpanded) previousExpandedPosition = position;
 
             // listener on Title TextView
@@ -132,6 +154,7 @@ public class ToDoItemRecyclerViewAdapter
         ConstraintLayout todoDetail;
         ImageButton rescheduleButton;
         ImageButton toDoDateButton;
+        ImageButton toDoTimeButton;
 
         ToDoItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -141,6 +164,7 @@ public class ToDoItemRecyclerViewAdapter
             toDoDate = itemView.findViewById(R.id.date_text);
             rescheduleButton = itemView.findViewById(R.id.reschedule_btn);
             toDoDateButton = itemView.findViewById(R.id.date_btn);
+            toDoTimeButton = itemView.findViewById(R.id.time_btn);
         }
     }
 }

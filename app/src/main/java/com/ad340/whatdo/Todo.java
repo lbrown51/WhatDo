@@ -39,6 +39,9 @@ public class Todo {
     @Ignore
     public void setDate(String date) { this.date = date; }
 
+    @Ignore
+    public void setTime(String time) { this.time = time; }
+
     public Todo(Integer id, @NonNull String title, String date, String time, String notes) {
         this.id = id;
         this.title = title;
