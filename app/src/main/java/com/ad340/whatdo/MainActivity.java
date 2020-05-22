@@ -1,6 +1,7 @@
 package com.ad340.whatdo;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,7 +37,12 @@ public class MainActivity extends AppCompatActivity {
         toDoRecyclerView.setAdapter(adapter);
         toDoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mTodoViewModel = new ViewModelProvider(this).get(TodoViewModel.class);
-        mTodoViewModel.getAllTodos().observe(this, adapter::setTodos);
+        mTodoViewModel.getAllTodos().observe(this, new Observer<List<Todo>>() {
+            @Override
+            public void onChanged(List<Todo> todos) {
+                adapter.setTodos(todos);
+            }
+        });
 
         int largePadding = getResources().getDimensionPixelSize(R.dimen.large_item_spacing);
         int smallPadding = getResources().getDimensionPixelSize(R.dimen.small_item_spacing);
