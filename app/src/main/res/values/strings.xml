@@ -2,7 +2,6 @@
     <string name="app_name">WhatDo</string>
     <string name="app_bar_title">Tasks Today</string>
     <string name="floating_action_button">FAB to create to-do</string>
-    <string name="mark_complete">Mark Complete</string>
     <string name="time_picker_placeholder">Set Time: TIME_PICKER</string>
     <string name="date_picker_placeholder">Set Date: DATE_PICKER</string>
     <string name="reschedule">Reschedule</string>
@@ -10,4 +9,7 @@
     <string name="text_whitespace">"      "</string>
     <string name="placeholder_text">placeholder text</string>
     <string name="add_task_hint">Add a task</string>
+    <string name="notes">Notes</string>
+    <string name="date_button">Date button</string>
+    <string name="time_button">Time button</string>
 </resources>
