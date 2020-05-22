@@ -23,6 +23,7 @@ import java.util.Locale;
 
 public class ToDoItemRecyclerViewAdapter
         extends RecyclerView.Adapter<ToDoItemRecyclerViewAdapter.ToDoItemViewHolder>{
+    private static final String TAG = ToDoItemRecyclerViewAdapter.class.getName();
     private Context context;
     private List<Todo> todos;
     private int mExpandedPosition = -1;
@@ -54,10 +55,11 @@ public class ToDoItemRecyclerViewAdapter
                 c.set(Calendar.YEAR, year);
                 c.set(Calendar.MONTH, monthOfYear);
                 c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                String currentDateString = " " + DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
 
-                holder.toDoDate.setText(currentDateString);
-                todo.setDate(currentDateString);
+                StringBuilder dateString = new StringBuilder(DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime()));
+
+                holder.toDoDate.setText(dateString);
+                todo.setDate(String.valueOf(dateString));
             };
 
             // user sets time in TimePicker
@@ -158,17 +160,13 @@ public class ToDoItemRecyclerViewAdapter
 
         ToDoItemViewHolder(@NonNull View itemView) {
             super(itemView);
-            toDoTaskName = itemView.findViewById(R.id.todo_item_task_name);
-            toDoTime = itemView.findViewById(R.id.todo_item_time);
+            toDoTaskName = itemView.findViewById(R.id.name_text);
+            toDoTime = itemView.findViewById(R.id.time_text);
             toDoDate = itemView.findViewById(R.id.date_text);
             todoDetail = itemView.findViewById(R.id.todo_detail);
             rescheduleButton = itemView.findViewById(R.id.reschedule_btn);
             toDoDateButton = itemView.findViewById(R.id.date_btn);
             toDoTimeButton = itemView.findViewById(R.id.time_btn);
-
-
-
-
         }
     }
 }

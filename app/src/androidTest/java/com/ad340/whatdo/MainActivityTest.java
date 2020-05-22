@@ -2,17 +2,19 @@ package com.ad340.whatdo;
 
 import android.util.Log;
 import android.view.KeyEvent;
+import android.widget.DatePicker;
+import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.Espresso;
-import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.android.material.appbar.MaterialToolbar;
 
+import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,9 +26,11 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.pressKey;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.PickerActions.setDate;
+import static androidx.test.espresso.contrib.PickerActions.setTime;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayingAtLeast;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -99,7 +103,7 @@ public class MainActivityTest {
     @Test
     public void tasksDisplayCorrectViews() {
         onView(withId(R.id.todo_list_recycler_view))
-                .check(matches(hasDescendant(withId(R.id.todo_item_task_name))));
+                .check(matches(hasDescendant(withId(R.id.name_text))));
 
         onView(withId(R.id.todo_list_recycler_view))
                 .check(matches(hasDescendant(withId(R.id.date_text))));
@@ -208,7 +212,7 @@ public class MainActivityTest {
 
         // Expand fifth task
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.todo_item_task_name))
+                .atPositionOnView(4, R.id.name_text))
                 .perform(click());
 
         // Date and buttons are visible
@@ -234,7 +238,7 @@ public class MainActivityTest {
 
         // Collapse fifth task
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.todo_item_task_name))
+                .atPositionOnView(4, R.id.name_text))
                 .perform(click());
 
         // Date and buttons are invisible
@@ -288,7 +292,7 @@ public class MainActivityTest {
 
         // Expand fifth task
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.todo_item_time))
+                .atPositionOnView(4, R.id.time_text))
                 .perform(click());
 
         // Date and buttons are visible
@@ -314,7 +318,7 @@ public class MainActivityTest {
 
         // Collapse fifth task
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.todo_item_time))
+                .atPositionOnView(4, R.id.time_text))
                 .perform(click());
 
         // Date and buttons are invisible
@@ -347,7 +351,7 @@ public class MainActivityTest {
     @Test
     public void hasCancelOption() {
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(2, R.id.todo_item_task_name))
+                .atPositionOnView(2, R.id.name_text))
                 .perform(click());
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
@@ -365,7 +369,7 @@ public class MainActivityTest {
     @Test
     public void hasRescheduleOption() {
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(2, R.id.todo_item_task_name))
+                .atPositionOnView(2, R.id.name_text))
                 .perform(click());
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
@@ -373,5 +377,53 @@ public class MainActivityTest {
                 .perform(click());
 
         onView(withText(R.string.reschedule)).perform(click());
+    }
+
+    /*
+        Tests that the DatePicker works
+     */
+    @Test
+    public void datePickerWorks() {
+        int year = 2020;
+        int month = 5;
+        int dayOfMonth = 28;
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.name_text))
+                .perform(click());
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.date_btn))
+                .perform(click());
+
+        onView(withClassName(Matchers.equalTo(
+                DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
+        onView(withId(android.R.id.button1)).perform(click());
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.date_text))
+                .check(matches(withText("Thursday, May 28, 2020")));
+    }
+
+    /*
+        Tests that the TimePicker works
+     */
+    @Test
+    public void timePickerWorks() {
+        int hourOfDay = 16;
+        int minute = 30;
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.name_text))
+                .perform(click());
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.time_btn))
+                .perform(click());
+
+        onView(withClassName(Matchers.equalTo(
+                TimePicker.class.getName()))).perform(setTime(hourOfDay, minute));
+        onView(withId(android.R.id.button1)).perform(click());
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.time_text))
+                .check(matches(withText("4:30 PM")));
     }
 }
