@@ -159,27 +159,16 @@ public class ToDoItemRecyclerViewAdapter
         ToDoItemViewHolder(@NonNull View itemView) {
             super(itemView);
             toDoTaskName = itemView.findViewById(R.id.todo_item_task_name);
+            toDoTime = itemView.findViewById(R.id.todo_item_time);
+            toDoDate = itemView.findViewById(R.id.date_text);
             todoDetail = itemView.findViewById(R.id.todo_detail);
-            toDoTaskDatetime = itemView.findViewById(R.id.todo_item_due_datetime);
-            submitButton = itemView.findViewById(R.id.task_submit_btn);
+            rescheduleButton = itemView.findViewById(R.id.reschedule_btn);
+            toDoDateButton = itemView.findViewById(R.id.date_btn);
+            toDoTimeButton = itemView.findViewById(R.id.time_btn);
 
-            toDoTaskName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Todo todo = todos.get(getAdapterPosition());
-                    todo.setExpanded(!todo.isExpanded());
-                    notifyItemChanged(getAdapterPosition()); // calls onBindViewHolder for position
-                }
-            });
 
-            toDoTaskDatetime.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Todo todo = todos.get(getAdapterPosition());
-                    todo.setExpanded(!todo.isExpanded());
-                    notifyItemChanged(getAdapterPosition()); // calls onBindViewHolder for position
-                }
-            });
+
+
         }
     }
 }
