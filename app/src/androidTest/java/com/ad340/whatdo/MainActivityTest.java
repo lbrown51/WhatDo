@@ -24,7 +24,9 @@ import java.util.Locale;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.pressKey;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.PickerActions.setDate;
 import static androidx.test.espresso.contrib.PickerActions.setTime;
@@ -134,8 +136,7 @@ public class MainActivityTest {
         try {
             onView(withId(R.id.create_todo_dialog))
                     .check(matches(not(isDisplayed())));
-            onView(withId(R.id.placeholder_text))
-                    .check(matches(withText(R.string.placeholder_text)));
+            // TODO Add more add todo checks
         } catch (NoMatchingViewException e) {
             onView(withId(R.id.fab))
                     .check(matches(isDisplayed()));
@@ -155,8 +156,7 @@ public class MainActivityTest {
         try {
             onView(withId(R.id.create_todo_dialog))
                     .check(matches(not(isDisplayed())));
-            onView(withId(R.id.placeholder_text))
-                    .check(matches(withText(R.string.placeholder_text)));
+            // TODO Add more add todo checks
         } catch (NoMatchingViewException e) {
             onView(withId(R.id.fab))
                     .check(matches(isDisplayed()));
@@ -164,8 +164,8 @@ public class MainActivityTest {
     }
 
     /*
-    Tests whether the create to-do dialog closes with back button
- */
+        Tests whether the create to-do dialog closes with back button
+    */
     @Test
     public void openCloseDialogWithBackKey() {
         onView(withId(R.id.fab)).perform(click());
@@ -176,13 +176,74 @@ public class MainActivityTest {
         try {
             onView(withId(R.id.create_todo_dialog))
                     .check(matches(not(isDisplayed())));
-            onView(withId(R.id.placeholder_text))
-                    .check(matches(withText(R.string.placeholder_text)));
+            // TODO Add more add todo checks
         } catch (NoMatchingViewException e) {
             onView(withId(R.id.fab))
                     .check(matches(isDisplayed()));
         }
     }
+
+     /*
+        Tests whether create new task form has correct fields
+     */
+     @Test
+     public void createNewTodoHasCorrectFields() {
+         onView(withId(R.id.fab)).perform(click());
+         onView(withId(R.id.create_todo_dialog))
+                 .check(matches(isDisplayed()));
+
+         onView(withId(R.id.create_todo_task_name_layout))
+                 .check(matches(isDisplayed()));
+         onView(withId(R.id.create_todo_finish_btn))
+                 .check(matches(isDisplayed()));
+         onView(withId(R.id.create_todo_title))
+                 .check(matches(isDisplayed()));
+         onView(withId(R.id.create_todo_time_btn))
+                 .check(matches(isDisplayed()));
+         onView(withId(R.id.create_todo_date_btn))
+                 .check(matches(isDisplayed()));
+     }
+
+     /*
+        Tests if empty tasks won't be created.
+     */
+     @Test
+     public void emptyTaskStopsTodoCreate() {
+         onView(withId(R.id.fab)).perform(click());
+         onView(withId(R.id.create_todo_dialog))
+                 .check(matches(isDisplayed()));
+
+         onView(withId(R.id.create_todo_finish_btn))
+                 .perform(click());
+         onView(withId(R.id.create_todo_dialog))
+                 .check(matches(isDisplayed()));
+     }
+
+     /*
+        Tests if new tasks can be created.
+     */
+     @Test
+     public void canCreateNewTodo() {
+         onView(withId(R.id.fab)).perform(click());
+         onView(withId(R.id.create_todo_dialog))
+                 .check(matches(isDisplayed()));
+
+
+
+         onView(withId(R.id.create_todo_task_name_edit_text))
+                 .perform(typeText("New Task"), closeSoftKeyboard());
+
+         onView(withId(R.id.create_todo_finish_btn))
+                 .perform(click());
+
+         onView(withId(R.id.todo_list_recycler_view))
+                 .check(matches(isDisplayed()));
+
+         onView(withRecyclerView(R.id.todo_list_recycler_view)
+                 .atPositionOnView(3, R.id.name_text))
+                 .check(matches(withText("New Task")));
+     }
+
 
     /*
         Tests whether tasks can be expanded from task name or not
