@@ -187,8 +187,9 @@ public class MainActivityTest {
         Tests whether create new task form has correct fields
      */
      @Test
-     public void createNewTodoHasCorrectFields() {
+     public void createNewTodoHasCorrectFields() throws InterruptedException {
          onView(withId(R.id.fab)).perform(click());
+         Thread.sleep(2000);
          onView(withId(R.id.create_todo_dialog))
                  .check(matches(isDisplayed()));
 
