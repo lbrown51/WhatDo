@@ -1,40 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/create_todo_dialog"
-    android:background="@color/colorAccent"
-    >
-    <RelativeLayout
+    android:id="@+id/create_todo_dialog">
+
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginHorizontal="@dimen/large_item_spacing"
-        android:layout_marginVertical="@dimen/large_item_spacing"
-        android:background="#FFF"
-        android:layout_centerInParent="true"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:elevation="2dp"
+        android:layout_gravity="center_vertical"
+        android:layout_centerInParent="true">
 
-        <TextView
-            android:id="@+id/placeholder_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/placeholder_text"
-            android:textSize="@dimen/default_text_size"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/colorPrimary">
 
-        <ImageButton
-            android:id="@+id/close_dialog"
-            android:layout_width="@dimen/close_button_dimen"
-            android:layout_height="@dimen/close_button_dimen"
-            android:src="@drawable/ic_close_black"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="@dimen/large_item_spacing"
-            android:layout_marginEnd="@dimen/large_item_spacing"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            />
+            <TextView
+                android:id="@+id/create_todo_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Create a Todo"
+                android:textColor="@android:color/white"
+                android:padding="20dp"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
-    </RelativeLayout>
+            <ImageButton
+                android:id="@+id/close_dialog"
+                android:layout_width="19dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="@dimen/large_item_spacing"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_close_black"
+                android:tint="@color/colorAccent"
+                app:layout_constraintBottom_toBottomOf="@id/create_todo_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/todo_summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:background="@android:color/white"
+                app:layout_constraintTop_toBottomOf="@id/create_todo_title"
+                app:layout_constraintStart_toStartOf="parent">
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/create_todo_task_name_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="@string/add_task_hint"
+                    android:background="@android:color/white"
+                    android:hint="@string/add_task_hint"
+                    app:errorEnabled="true"
+                    app:boxBackgroundColor="@android:color/white"
+                    app:hintTextColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/create_todo_task_name_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageButton
+                    android:id="@+id/create_todo_time_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/todo_item_padding"
+                    android:layout_marginBottom="@dimen/recycler_view_padding"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/time_button"
+                    app:layout_constraintBottom_toBottomOf="@id/create_todo_finish_btn"
+                    app:layout_constraintTop_toTopOf="@id/create_todo_finish_btn"                    app:layout_constraintStart_toEndOf="@+id/create_todo_date_btn"
+                    app:srcCompat="@drawable/ic_access_time_24dp" />
+
+                <ImageButton
+                    android:id="@+id/create_todo_notes_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/todo_item_padding"
+                    android:layout_marginBottom="@dimen/recycler_view_padding"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/notes"
+                    app:layout_constraintBottom_toBottomOf="@id/create_todo_finish_btn"
+                    app:layout_constraintTop_toTopOf="@id/create_todo_finish_btn"                    app:layout_constraintStart_toStartOf="parent"
+                    app:srcCompat="@drawable/ic_create_24dp" />
+
+                <ImageButton
+                    android:id="@+id/create_todo_date_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/todo_item_padding"
+                    android:layout_marginBottom="@dimen/recycler_view_padding"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/date_button"
+                    app:layout_constraintBottom_toBottomOf="@id/create_todo_finish_btn"
+                    app:layout_constraintTop_toTopOf="@id/create_todo_finish_btn"
+                    app:layout_constraintStart_toEndOf="@+id/create_todo_notes_btn"
+                    app:srcCompat="@drawable/ic_date_range_24dp" />
+
+                <Button
+                    android:id="@+id/create_todo_finish_btn"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="16dp"
+                    app:icon="@drawable/ic_send_black_24dp"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/create_todo_task_name_layout" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>

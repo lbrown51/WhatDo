@@ -7,12 +7,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -79,6 +83,20 @@ public class MainActivity extends AppCompatActivity {
         final Dialog dialog = new Dialog(this, android.R.style.Theme_DeviceDefault_NoActionBar_Overscan);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(createView);
+
+        EditText newTodoEditText = dialog.findViewById(R.id.create_todo_task_name_edit_text);
+        Button finishNewTodoButton = dialog.findViewById(R.id.create_todo_finish_btn);
+        finishNewTodoButton.setOnClickListener(view -> {
+            String newTodoText = newTodoEditText.getText().toString();
+            if (newTodoText.isEmpty()) {
+                newTodoEditText.setError("Cannot make an empty task");
+            } else {
+                Todo newTodo = new Todo(null, newTodoText, null, null, null);
+                mTodoViewModel.insert(newTodo);
+                dialog.dismiss();
+            }
+        });
+
 
         ImageButton closeButton = (ImageButton) dialog.findViewById(R.id.close_dialog);
         closeButton.setOnClickListener((view) -> {
