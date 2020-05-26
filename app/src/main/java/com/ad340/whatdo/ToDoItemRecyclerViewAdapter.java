@@ -21,6 +21,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import static com.ad340.whatdo.PickerUtils.dateSetListener;
+import static com.ad340.whatdo.PickerUtils.timeSetListener;
+
 public class ToDoItemRecyclerViewAdapter
         extends RecyclerView.Adapter<ToDoItemRecyclerViewAdapter.ToDoItemViewHolder>{
     private static final String TAG = ToDoItemRecyclerViewAdapter.class.getName();
@@ -51,28 +54,10 @@ public class ToDoItemRecyclerViewAdapter
             final boolean isExpanded = position==mExpandedPosition;
 
             // user sets date in DatePicker
-            final DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
-                c.set(Calendar.YEAR, year);
-                c.set(Calendar.MONTH, monthOfYear);
-                c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
-                StringBuilder dateString = new StringBuilder(DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime()));
-
-                holder.toDoDate.setText(dateString);
-                todo.setDate(String.valueOf(dateString));
-            };
+            final DatePickerDialog.OnDateSetListener date = dateSetListener(c, todo, holder);
 
             // user sets time in TimePicker
-            final TimePickerDialog.OnTimeSetListener time = (view, hourOfDay, minute) -> {
-                c.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                c.set(Calendar.MINUTE, minute);
-
-                SimpleDateFormat sdf = new SimpleDateFormat("h:mm a", Locale.US);
-                String timeString = sdf.format(c.getTime());
-
-                holder.toDoTime.setText(timeString);
-                todo.setTime(timeString);
-            };
+            final TimePickerDialog.OnTimeSetListener time = timeSetListener(c, todo, holder);
 
             holder.todoDetail.setVisibility(isExpanded?View.VISIBLE:View.GONE);
             holder.itemView.setActivated(isExpanded);
