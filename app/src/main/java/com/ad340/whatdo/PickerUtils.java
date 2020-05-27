@@ -23,9 +23,8 @@ public class PickerUtils {
             StringBuilder dateString = new StringBuilder(DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime()));
 
             holder.toDoDate.setText(dateString);
-            if (listener != null) {
-                listener.onUpdateTodo(todo, String.valueOf(dateString), Constants.DATE);
-            }
+            listener.onUpdateTodo(todo, String.valueOf(dateString), Constants.DATE);
+
         };
     }
 
@@ -62,9 +61,8 @@ public class PickerUtils {
             String timeString = sdf.format(c.getTime());
 
             holder.toDoTime.setText(timeString);
-            if (listener != null) {
-                listener.onUpdateTodo(todo, timeString, Constants.TIME);
-            }
+            listener.onUpdateTodo(todo, timeString, Constants.TIME);
+
         };
     }
 
