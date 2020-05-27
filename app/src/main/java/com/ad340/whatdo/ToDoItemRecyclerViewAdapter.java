@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +14,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import static com.ad340.whatdo.PickerUtils.dateSetListener;
 import static com.ad340.whatdo.PickerUtils.timeSetListener;
@@ -31,8 +31,17 @@ public class ToDoItemRecyclerViewAdapter
     private List<Todo> todos;
     private int mExpandedPosition = -1;
     private int previousExpandedPosition = -1;
-    ToDoItemRecyclerViewAdapter(Context context) {
+    private OnListInteractionListener listener;
+
+//    ToDoItemRecyclerViewAdapter(Context context) {
+//        this.context = context;
+//    }
+
+    ToDoItemRecyclerViewAdapter(Context context, List<Todo> mTodos, OnListInteractionListener mListener) {
+        todos = mTodos;
+        listener = mListener;
         this.context = context;
+
     }
 
     @NonNull
@@ -48,13 +57,28 @@ public class ToDoItemRecyclerViewAdapter
     public void onBindViewHolder(@NonNull final ToDoItemViewHolder holder, int position) {
 
 
+
+
         if (todos != null && position < todos.size()) {
             Todo todo = todos.get(position);
             Calendar c = Calendar.getInstance();
             final boolean isExpanded = position==mExpandedPosition;
 
             // user sets date in DatePicker
-            final DatePickerDialog.OnDateSetListener date = dateSetListener(c, todo, holder);
+            final DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
+                c.set(Calendar.YEAR, year);
+                c.set(Calendar.MONTH, monthOfYear);
+                c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                StringBuilder dateString = new StringBuilder(DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime()));
+
+                holder.toDoDate.setText(dateString);
+                todo.setDate(String.valueOf(dateString));
+                if (listener != null) {
+                    Log.i(TAG, "onBindViewHolder: listener");
+                    listener.onListInteraction(todo);
+            }
+            };
 
             // user sets time in TimePicker
             final TimePickerDialog.OnTimeSetListener time = timeSetListener(c, todo, holder);
@@ -65,7 +89,6 @@ public class ToDoItemRecyclerViewAdapter
             holder.toDoDate.setText(todo.getDate());
             holder.toDoTime.setText(todo.getTime());
             holder.rescheduleButton.setOnClickListener(view -> {
-
                 //make popup menu
                 PopupMenu popup = new PopupMenu(context, holder.rescheduleButton);
                 //inflating menu
@@ -85,6 +108,11 @@ public class ToDoItemRecyclerViewAdapter
                 //displaying the popup
                 popup.show();
             });
+
+//            if (listener != null) {
+//                Log.i(TAG, "onBindViewHolder: listener");
+//                listener.onListInteraction(todo);
+//            }
 
 
             // show DatePicker
@@ -117,6 +145,8 @@ public class ToDoItemRecyclerViewAdapter
                 notifyItemChanged(previousExpandedPosition);
                 notifyItemChanged(position);
             });
+
+
         }
     }
 

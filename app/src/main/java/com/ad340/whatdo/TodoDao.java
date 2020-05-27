@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -18,4 +19,11 @@ public interface TodoDao {
 
     @Query("DELETE FROM todo_table")
     void deleteAll();
+
+    @Query("UPDATE todo_table SET date = :date WHERE id = :id")
+    void updateTodo(int id, String date);
+
+    @Update
+    void updateTodos(Todo... todos);
+
 }
