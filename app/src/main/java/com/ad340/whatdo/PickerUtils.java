@@ -35,6 +35,7 @@ public class PickerUtils {
             c.set(Calendar.MONTH, monthOfYear);
             c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
+            dateString.setLength(0);
             dateString.append(DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime()));
         };
     }
@@ -73,6 +74,7 @@ public class PickerUtils {
             c.set(Calendar.MINUTE, minute);
 
             SimpleDateFormat sdf = new SimpleDateFormat("h:mm a", Locale.US);
+            timeString.setLength(0);
             timeString.append(sdf.format(c.getTime()));
         };
     }
