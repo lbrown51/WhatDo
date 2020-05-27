@@ -18,10 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.Calendar;
 import java.util.List;
 
-import static com.ad340.whatdo.PickerUtils.showDatePicker;
+import static com.ad340.whatdo.PickerUtils.setDatePickerShowOnClick;
 import static com.ad340.whatdo.PickerUtils.onDateSetListener;
 import static com.ad340.whatdo.PickerUtils.onTimeSetListener;
-import static com.ad340.whatdo.PickerUtils.showTimePicker;
+import static com.ad340.whatdo.PickerUtils.setTimePickerShowOnClick;
 
 
 public class ToDoItemRecyclerViewAdapter
@@ -88,8 +88,8 @@ public class ToDoItemRecyclerViewAdapter
             });
 
             // show DatePicker and TimePicker
-            showDatePicker(context, c, holder.toDoDateButton, date);
-            showTimePicker(context, c, holder.toDoTimeButton, time);
+            setDatePickerShowOnClick(context, c, holder.toDoDateButton, date);
+            setTimePickerShowOnClick(context, c, holder.toDoTimeButton, time);
 
             // if current task is expanded, previous = current
             if (isExpanded) previousExpandedPosition = position;

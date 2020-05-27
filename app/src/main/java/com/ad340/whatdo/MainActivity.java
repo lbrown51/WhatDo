@@ -23,10 +23,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.Calendar;
 import java.util.Locale;
 
-import static com.ad340.whatdo.PickerUtils.showDatePicker;
+import static com.ad340.whatdo.PickerUtils.setDatePickerShowOnClick;
 import static com.ad340.whatdo.PickerUtils.onDateSetListener;
 import static com.ad340.whatdo.PickerUtils.onTimeSetListener;
-import static com.ad340.whatdo.PickerUtils.showTimePicker;
+import static com.ad340.whatdo.PickerUtils.setTimePickerShowOnClick;
 
 public class MainActivity extends AppCompatActivity implements OnTodoInteractionListener {
 
@@ -99,8 +99,8 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         final DatePickerDialog.OnDateSetListener date = onDateSetListener(c, dateString, dateText);
         final TimePickerDialog.OnTimeSetListener time = onTimeSetListener(c, timeString, timeText);
 
-        showDatePicker(this, c, newTodoDateButton, date);
-        showTimePicker(this, c, newTodoTimeButton, time);
+        setDatePickerShowOnClick(this, c, newTodoDateButton, date);
+        setTimePickerShowOnClick(this, c, newTodoTimeButton, time);
 
         finishNewTodoButton.setOnClickListener(view -> {
             String newTodoText = newTodoEditText.getText().toString();

@@ -259,7 +259,7 @@ public class MainActivityTest {
 
          onView(withId(R.id.create_todo_date_text))
                  .check(matches(withText("Thursday, May 28, 2020")));
-         
+
          onView(withId(R.id.create_todo_finish_btn))
                  .perform(click());
 

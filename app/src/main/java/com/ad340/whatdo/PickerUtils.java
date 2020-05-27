@@ -43,8 +43,8 @@ public class PickerUtils {
         };
     }
 
-    public static void showDatePicker(Context context, Calendar c, ImageButton imageButton,
-                                      DatePickerDialog.OnDateSetListener date) {
+    public static void setDatePickerShowOnClick(Context context, Calendar c, ImageButton imageButton,
+                                                DatePickerDialog.OnDateSetListener date) {
         imageButton.setOnClickListener(view ->
                 new DatePickerDialog(context, date,
                         c.get(Calendar.YEAR),
@@ -84,8 +84,8 @@ public class PickerUtils {
     }
 
 
-    public static void showTimePicker(Context context, Calendar c, ImageButton imageButton,
-                                      TimePickerDialog.OnTimeSetListener time) {
+    public static void setTimePickerShowOnClick(Context context, Calendar c, ImageButton imageButton,
+                                                TimePickerDialog.OnTimeSetListener time) {
         imageButton.setOnClickListener(view ->
                 new TimePickerDialog(context, time,
                         c.get(Calendar.HOUR_OF_DAY),
