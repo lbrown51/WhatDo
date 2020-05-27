@@ -1,1 +1,2 @@
-- "app/src/main/java/com/ad340/whatdo/Constants.java"  # ignore Constants.java
+ignore:
+  - "app/src/main/java/com/ad340/whatdo/Constants.java"  # ignore Constants.java
