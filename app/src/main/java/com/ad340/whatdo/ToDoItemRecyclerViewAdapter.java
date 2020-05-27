@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +15,13 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
+import static com.ad340.whatdo.PickerUtils.showDatePicker;
 import static com.ad340.whatdo.PickerUtils.onDateSetListener;
 import static com.ad340.whatdo.PickerUtils.onTimeSetListener;
+import static com.ad340.whatdo.PickerUtils.showTimePicker;
 
 
 public class ToDoItemRecyclerViewAdapter
@@ -89,20 +87,9 @@ public class ToDoItemRecyclerViewAdapter
                 popup.show();
             });
 
-
-            // show DatePicker
-            holder.toDoDateButton.setOnClickListener(view ->
-                    new DatePickerDialog(context, date,
-                        c.get(Calendar.YEAR),
-                        c.get(Calendar.MONTH),
-                        c.get(Calendar.DAY_OF_MONTH)).show()
-            );
-
-            // show TimePicker
-            holder.toDoTimeButton.setOnClickListener(view ->
-                    new TimePickerDialog(context, time,
-                        c.get(Calendar.HOUR_OF_DAY),
-                        c.get(Calendar.MINUTE), false).show());
+            // show DatePicker and TimePicker
+            showDatePicker(context, c, holder.toDoDateButton, date);
+            showTimePicker(context, c, holder.toDoTimeButton, time);
 
             // if current task is expanded, previous = current
             if (isExpanded) previousExpandedPosition = position;

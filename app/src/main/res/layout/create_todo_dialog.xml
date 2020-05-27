@@ -82,7 +82,8 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/time_button"
                     app:layout_constraintBottom_toBottomOf="@id/create_todo_finish_btn"
-                    app:layout_constraintTop_toTopOf="@id/create_todo_finish_btn"                    app:layout_constraintStart_toEndOf="@+id/create_todo_date_btn"
+                    app:layout_constraintTop_toTopOf="@id/create_todo_finish_btn"
+                    app:layout_constraintStart_toEndOf="@+id/create_todo_date_btn"
                     app:srcCompat="@drawable/ic_access_time_24dp" />
 
                 <ImageButton
@@ -94,7 +95,8 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/notes"
                     app:layout_constraintBottom_toBottomOf="@id/create_todo_finish_btn"
-                    app:layout_constraintTop_toTopOf="@id/create_todo_finish_btn"                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/create_todo_finish_btn"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:srcCompat="@drawable/ic_create_24dp" />
 
                 <ImageButton
