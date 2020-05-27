@@ -229,13 +229,14 @@ public class MainActivityTest {
         Tests if new tasks can be created.
      */
      @Test
-     public void canCreateNewTodo() {
+     public void canCreateNewTodo() throws InterruptedException {
          int hourOfDay = 16;
          int minute = 30;
          int year = 2020;
          int month = 5;
          int dayOfMonth = 28;
 
+         Thread.sleep(250);
          onView(withId(R.id.fab)).perform(click());
          onView(withId(R.id.create_todo_dialog))
                  .check(matches(isDisplayed()));

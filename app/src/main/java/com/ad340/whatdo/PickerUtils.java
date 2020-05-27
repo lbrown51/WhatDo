@@ -3,7 +3,9 @@ package com.ad340.whatdo;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -29,7 +31,7 @@ public class PickerUtils {
     }
 
     public static DatePickerDialog.OnDateSetListener onDateSetListener (  // MainActivity
-            Calendar c, StringBuilder dateString) {
+            Calendar c, StringBuilder dateString, TextView v) {
         return (view, year, monthOfYear, dayOfMonth) -> {
             c.set(Calendar.YEAR, year);
             c.set(Calendar.MONTH, monthOfYear);
@@ -37,6 +39,7 @@ public class PickerUtils {
 
             dateString.setLength(0);
             dateString.append(DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime()));
+            v.setText(dateString);
         };
     }
 
@@ -68,7 +71,7 @@ public class PickerUtils {
     }
 
     public static TimePickerDialog.OnTimeSetListener onTimeSetListener ( // MainActivity
-            Calendar c, StringBuilder timeString) {
+            Calendar c, StringBuilder timeString, TextView v) {
         return (view, hourOfDay, minute) -> {
             c.set(Calendar.HOUR_OF_DAY, hourOfDay);
             c.set(Calendar.MINUTE, minute);
@@ -76,6 +79,7 @@ public class PickerUtils {
             SimpleDateFormat sdf = new SimpleDateFormat("h:mm a", Locale.US);
             timeString.setLength(0);
             timeString.append(sdf.format(c.getTime()));
+            v.setText(timeString);
         };
     }
 

@@ -15,6 +15,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -89,12 +90,14 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         StringBuilder timeString = new StringBuilder();
 
         EditText newTodoEditText = dialog.findViewById(R.id.create_todo_task_name_edit_text);
+        TextView dateText = dialog.findViewById(R.id.create_todo_date_text);
+        TextView timeText = dialog.findViewById(R.id.create_todo_time_text);
         Button finishNewTodoButton = dialog.findViewById(R.id.create_todo_finish_btn);
         ImageButton newTodoDateButton = dialog.findViewById(R.id.create_todo_date_btn);
         ImageButton newTodoTimeButton = dialog.findViewById(R.id.create_todo_time_btn);
 
-        final DatePickerDialog.OnDateSetListener date = onDateSetListener(c, dateString);
-        final TimePickerDialog.OnTimeSetListener time = onTimeSetListener(c, timeString);
+        final DatePickerDialog.OnDateSetListener date = onDateSetListener(c, dateString, dateText);
+        final TimePickerDialog.OnTimeSetListener time = onTimeSetListener(c, timeString, timeText);
 
         showDatePicker(this, c, newTodoDateButton, date);
         showTimePicker(this, c, newTodoTimeButton, time);
