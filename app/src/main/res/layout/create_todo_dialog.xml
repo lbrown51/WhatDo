@@ -2,6 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/create_todo_dialog">
@@ -78,23 +79,38 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/todo_item_padding"
-                    android:layout_marginBottom="@dimen/recycler_view_padding"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/time_button"
                     app:layout_constraintBottom_toBottomOf="@id/create_todo_finish_btn"
-                    app:layout_constraintTop_toTopOf="@id/create_todo_finish_btn"                    app:layout_constraintStart_toEndOf="@+id/create_todo_date_btn"
+                    app:layout_constraintStart_toEndOf="@+id/create_todo_date_btn"
                     app:srcCompat="@drawable/ic_access_time_24dp" />
+
+                <TextView
+                    android:id="@+id/create_todo_date_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@+id/create_todo_notes_btn"
+                    app:layout_constraintStart_toStartOf="@+id/create_todo_notes_btn"
+                    app:layout_constraintTop_toBottomOf="@+id/create_todo_task_name_layout" />
+
+                <TextView
+                    android:id="@+id/create_todo_time_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/todo_item_padding"
+                    app:layout_constraintBottom_toTopOf="@+id/create_todo_time_btn"
+                    app:layout_constraintStart_toEndOf="@+id/create_todo_date_text"
+                    app:layout_constraintTop_toBottomOf="@+id/create_todo_task_name_layout" />
 
                 <ImageButton
                     android:id="@+id/create_todo_notes_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/todo_item_padding"
-                    android:layout_marginBottom="@dimen/recycler_view_padding"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/notes"
                     app:layout_constraintBottom_toBottomOf="@id/create_todo_finish_btn"
-                    app:layout_constraintTop_toTopOf="@id/create_todo_finish_btn"                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:srcCompat="@drawable/ic_create_24dp" />
 
                 <ImageButton
@@ -102,11 +118,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/todo_item_padding"
-                    android:layout_marginBottom="@dimen/recycler_view_padding"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/date_button"
                     app:layout_constraintBottom_toBottomOf="@id/create_todo_finish_btn"
-                    app:layout_constraintTop_toTopOf="@id/create_todo_finish_btn"
                     app:layout_constraintStart_toEndOf="@+id/create_todo_notes_btn"
                     app:srcCompat="@drawable/ic_date_range_24dp" />
 

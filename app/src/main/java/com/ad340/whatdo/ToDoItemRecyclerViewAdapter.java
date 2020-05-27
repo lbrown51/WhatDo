@@ -15,11 +15,14 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
+
+import static com.ad340.whatdo.PickerUtils.setDatePickerShowOnClick;
+import static com.ad340.whatdo.PickerUtils.onDateSetListener;
+import static com.ad340.whatdo.PickerUtils.onTimeSetListener;
+import static com.ad340.whatdo.PickerUtils.setTimePickerShowOnClick;
+
 
 public class ToDoItemRecyclerViewAdapter
         extends RecyclerView.Adapter<ToDoItemRecyclerViewAdapter.ToDoItemViewHolder>{
@@ -28,8 +31,12 @@ public class ToDoItemRecyclerViewAdapter
     private List<Todo> todos;
     private int mExpandedPosition = -1;
     private int previousExpandedPosition = -1;
+    private OnTodoInteractionListener listener;
+
+
     ToDoItemRecyclerViewAdapter(Context context) {
         this.context = context;
+        listener = (OnTodoInteractionListener) this.context;
     }
 
     @NonNull
@@ -43,36 +50,16 @@ public class ToDoItemRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(@NonNull final ToDoItemViewHolder holder, int position) {
-
-
         if (todos != null && position < todos.size()) {
             Todo todo = todos.get(position);
             Calendar c = Calendar.getInstance();
             final boolean isExpanded = position==mExpandedPosition;
 
             // user sets date in DatePicker
-            final DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
-                c.set(Calendar.YEAR, year);
-                c.set(Calendar.MONTH, monthOfYear);
-                c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
-                StringBuilder dateString = new StringBuilder(DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime()));
-
-                holder.toDoDate.setText(dateString);
-                todo.setDate(String.valueOf(dateString));
-            };
+            final DatePickerDialog.OnDateSetListener date = onDateSetListener(c, todo, holder, listener);
 
             // user sets time in TimePicker
-            final TimePickerDialog.OnTimeSetListener time = (view, hourOfDay, minute) -> {
-                c.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                c.set(Calendar.MINUTE, minute);
-
-                SimpleDateFormat sdf = new SimpleDateFormat("h:mm a", Locale.US);
-                String timeString = sdf.format(c.getTime());
-
-                holder.toDoTime.setText(timeString);
-                todo.setTime(timeString);
-            };
+            final TimePickerDialog.OnTimeSetListener time = onTimeSetListener(c, todo, holder, listener);
 
             holder.todoDetail.setVisibility(isExpanded?View.VISIBLE:View.GONE);
             holder.itemView.setActivated(isExpanded);
@@ -80,7 +67,6 @@ public class ToDoItemRecyclerViewAdapter
             holder.toDoDate.setText(todo.getDate());
             holder.toDoTime.setText(todo.getTime());
             holder.rescheduleButton.setOnClickListener(view -> {
-
                 //make popup menu
                 PopupMenu popup = new PopupMenu(context, holder.rescheduleButton);
                 //inflating menu
@@ -101,20 +87,9 @@ public class ToDoItemRecyclerViewAdapter
                 popup.show();
             });
 
-
-            // show DatePicker
-            holder.toDoDateButton.setOnClickListener(view ->
-                    new DatePickerDialog(context, date,
-                        c.get(Calendar.YEAR),
-                        c.get(Calendar.MONTH),
-                        c.get(Calendar.DAY_OF_MONTH)).show()
-            );
-
-            // show TimePicker
-            holder.toDoTimeButton.setOnClickListener(view ->
-                    new TimePickerDialog(context, time,
-                        c.get(Calendar.HOUR_OF_DAY),
-                        c.get(Calendar.MINUTE), false).show());
+            // show DatePicker and TimePicker
+            setDatePickerShowOnClick(context, c, holder.toDoDateButton, date);
+            setTimePickerShowOnClick(context, c, holder.toDoTimeButton, time);
 
             // if current task is expanded, previous = current
             if (isExpanded) previousExpandedPosition = position;

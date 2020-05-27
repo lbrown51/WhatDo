@@ -1,6 +1,7 @@
 package com.ad340.whatdo;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -21,4 +22,6 @@ public class TodoViewModel extends AndroidViewModel {
     LiveData<List<Todo>> getAllTodos() { return allTodos; }
 
     public void insert(Todo todo) { repository.insert(todo);}
+
+    public void updateTodo(Todo todo, String data, int type) { repository.updateTodo(todo, data, type); }
 }

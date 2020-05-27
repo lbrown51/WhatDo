@@ -64,7 +64,7 @@ public class MainActivityTest {
         Tests whether the header has the correct date
      */
     @Test
-    public void headerTextUpdates() {
+    public void headerTextUpdates() throws InterruptedException {
         AppCompatActivity activity = (AppCompatActivity) TestUtils.getActivity();
         Calendar today = Calendar.getInstance();
         StringBuilder expectedText = new StringBuilder(TestUtils.getString(R.string.app_bar_title));
@@ -78,6 +78,8 @@ public class MainActivityTest {
         Log.e("displayText", displayText);
         Log.e("expectedText", expectedText.toString());
         assertEquals(displayText, expectedText.toString());
+
+        Thread.sleep(250);
     }
 
     /*
@@ -103,7 +105,8 @@ public class MainActivityTest {
         Tests whether the tasks have the correct content.
     */
     @Test
-    public void tasksDisplayCorrectViews() {
+    public void tasksDisplayCorrectViews() throws InterruptedException {
+        Thread.sleep(250);
         onView(withId(R.id.todo_list_recycler_view))
                 .check(matches(hasDescendant(withId(R.id.name_text))));
 
@@ -167,7 +170,9 @@ public class MainActivityTest {
         Tests whether the create to-do dialog closes with back button
     */
     @Test
-    public void openCloseDialogWithBackKey() {
+    public void openCloseDialogWithBackKey() throws InterruptedException {
+        Thread.sleep(250);
+
         onView(withId(R.id.fab)).perform(click());
         onView(withId(R.id.create_todo_dialog))
                 .check(matches(isDisplayed()));
@@ -224,15 +229,36 @@ public class MainActivityTest {
         Tests if new tasks can be created.
      */
      @Test
-     public void canCreateNewTodo() {
+     public void canCreateNewTodo() throws InterruptedException {
+         int hourOfDay = 16;
+         int minute = 30;
+         int year = 2020;
+         int month = 5;
+         int dayOfMonth = 28;
+
+         Thread.sleep(250);
          onView(withId(R.id.fab)).perform(click());
          onView(withId(R.id.create_todo_dialog))
                  .check(matches(isDisplayed()));
 
-
-
          onView(withId(R.id.create_todo_task_name_edit_text))
                  .perform(typeText("New Task"), closeSoftKeyboard());
+
+         onView(withId(R.id.create_todo_time_btn)).perform(click());
+         onView(withClassName(Matchers.equalTo(
+                 TimePicker.class.getName()))).perform(setTime(hourOfDay, minute));
+         onView(withId(android.R.id.button1)).perform(click());
+
+         onView(withId(R.id.create_todo_time_text))
+                 .check(matches(withText("4:30 PM")));
+
+         onView(withId(R.id.create_todo_date_btn)).perform(click());
+         onView(withClassName(Matchers.equalTo(
+                 DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
+         onView(withId(android.R.id.button1)).perform(click());
+
+         onView(withId(R.id.create_todo_date_text))
+                 .check(matches(withText("Thursday, May 28, 2020")));
 
          onView(withId(R.id.create_todo_finish_btn))
                  .perform(click());
@@ -243,6 +269,15 @@ public class MainActivityTest {
          onView(withRecyclerView(R.id.todo_list_recycler_view)
                  .atPositionOnView(3, R.id.name_text))
                  .check(matches(withText("New Task")));
+
+         onView(withRecyclerView(R.id.todo_list_recycler_view)
+                 .atPositionOnView(3, R.id.time_text))
+                 .check(matches(withText("4:30 PM")));
+
+         onView(withRecyclerView(R.id.todo_list_recycler_view)
+                 .atPositionOnView(3, R.id.date_text))
+                 .check(matches(withText("Thursday, May 28, 2020")));
+
      }
 
 

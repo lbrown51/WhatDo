@@ -1,14 +1,13 @@
 package com.ad340.whatdo;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,16 +15,20 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+import static com.ad340.whatdo.PickerUtils.setDatePickerShowOnClick;
+import static com.ad340.whatdo.PickerUtils.onDateSetListener;
+import static com.ad340.whatdo.PickerUtils.onTimeSetListener;
+import static com.ad340.whatdo.PickerUtils.setTimePickerShowOnClick;
+
+public class MainActivity extends AppCompatActivity implements OnTodoInteractionListener {
 
     private MaterialToolbar header;
     private TodoViewModel mTodoViewModel;
@@ -37,16 +40,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView toDoRecyclerView = findViewById(R.id.todo_list_recycler_view);
+        mTodoViewModel = new ViewModelProvider(this).get(TodoViewModel.class);
         ToDoItemRecyclerViewAdapter adapter = new ToDoItemRecyclerViewAdapter(this);
+        RecyclerView toDoRecyclerView = findViewById(R.id.todo_list_recycler_view);
+
         toDoRecyclerView.setAdapter(adapter);
         toDoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mTodoViewModel = new ViewModelProvider(this).get(TodoViewModel.class);
-        mTodoViewModel.getAllTodos().observe(this, new Observer<List<Todo>>() {
-            @Override
-            public void onChanged(List<Todo> todos) {
-                adapter.setTodos(todos);
-            }
+
+        mTodoViewModel.getAllTodos().observe(this, todos -> {
+            adapter.setTodos(todos);
         });
 
         int largePadding = getResources().getDimensionPixelSize(R.dimen.large_item_spacing);
@@ -79,26 +81,41 @@ public class MainActivity extends AppCompatActivity {
 
     private void showCreateDialog() {
         final View createView = View.inflate(this, R.layout.create_todo_dialog, null);
-
         final Dialog dialog = new Dialog(this, android.R.style.Theme_DeviceDefault_NoActionBar_Overscan);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(createView);
 
+        Calendar c = Calendar.getInstance();
+        StringBuilder dateString = new StringBuilder();
+        StringBuilder timeString = new StringBuilder();
+
         EditText newTodoEditText = dialog.findViewById(R.id.create_todo_task_name_edit_text);
+        TextView dateText = dialog.findViewById(R.id.create_todo_date_text);
+        TextView timeText = dialog.findViewById(R.id.create_todo_time_text);
         Button finishNewTodoButton = dialog.findViewById(R.id.create_todo_finish_btn);
+        ImageButton newTodoDateButton = dialog.findViewById(R.id.create_todo_date_btn);
+        ImageButton newTodoTimeButton = dialog.findViewById(R.id.create_todo_time_btn);
+
+        final DatePickerDialog.OnDateSetListener date = onDateSetListener(c, dateString, dateText);
+        final TimePickerDialog.OnTimeSetListener time = onTimeSetListener(c, timeString, timeText);
+
+        setDatePickerShowOnClick(this, c, newTodoDateButton, date);
+        setTimePickerShowOnClick(this, c, newTodoTimeButton, time);
+
         finishNewTodoButton.setOnClickListener(view -> {
             String newTodoText = newTodoEditText.getText().toString();
             if (newTodoText.isEmpty()) {
                 newTodoEditText.setError("Cannot make an empty task");
             } else {
-                Todo newTodo = new Todo(null, newTodoText, null, null, null);
+                Todo newTodo = new Todo(null, newTodoText, String.valueOf(dateString),
+                        String.valueOf(timeString), null);
                 mTodoViewModel.insert(newTodo);
                 dialog.dismiss();
             }
         });
 
 
-        ImageButton closeButton = (ImageButton) dialog.findViewById(R.id.close_dialog);
+        ImageButton closeButton = dialog.findViewById(R.id.close_dialog);
         closeButton.setOnClickListener((view) -> {
             view.setVisibility(View.INVISIBLE);
             dialog.dismiss();
@@ -112,5 +129,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         dialog.show();
-    };
+    }
+
+    @Override
+    public void onUpdateTodo(Todo todo, String data, int type) {
+        mTodoViewModel.updateTodo(todo, data, type);
+    }
 }
