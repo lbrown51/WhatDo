@@ -1,17 +1,12 @@
 package com.ad340.whatdo;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -20,46 +15,36 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements OnListInteractionListener {
+public class MainActivity extends AppCompatActivity implements OnTodoInteractionListener {
 
     private MaterialToolbar header;
     private TodoViewModel mTodoViewModel;
     public static final int NEW_TODO_ACTIVITY_REQUEST_CODE = 1;
     public FloatingActionButton fab;
     private static final String TAG = MainActivity.class.getName();
-    private OnListInteractionListener mListener;
-    private List<Todo> mTodos;
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mListener = (OnListInteractionListener) this;
-//        List<Todo> mTodos = mTodoViewModel.getAllTodos().getValue();
         mTodoViewModel = new ViewModelProvider(this).get(TodoViewModel.class);
-        ToDoItemRecyclerViewAdapter adapter = new ToDoItemRecyclerViewAdapter(this, mTodos, mListener);
+        ToDoItemRecyclerViewAdapter adapter = new ToDoItemRecyclerViewAdapter(this);
         RecyclerView toDoRecyclerView = findViewById(R.id.todo_list_recycler_view);
 
         toDoRecyclerView.setAdapter(adapter);
+        toDoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mTodoViewModel.getAllTodos().observe(this, todos -> {
             adapter.setTodos(todos);
         });
-
-        toDoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
 
         int largePadding = getResources().getDimensionPixelSize(R.dimen.large_item_spacing);
         int smallPadding = getResources().getDimensionPixelSize(R.dimen.small_item_spacing);
@@ -69,9 +54,6 @@ public class MainActivity extends AppCompatActivity implements OnListInteraction
         fab.setOnClickListener(view -> {
                 showCreateDialog();
             });
-
-//        onActivityResult(1, 1, data);
-
 
         Calendar today = Calendar.getInstance();
         header = findViewById(R.id.top_app_bar);
@@ -107,21 +89,13 @@ public class MainActivity extends AppCompatActivity implements OnListInteraction
                 newTodoEditText.setError("Cannot make an empty task");
             } else {
                 Todo newTodo = new Todo(null, newTodoText, null, null, null);
-
-                LiveData<List<Todo>> todos = mTodoViewModel.getAllTodos();
-                Todo todo = todos.getValue().get(0);
-                Log.i(TAG, "showCreateDialog:");
-                Log.i(TAG, todo.getTime() != null ? todo.getTime() : "no time");
                 mTodoViewModel.insert(newTodo);
-                Log.i(TAG, todo.getTime() != null ? todo.getTime() : "no time");
-
-                mTodoViewModel.updateTodo(todo, "Hello");
                 dialog.dismiss();
             }
         });
 
 
-        ImageButton closeButton = (ImageButton) dialog.findViewById(R.id.close_dialog);
+        ImageButton closeButton = dialog.findViewById(R.id.close_dialog);
         closeButton.setOnClickListener((view) -> {
             view.setVisibility(View.INVISIBLE);
             dialog.dismiss();
@@ -135,26 +109,15 @@ public class MainActivity extends AppCompatActivity implements OnListInteraction
         });
 
         dialog.show();
-    };
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.i(TAG, "onSaveInstanceState: ");
     }
 
     @Override
-    public void onDestroy() {
-//        unregisterReceiver(batteryInfoReceiver);
-        super.onDestroy();
+    public void onSetDate(Todo todo, String date) {
+        mTodoViewModel.updateTodoDate(todo, date);
     }
 
-
     @Override
-    public void onListInteraction(Todo todo) {
-        Log.i(TAG, "onListInteraction: ");
-        Log.i(TAG, todo.getDate() != null ? todo.getDate() : "No date");
-        String date = todo.getDate() != null ? todo.getDate() : "";
-        mTodoViewModel.updateTodo(todo, date);
+    public void onSetTime(Todo todo, String time) {
+        mTodoViewModel.updateTodoTime(todo, time);
     }
 }

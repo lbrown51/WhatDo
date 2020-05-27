@@ -23,7 +23,9 @@ public class TodoViewModel extends AndroidViewModel {
 
     public void insert(Todo todo) { repository.insert(todo);}
 
-    public void updateTodo(Todo todo, String date) { repository.updateTodo(todo, date);}
+    public void updateTodoDate(Todo todo, String date) { repository.updateTodoDate(todo, date);}
+
+    public void updateTodoTime(Todo todo, String time) { repository.updateTodoTime(todo, time);}
 
     public void updateTodos(Todo... todos) {
         repository.updateTodos(todos);

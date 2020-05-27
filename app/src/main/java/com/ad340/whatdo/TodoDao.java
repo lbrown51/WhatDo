@@ -21,7 +21,10 @@ public interface TodoDao {
     void deleteAll();
 
     @Query("UPDATE todo_table SET date = :date WHERE id = :id")
-    void updateTodo(int id, String date);
+    void updateTodoDate(int id, String date);
+
+    @Query("UPDATE todo_table SET time = :time WHERE id = :id")
+    void updateTodoTime(int id, String time);
 
     @Update
     void updateTodos(Todo... todos);
