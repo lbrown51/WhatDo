@@ -249,11 +249,17 @@ public class MainActivityTest {
                  TimePicker.class.getName()))).perform(setTime(hourOfDay, minute));
          onView(withId(android.R.id.button1)).perform(click());
 
+         onView(withId(R.id.create_todo_time_text))
+                 .check(matches(withText("4:30 PM")));
+
          onView(withId(R.id.create_todo_date_btn)).perform(click());
          onView(withClassName(Matchers.equalTo(
                  DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
          onView(withId(android.R.id.button1)).perform(click());
 
+         onView(withId(R.id.create_todo_date_text))
+                 .check(matches(withText("Thursday, May 28, 2020")));
+         
          onView(withId(R.id.create_todo_finish_btn))
                  .perform(click());
 
