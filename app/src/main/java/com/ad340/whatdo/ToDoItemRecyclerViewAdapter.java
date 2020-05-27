@@ -22,6 +22,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import static com.ad340.whatdo.PickerUtils.onDateSetListener;
+import static com.ad340.whatdo.PickerUtils.onTimeSetListener;
+
 
 public class ToDoItemRecyclerViewAdapter
         extends RecyclerView.Adapter<ToDoItemRecyclerViewAdapter.ToDoItemViewHolder>{
@@ -55,34 +58,10 @@ public class ToDoItemRecyclerViewAdapter
             final boolean isExpanded = position==mExpandedPosition;
 
             // user sets date in DatePicker
-            final DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
-                c.set(Calendar.YEAR, year);
-                c.set(Calendar.MONTH, monthOfYear);
-                c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
-                StringBuilder dateString = new StringBuilder(DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime()));
-
-                holder.toDoDate.setText(dateString);
-                if (listener != null) {
-                    Log.i(TAG, "onBindViewHolder: listener");
-                    listener.onUpdateTodo(todo, String.valueOf(dateString), Constants.DATE);
-                }
-            };
+            final DatePickerDialog.OnDateSetListener date = onDateSetListener(c, todo, holder, listener);
 
             // user sets time in TimePicker
-            final TimePickerDialog.OnTimeSetListener time = (view, hourOfDay, minute) -> {
-                c.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                c.set(Calendar.MINUTE, minute);
-
-                SimpleDateFormat sdf = new SimpleDateFormat("h:mm a", Locale.US);
-                String timeString = sdf.format(c.getTime());
-
-                holder.toDoTime.setText(timeString);
-                if (listener != null) {
-                    Log.i(TAG, "onBindViewHolder: listener");
-                    listener.onUpdateTodo(todo, timeString, Constants.TIME);
-                }
-            };
+            final TimePickerDialog.OnTimeSetListener time = onTimeSetListener(c, todo, holder, listener);
 
             holder.todoDetail.setVisibility(isExpanded?View.VISIBLE:View.GONE);
             holder.itemView.setActivated(isExpanded);
@@ -141,8 +120,6 @@ public class ToDoItemRecyclerViewAdapter
                 notifyItemChanged(previousExpandedPosition);
                 notifyItemChanged(position);
             });
-
-
         }
     }
 
