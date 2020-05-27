@@ -33,6 +33,7 @@ public class TodoRepository {
                 break;
             case 4: // update notes
                 TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoNotes(id, data));
+                break;
             default: // type not recognized
                 StringBuilder errMessage  = new StringBuilder("Data type of ")
                         .append(type).append(" not recognized.");
@@ -44,8 +45,4 @@ public class TodoRepository {
     void insert(Todo todo) {
         TodoRoomDatabase.databaseWriteExecutor.execute(() -> { todoDao.insert(todo);});
     }
-
-    void updateTodos(Todo... todos) {
-        TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodos(todos));
-    };
 }

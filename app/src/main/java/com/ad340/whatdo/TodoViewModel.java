@@ -23,9 +23,5 @@ public class TodoViewModel extends AndroidViewModel {
 
     public void insert(Todo todo) { repository.insert(todo);}
 
-    public void updateTodo(Todo todo, String data, int type) { repository.updateTodo(todo, data, type);}
-
-    public void updateTodos(Todo... todos) {
-        repository.updateTodos(todos);
-    }
+    public void updateTodo(Todo todo, String data, int type) { repository.updateTodo(todo, data, type); }
 }

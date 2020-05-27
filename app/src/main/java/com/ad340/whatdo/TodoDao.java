@@ -31,9 +31,4 @@ public interface TodoDao {
 
     @Query("UPDATE todo_table SET notes = :notes WHERE id = :id")
     void updateTodoNotes(int id, String notes);
-
-
-    @Update
-    void updateTodos(Todo... todos);
-
 }
