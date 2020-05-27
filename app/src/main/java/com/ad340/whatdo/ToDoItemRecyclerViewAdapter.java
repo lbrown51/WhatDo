@@ -65,7 +65,7 @@ public class ToDoItemRecyclerViewAdapter
                 holder.toDoDate.setText(dateString);
                 if (listener != null) {
                     Log.i(TAG, "onBindViewHolder: listener");
-                    listener.onSetDate(todo, String.valueOf(dateString));
+                    listener.onUpdateTodo(todo, String.valueOf(dateString), Constants.DATE);
                 }
             };
 
@@ -80,7 +80,7 @@ public class ToDoItemRecyclerViewAdapter
                 holder.toDoTime.setText(timeString);
                 if (listener != null) {
                     Log.i(TAG, "onBindViewHolder: listener");
-                    listener.onSetTime(todo, timeString);
+                    listener.onUpdateTodo(todo, timeString, Constants.TIME);
                 }
             };
 

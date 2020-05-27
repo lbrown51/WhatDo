@@ -28,8 +28,6 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
     private TodoViewModel mTodoViewModel;
     public static final int NEW_TODO_ACTIVITY_REQUEST_CODE = 1;
     public FloatingActionButton fab;
-    private static final String TAG = MainActivity.class.getName();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,12 +110,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
     }
 
     @Override
-    public void onSetDate(Todo todo, String date) {
-        mTodoViewModel.updateTodoDate(todo, date);
-    }
-
-    @Override
-    public void onSetTime(Todo todo, String time) {
-        mTodoViewModel.updateTodoTime(todo, time);
+    public void onUpdateTodo(Todo todo, String data, int type) {
+        mTodoViewModel.updateTodo(todo, data, type);
     }
 }
