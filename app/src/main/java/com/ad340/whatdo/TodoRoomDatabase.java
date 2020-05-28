@@ -44,16 +44,19 @@ public abstract class TodoRoomDatabase extends RoomDatabase {
             databaseWriteExecutor.execute(() -> {
                 TodoDao dao = INSTANCE.todoDao();
                 dao.deleteAll();
-                Todo todo = new Todo(null, "First Todo", null, null, null);
+                Todo todo = new Todo(null, "First Todo", null, null, null, false);
                 dao.insert(todo);
-                todo = new Todo(null, "Second Todo", null, null, null);
+                todo = new Todo(null, "Second Todo", null, null, null, false);
                 dao.insert(todo);
-                todo = new Todo(null, "Third Todo", null, null, null);
+                todo = new Todo(null, "Third Todo", null, null, null, false);
                 dao.insert(todo);
-                todo = new Todo(null, "Fourth Todo", null, null, null);
+                todo = new Todo(null, "Fourth Todo", null, null, null, false);
                 dao.insert(todo);
-                todo = new Todo(null, "Fifth Todo", null, null, null);
+                todo = new Todo(null, "Fifth Todo", null, null, null, false);
                 dao.insert(todo);
+                todo = new Todo(null, "Finished Todo", null, null, null, true);
+                dao.insert(todo);
+
             });
 
 

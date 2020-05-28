@@ -27,7 +27,6 @@ public class Todo {
     private String time;
     public String getTime() { return this.time; }
 
-    @Ignore
     @ColumnInfo(name = "isCompleted")
     private boolean isCompleted;
     public boolean getCompleted() { return this.isCompleted; }
@@ -36,13 +35,13 @@ public class Todo {
     private String notes;
     public String getNotes() { return this.notes; }
 
-    public Todo(Integer id, @NonNull String title, String date, String time, String notes) {
+    public Todo(Integer id, @NonNull String title, String date, String time, String notes, Boolean isCompleted) {
         this.id = id;
         this.title = title;
         this.date = date;
         this.time = time;
         this.notes = notes;
-        this.isCompleted = false;
+        this.isCompleted = isCompleted;
     }
 
 //    @Ignore
