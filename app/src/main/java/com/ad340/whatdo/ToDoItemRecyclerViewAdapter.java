@@ -89,7 +89,10 @@ public class ToDoItemRecyclerViewAdapter
                 popup.setOnMenuItemClickListener(item -> {
                     switch (item.getItemId()) {
                         case R.id.reschedule:
-                            //handle reschedule click
+                            new DatePickerDialog(context, date,
+                                    c.get(Calendar.YEAR),
+                                    c.get(Calendar.MONTH),
+                                    c.get(Calendar.DAY_OF_MONTH)).show();
                             break;
                         case R.id.cancel:
                             mTodoViewModel.removeTodo(todo);
