@@ -442,8 +442,7 @@ public class MainActivityTest {
 
 
     /*
-    Tests whether tasks have a Cancel option
-
+        Tests whether tasks have a Cancel option
     */
     @Test
     public void hasCancelOption() {
@@ -458,10 +457,29 @@ public class MainActivityTest {
         onView(withText(R.string.cancel)).perform(click());
     }
 
+    /*
+        Tests whether tasks can be cancelled
+    */
+    @Test
+    public void canCancelTask() {
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(2, R.id.name_text))
+                .perform(click());
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(2, R.id.reschedule_btn))
+                .perform(click());
+
+        onView(withText(R.string.cancel)).perform(click());
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(2, R.id.name_text))
+                .check(matches(not(withText("Third Todo"))));
+    }
+
 
     /*
-    Tests whether tasks have a Reschedule option
-
+        Tests whether tasks have a Reschedule option
     */
     @Test
     public void hasRescheduleOption() {
@@ -474,6 +492,46 @@ public class MainActivityTest {
                 .perform(click());
 
         onView(withText(R.string.reschedule)).perform(click());
+    }
+
+    /*
+        Tests whether tasks can be rescheduled
+    */
+    @Test
+    public void canRescheduleTask() {
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(2, R.id.name_text))
+                .perform(click());
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(2, R.id.reschedule_btn))
+                .perform(click());
+
+        onView(withText(R.string.reschedule)).perform(click());
+
+        int year = 2020;
+        int month = 5;
+        int dayOfMonth = 28;
+        onView(withClassName(Matchers.equalTo(
+                DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
+        onView(withId(android.R.id.button1)).perform(click());
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(2, R.id.date_text))
+                .check(matches(withText("Thursday, May 28, 2020")));
+    }
+
+    /*
+        Tests whether tasks can be finished
+    */
+    @Test
+    public void canFinishTask() {
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(2, R.id.todo_item_finished_checkbox))
+                .perform(click());
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(2, R.id.name_text))
+                .check(matches(not(withText("Third Todo"))));
     }
 
     /*
