@@ -290,7 +290,7 @@ public class MainActivityTest {
         Tests whether tasks can be expanded from task name or not
      */
     @Test
-    public void tasksExpandAndCollapse() {
+    public void tasksExpandAndCollapse() throws InterruptedException {
         // Date and buttons are invisible
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.date_text))
@@ -343,9 +343,10 @@ public class MainActivityTest {
                 .atPositionOnView(0, R.id.name_text))
                 .perform(click());
 
+        Thread.sleep(500);
         // Date and buttons are invisible
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.date_text))
+                .atPositionOnView(0, R.id.date_text))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
@@ -373,77 +374,77 @@ public class MainActivityTest {
     public void tasksExpandAndCollapse2() throws InterruptedException {
         // Date and buttons are invisible
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.date_text))
+                .atPositionOnView(1, R.id.date_text))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.notes_btn))
+                .atPositionOnView(1, R.id.notes_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.time_btn))
+                .atPositionOnView(1, R.id.time_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.date_btn))
+                .atPositionOnView(1, R.id.date_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.reschedule_btn))
+                .atPositionOnView(1, R.id.reschedule_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
-        // Expand fifth task
+        // Expand second task
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.time_text))
+                .atPositionOnView(1, R.id.time_text))
                 .perform(click());
 
         // Date and buttons are visible
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.date_text))
+                .atPositionOnView(1, R.id.date_text))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.reschedule_btn))
+                .atPositionOnView(1, R.id.reschedule_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.notes_btn))
+                .atPositionOnView(1, R.id.notes_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.time_btn))
+                .atPositionOnView(1, R.id.time_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.date_btn))
+                .atPositionOnView(1, R.id.date_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
-        // Collapse fifth task
+        // Collapse second task
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.time_text))
+                .atPositionOnView(1, R.id.time_text))
                 .perform(click());
 
         Thread.sleep(500);
 
         // Date and buttons are invisible
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.date_text))
+                .atPositionOnView(1, R.id.date_text))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.reschedule_btn))
+                .atPositionOnView(1, R.id.reschedule_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.notes_btn))
+                .atPositionOnView(1, R.id.notes_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.time_btn))
+                .atPositionOnView(1, R.id.time_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.date_btn))
+                .atPositionOnView(1, R.id.date_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
     }
 
@@ -536,11 +537,11 @@ public class MainActivityTest {
     @Test
     public void canFinishTask() {
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(2, R.id.todo_item_finished_checkbox))
+                .atPositionOnView(1, R.id.todo_item_finished_checkbox))
                 .perform(click());
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(2, R.id.name_text))
+                .atPositionOnView(1, R.id.name_text))
                 .check(matches(not(withText("Third Todo"))));
     }
 
