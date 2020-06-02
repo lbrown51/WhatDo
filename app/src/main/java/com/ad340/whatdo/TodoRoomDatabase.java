@@ -38,10 +38,21 @@ public abstract class TodoRoomDatabase extends RoomDatabase {
     }
 
     private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
+
+        // When ready to persist data, uncomment onCreate and comment out onOpen
+//        @Override
+//        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+//            super.onCreate(db);
+//            databaseWriteExecutor.execute(() -> {
+//                TodoDao dao = INSTANCE.todoDao();
+//                Todo todo = new Todo(null, "My First Todo", null, null, null, false);
+//                dao.insert(todo);
+//            });
+//        }
+
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
-
             databaseWriteExecutor.execute(() -> {
                 TodoDao dao = INSTANCE.todoDao();
                 dao.deleteAll();
@@ -57,10 +68,7 @@ public abstract class TodoRoomDatabase extends RoomDatabase {
                 dao.insert(todo);
                 todo = new Todo(null, "Finished Todo", null, null, null, true);
                 dao.insert(todo);
-
             });
-
-
         }
     };
 
