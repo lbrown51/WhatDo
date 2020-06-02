@@ -16,8 +16,6 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import com.google.android.material.appbar.MaterialToolbar;
 
 import org.hamcrest.Matchers;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
