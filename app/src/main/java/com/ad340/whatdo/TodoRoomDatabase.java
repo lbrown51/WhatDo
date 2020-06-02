@@ -21,6 +21,7 @@ public abstract class TodoRoomDatabase extends RoomDatabase {
     static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
+    
     static TodoRoomDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (TodoRoomDatabase.class) {
