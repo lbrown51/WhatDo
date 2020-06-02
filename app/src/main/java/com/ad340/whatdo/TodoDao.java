@@ -17,8 +17,14 @@ public interface TodoDao {
     @Query("SELECT * from todo_table ORDER BY title ASC")
     LiveData<List<Todo>> getAllTodos();
 
+    @Query("SELECT * FROM todo_table WHERE NOT isCompleted")
+    LiveData<List<Todo>> getUncompletedTodos();
+
     @Query("DELETE FROM todo_table")
     void deleteAll();
+
+    @Query("DELETE FROM todo_table WHERE id = :id")
+    void cancelTodo(int id);
 
     @Query("UPDATE todo_table SET title = :title WHERE id = :id")
     void updateTodoTitle(int id, String title);
@@ -31,4 +37,7 @@ public interface TodoDao {
 
     @Query("UPDATE todo_table SET notes = :notes WHERE id = :id")
     void updateTodoNotes(int id, String notes);
+
+    @Query("UPDATE todo_table SET isCompleted = 1 WHERE id = :id")
+    void setTodoCompleted(int id);
 }

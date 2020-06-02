@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         toDoRecyclerView.setAdapter(adapter);
         toDoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        mTodoViewModel.getAllTodos().observe(this, todos -> {
+        mTodoViewModel.getUncompletedTodos().observe(this, todos -> {
             adapter.setTodos(todos);
         });
 
@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                 showCreateDialog();
             });
 
+
+
         Calendar today = Calendar.getInstance();
         header = findViewById(R.id.top_app_bar);
         StringBuilder displayText = new StringBuilder(header.getTitle());
@@ -71,13 +73,6 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         header.setTitle(displayText);
     }
 
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (requestCode == NEW_TODO_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-//            Todo todo = new Todo()
-//        }
-//    }
 
     private void showCreateDialog() {
         final View createView = View.inflate(this, R.layout.create_todo_dialog, null);
@@ -108,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                 newTodoEditText.setError("Cannot make an empty task");
             } else {
                 Todo newTodo = new Todo(null, newTodoText, String.valueOf(dateString),
-                        String.valueOf(timeString), null);
+                        String.valueOf(timeString), null, false);
                 mTodoViewModel.insert(newTodo);
                 dialog.dismiss();
             }

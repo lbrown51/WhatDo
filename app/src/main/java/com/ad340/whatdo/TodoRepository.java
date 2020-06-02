@@ -10,14 +10,18 @@ public class TodoRepository {
 
     private TodoDao todoDao;
     private LiveData<List<Todo>> allTodos;
+    private LiveData<List<Todo>> uncompletedTodos;
 
     TodoRepository(Application application) {
         TodoRoomDatabase db = TodoRoomDatabase.getDatabase(application);
         todoDao = db.todoDao();
         allTodos = todoDao.getAllTodos();
+        uncompletedTodos = todoDao.getUncompletedTodos();
     }
 
     LiveData<List<Todo>> getAllTodos() { return allTodos; }
+
+    LiveData<List<Todo>> getUncompletedTodos() { return uncompletedTodos; }
 
     void updateTodo(Todo todo, String data, int type) {
         int id = todo.getId();
@@ -34,6 +38,9 @@ public class TodoRepository {
             case 4: // update notes
                 TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoNotes(id, data));
                 break;
+            case 5: // set to completed
+                TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.setTodoCompleted(id));
+                break;
             default: // type not recognized
                 StringBuilder errMessage  = new StringBuilder("Data type of ")
                         .append(type).append(" not recognized.");
@@ -44,5 +51,10 @@ public class TodoRepository {
 
     void insert(Todo todo) {
         TodoRoomDatabase.databaseWriteExecutor.execute(() -> { todoDao.insert(todo);});
+    }
+
+    void removeTodo(Todo todo) {
+        int id = todo.getId();
+        TodoRoomDatabase.databaseWriteExecutor.execute(() -> { todoDao.cancelTodo(id);});
     }
 }

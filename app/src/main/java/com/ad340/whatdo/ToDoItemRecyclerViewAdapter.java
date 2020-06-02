@@ -1,5 +1,6 @@
 package com.ad340.whatdo;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -7,12 +8,15 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Calendar;
@@ -29,6 +33,7 @@ public class ToDoItemRecyclerViewAdapter
     private static final String TAG = ToDoItemRecyclerViewAdapter.class.getName();
     private Context context;
     private List<Todo> todos;
+    private TodoViewModel mTodoViewModel;
     private int mExpandedPosition = -1;
     private int previousExpandedPosition = -1;
     private OnTodoInteractionListener listener;
@@ -37,6 +42,8 @@ public class ToDoItemRecyclerViewAdapter
     ToDoItemRecyclerViewAdapter(Context context) {
         this.context = context;
         listener = (OnTodoInteractionListener) this.context;
+        mTodoViewModel = new ViewModelProvider((ViewModelStoreOwner) context)
+                .get(TodoViewModel.class);
     }
 
     @NonNull
@@ -66,6 +73,13 @@ public class ToDoItemRecyclerViewAdapter
             holder.toDoTaskName.setText(todo.getTitle());
             holder.toDoDate.setText(todo.getDate());
             holder.toDoTime.setText(todo.getTime());
+
+            holder.toDoFinishedCheckbox.setChecked(false);
+            holder.toDoFinishedCheckbox.setOnClickListener(view -> {
+                mTodoViewModel.updateTodo(todo, "", 5);
+                notifyDataSetChanged();
+            });
+
             holder.rescheduleButton.setOnClickListener(view -> {
                 //make popup menu
                 PopupMenu popup = new PopupMenu(context, holder.rescheduleButton);
@@ -75,10 +89,16 @@ public class ToDoItemRecyclerViewAdapter
                 popup.setOnMenuItemClickListener(item -> {
                     switch (item.getItemId()) {
                         case R.id.reschedule:
-                            //handle reschedule click
+                            new DatePickerDialog(context, date,
+                                    c.get(Calendar.YEAR),
+                                    c.get(Calendar.MONTH),
+                                    c.get(Calendar.DAY_OF_MONTH)).show();
                             break;
                         case R.id.cancel:
-                            //handle cancel click
+                            mTodoViewModel.removeTodo(todo);
+                            mExpandedPosition = isExpanded ? -1:position;
+                            notifyItemChanged(previousExpandedPosition);
+                            notifyItemChanged(position);
                             break;
                     }
                     return false;
@@ -132,6 +152,7 @@ public class ToDoItemRecyclerViewAdapter
         ImageButton rescheduleButton;
         ImageButton toDoDateButton;
         ImageButton toDoTimeButton;
+        CheckBox toDoFinishedCheckbox;
 
         ToDoItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -139,6 +160,7 @@ public class ToDoItemRecyclerViewAdapter
             toDoTime = itemView.findViewById(R.id.time_text);
             toDoDate = itemView.findViewById(R.id.date_text);
             todoDetail = itemView.findViewById(R.id.todo_detail);
+            toDoFinishedCheckbox = itemView.findViewById(R.id.todo_item_finished_checkbox);
             rescheduleButton = itemView.findViewById(R.id.reschedule_btn);
             toDoDateButton = itemView.findViewById(R.id.date_btn);
             toDoTimeButton = itemView.findViewById(R.id.time_btn);

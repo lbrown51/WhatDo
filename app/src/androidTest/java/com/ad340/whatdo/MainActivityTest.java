@@ -11,6 +11,7 @@ import androidx.test.espresso.Espresso;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -236,8 +237,8 @@ public class MainActivityTest {
          int month = 5;
          int dayOfMonth = 28;
 
-         Thread.sleep(250);
          onView(withId(R.id.fab)).perform(click());
+         Thread.sleep(500);
          onView(withId(R.id.create_todo_dialog))
                  .check(matches(isDisplayed()));
 
@@ -245,18 +246,22 @@ public class MainActivityTest {
                  .perform(typeText("New Task"), closeSoftKeyboard());
 
          onView(withId(R.id.create_todo_time_btn)).perform(click());
+         Thread.sleep(500);
          onView(withClassName(Matchers.equalTo(
                  TimePicker.class.getName()))).perform(setTime(hourOfDay, minute));
          onView(withId(android.R.id.button1)).perform(click());
 
+         Thread.sleep(500);
          onView(withId(R.id.create_todo_time_text))
                  .check(matches(withText("4:30 PM")));
 
+         Thread.sleep(500);
          onView(withId(R.id.create_todo_date_btn)).perform(click());
          onView(withClassName(Matchers.equalTo(
                  DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
          onView(withId(android.R.id.button1)).perform(click());
 
+         Thread.sleep(500);
          onView(withId(R.id.create_todo_date_text))
                  .check(matches(withText("Thursday, May 28, 2020")));
 
@@ -267,15 +272,15 @@ public class MainActivityTest {
                  .check(matches(isDisplayed()));
 
          onView(withRecyclerView(R.id.todo_list_recycler_view)
-                 .atPositionOnView(3, R.id.name_text))
+                 .atPositionOnView(2, R.id.name_text))
                  .check(matches(withText("New Task")));
 
          onView(withRecyclerView(R.id.todo_list_recycler_view)
-                 .atPositionOnView(3, R.id.time_text))
+                 .atPositionOnView(2, R.id.time_text))
                  .check(matches(withText("4:30 PM")));
 
          onView(withRecyclerView(R.id.todo_list_recycler_view)
-                 .atPositionOnView(3, R.id.date_text))
+                 .atPositionOnView(2, R.id.date_text))
                  .check(matches(withText("Thursday, May 28, 2020")));
 
      }
@@ -285,78 +290,79 @@ public class MainActivityTest {
         Tests whether tasks can be expanded from task name or not
      */
     @Test
-    public void tasksExpandAndCollapse() {
+    public void tasksExpandAndCollapse() throws InterruptedException {
         // Date and buttons are invisible
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.date_text))
+                .atPositionOnView(0, R.id.date_text))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.notes_btn))
+                .atPositionOnView(0, R.id.notes_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.time_btn))
+                .atPositionOnView(0, R.id.time_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.date_btn))
+                .atPositionOnView(0, R.id.date_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.reschedule_btn))
+                .atPositionOnView(0, R.id.reschedule_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
-        // Expand fifth task
+        // Expand first task
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.name_text))
+                .atPositionOnView(0, R.id.name_text))
                 .perform(click());
 
         // Date and buttons are visible
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.date_text))
+                .atPositionOnView(0, R.id.date_text))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.reschedule_btn))
+                .atPositionOnView(0, R.id.reschedule_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.notes_btn))
+                .atPositionOnView(0, R.id.notes_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.time_btn))
+                .atPositionOnView(0, R.id.time_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.date_btn))
+                .atPositionOnView(0, R.id.date_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
-        // Collapse fifth task
+        // Collapse first task
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.name_text))
+                .atPositionOnView(0, R.id.name_text))
                 .perform(click());
 
+        Thread.sleep(500);
         // Date and buttons are invisible
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.date_text))
+                .atPositionOnView(0, R.id.date_text))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.reschedule_btn))
+                .atPositionOnView(0, R.id.reschedule_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.notes_btn))
+                .atPositionOnView(0, R.id.notes_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.time_btn))
+                .atPositionOnView(0, R.id.time_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.date_btn))
+                .atPositionOnView(0, R.id.date_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
     }
 
@@ -365,103 +371,126 @@ public class MainActivityTest {
         Tests whether tasks can be expanded from the time TextView or not
      */
     @Test
-    public void tasksExpandAndCollapse2() {
+    public void tasksExpandAndCollapse2() throws InterruptedException {
         // Date and buttons are invisible
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.date_text))
+                .atPositionOnView(1, R.id.date_text))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.notes_btn))
+                .atPositionOnView(1, R.id.notes_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.time_btn))
+                .atPositionOnView(1, R.id.time_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.date_btn))
+                .atPositionOnView(1, R.id.date_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.reschedule_btn))
+                .atPositionOnView(1, R.id.reschedule_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
-        // Expand fifth task
+        // Expand second task
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.time_text))
+                .atPositionOnView(1, R.id.time_text))
                 .perform(click());
 
         // Date and buttons are visible
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.date_text))
+                .atPositionOnView(1, R.id.date_text))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.reschedule_btn))
+                .atPositionOnView(1, R.id.reschedule_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.notes_btn))
+                .atPositionOnView(1, R.id.notes_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.time_btn))
+                .atPositionOnView(1, R.id.time_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.date_btn))
+                .atPositionOnView(1, R.id.date_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
-        // Collapse fifth task
+        // Collapse second task
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.time_text))
+                .atPositionOnView(1, R.id.time_text))
                 .perform(click());
+
+        Thread.sleep(500);
 
         // Date and buttons are invisible
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.date_text))
+                .atPositionOnView(1, R.id.date_text))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.reschedule_btn))
+                .atPositionOnView(1, R.id.reschedule_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.notes_btn))
+                .atPositionOnView(1, R.id.notes_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.time_btn))
+                .atPositionOnView(1, R.id.time_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(4, R.id.date_btn))
+                .atPositionOnView(1, R.id.date_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
     }
 
 
     /*
-    Tests whether tasks have a Cancel option
-
+        Tests whether tasks have a Cancel option
     */
     @Test
     public void hasCancelOption() {
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(2, R.id.name_text))
+                .atPositionOnView(1, R.id.name_text))
                 .perform(click());
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(2, R.id.reschedule_btn))
+                .atPositionOnView(1, R.id.reschedule_btn))
                 .perform(click());
 
         onView(withText(R.string.cancel)).perform(click());
     }
 
+    /*
+        Tests whether tasks can be cancelled
+    */
+    @Test
+    public void canCancelTask() throws InterruptedException {
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(1, R.id.name_text))
+                .perform(click());
+
+        Thread.sleep(500);
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(1, R.id.reschedule_btn))
+                .perform(click());
+
+        Thread.sleep(500);
+        onView(withText(R.string.cancel)).perform(click());
+
+        Thread.sleep(500);
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(1, R.id.name_text))
+                .check(matches(not(withText("Second Todo"))));
+    }
+
 
     /*
-    Tests whether tasks have a Reschedule option
-
+        Tests whether tasks have a Reschedule option
     */
     @Test
     public void hasRescheduleOption() {
@@ -474,6 +503,46 @@ public class MainActivityTest {
                 .perform(click());
 
         onView(withText(R.string.reschedule)).perform(click());
+    }
+
+    /*
+        Tests whether tasks can be rescheduled
+    */
+    @Test
+    public void canRescheduleTask() {
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(2, R.id.name_text))
+                .perform(click());
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(2, R.id.reschedule_btn))
+                .perform(click());
+
+        onView(withText(R.string.reschedule)).perform(click());
+
+        int year = 2020;
+        int month = 5;
+        int dayOfMonth = 28;
+        onView(withClassName(Matchers.equalTo(
+                DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
+        onView(withId(android.R.id.button1)).perform(click());
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(2, R.id.date_text))
+                .check(matches(withText("Thursday, May 28, 2020")));
+    }
+
+    /*
+        Tests whether tasks can be finished
+    */
+    @Test
+    public void canFinishTask() {
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(1, R.id.todo_item_finished_checkbox))
+                .perform(click());
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(1, R.id.name_text))
+                .check(matches(not(withText("Third Todo"))));
     }
 
     /*
