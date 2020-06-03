@@ -90,6 +90,8 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         Button finishNewTodoButton = dialog.findViewById(R.id.create_todo_finish_btn);
         ImageButton newTodoDateButton = dialog.findViewById(R.id.create_todo_date_btn);
         ImageButton newTodoTimeButton = dialog.findViewById(R.id.create_todo_time_btn);
+        ImageButton newTodoNotesButton = dialog.findViewById(R.id.create_todo_notes_btn);
+        EditText newTodoNotesText = dialog.findViewById(R.id.create_todo_notes_text);
 
         final DatePickerDialog.OnDateSetListener date = onDateSetListener(c, dateString, dateText);
         final TimePickerDialog.OnTimeSetListener time = onTimeSetListener(c, timeString, timeText);
@@ -97,13 +99,22 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         setDatePickerShowOnClick(this, c, newTodoDateButton, date);
         setTimePickerShowOnClick(this, c, newTodoTimeButton, time);
 
+        newTodoNotesButton.setOnClickListener(view -> {
+            if (newTodoNotesText.getVisibility() == View.GONE) {
+                newTodoNotesText.setVisibility(View.VISIBLE);
+            } else {
+                newTodoNotesText.setVisibility(View.GONE);
+            }
+        });
+
         finishNewTodoButton.setOnClickListener(view -> {
             String newTodoText = newTodoEditText.getText().toString();
             if (newTodoText.isEmpty()) {
                 newTodoEditText.setError("Cannot make an empty task");
             } else {
                 Todo newTodo = new Todo(null, newTodoText, String.valueOf(dateString),
-                        String.valueOf(timeString), null, false);
+                        String.valueOf(timeString), String.valueOf(newTodoNotesText.getText()),
+                        false);
                 mTodoViewModel.insert(newTodo);
                 dialog.dismiss();
             }

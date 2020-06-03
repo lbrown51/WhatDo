@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,6 @@ public class ToDoItemRecyclerViewAdapter
             Calendar c = Calendar.getInstance();
             final boolean isExpanded = position==mExpandedPosition;
 
-
             // user sets date in DatePicker
             final DatePickerDialog.OnDateSetListener date = onDateSetListener(c, todo, holder, listener);
 
@@ -74,8 +74,8 @@ public class ToDoItemRecyclerViewAdapter
             holder.toDoDate.setText(todo.getDate());
             holder.toDoTime.setText(todo.getTime());
             holder.toDoNotesText.setText(todo.getNotes());
-
             holder.toDoFinishedCheckbox.setChecked(false);
+
             holder.toDoFinishedCheckbox.setOnClickListener(view -> {
                 mTodoViewModel.updateTodo(todo, "", Constants.COMPLETE);
                 notifyDataSetChanged();
@@ -108,18 +108,15 @@ public class ToDoItemRecyclerViewAdapter
                 popup.show();
             });
 
-            // listener on notes Button
             holder.toDoNotesButton.setOnClickListener(view -> {
                 toggleNotes(holder.toDoNotesText, holder.toDoNotesSaveButton);
             });
 
-            // listener on notes save button
             holder.toDoNotesSaveButton.setOnClickListener(view -> {
                 holder.toDoNotesText.setVisibility(View.GONE);
                 holder.toDoNotesSaveButton.setVisibility(View.GONE);
                 listener.onUpdateTodo(todo, String.valueOf(holder.toDoNotesText.getText()), Constants.NOTES);
             });
-
 
             // show DatePicker and TimePicker
             setDatePickerShowOnClick(context, c, holder.toDoDateButton, date);

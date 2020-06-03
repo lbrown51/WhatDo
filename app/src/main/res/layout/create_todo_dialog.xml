@@ -89,8 +89,8 @@
                     android:id="@+id/create_todo_date_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toTopOf="@+id/create_todo_notes_btn"
-                    app:layout_constraintStart_toStartOf="@+id/create_todo_notes_btn"
+                    app:layout_constraintBottom_toTopOf="@+id/create_todo_notes_text"
+                    app:layout_constraintStart_toStartOf="@id/create_todo_task_name_layout"
                     app:layout_constraintTop_toBottomOf="@+id/create_todo_task_name_layout" />
 
                 <TextView
@@ -98,7 +98,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/todo_item_padding"
-                    app:layout_constraintBottom_toTopOf="@+id/create_todo_time_btn"
+                    app:layout_constraintBottom_toTopOf="@+id/create_todo_notes_text"
                     app:layout_constraintStart_toEndOf="@+id/create_todo_date_text"
                     app:layout_constraintTop_toBottomOf="@+id/create_todo_task_name_layout" />
 
@@ -123,6 +123,21 @@
                     app:layout_constraintBottom_toBottomOf="@id/create_todo_finish_btn"
                     app:layout_constraintStart_toEndOf="@+id/create_todo_notes_btn"
                     app:srcCompat="@drawable/ic_date_range_24dp" />
+
+
+                <EditText
+                    android:id="@+id/create_todo_notes_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="This todo is about..."
+                    android:ems="10"
+                    android:hint="This todo is about..."
+                    android:inputType="textMultiLine"
+                    android:maxLines="6"
+                    android:scrollbars="vertical"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toTopOf="@+id/create_todo_notes_btn"
+                    app:layout_constraintStart_toStartOf="@id/create_todo_task_name_layout" />
 
                 <Button
                     android:id="@+id/create_todo_finish_btn"
