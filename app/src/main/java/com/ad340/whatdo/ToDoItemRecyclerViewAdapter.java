@@ -1,14 +1,20 @@
 package com.ad340.whatdo;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -18,6 +24,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.w3c.dom.Text;
 
 import java.util.Calendar;
 import java.util.List;
@@ -37,6 +47,7 @@ public class ToDoItemRecyclerViewAdapter
     private int mExpandedPosition = -1;
     private int previousExpandedPosition = -1;
     private OnTodoInteractionListener listener;
+    private FloatingActionButton fab;
 
 
     ToDoItemRecyclerViewAdapter(Context context) {
@@ -44,6 +55,7 @@ public class ToDoItemRecyclerViewAdapter
         listener = (OnTodoInteractionListener) this.context;
         mTodoViewModel = new ViewModelProvider((ViewModelStoreOwner) context)
                 .get(TodoViewModel.class);
+        fab = ((Activity) context).findViewById(R.id.fab);
     }
 
     @NonNull
@@ -51,7 +63,6 @@ public class ToDoItemRecyclerViewAdapter
     public ToDoItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.todo_item, parent, false);
-
         return new ToDoItemViewHolder(layoutView);
     }
 
@@ -73,10 +84,11 @@ public class ToDoItemRecyclerViewAdapter
             holder.toDoTaskName.setText(todo.getTitle());
             holder.toDoDate.setText(todo.getDate());
             holder.toDoTime.setText(todo.getTime());
+            holder.toDoNotesText.setText(todo.getNotes());
 
             holder.toDoFinishedCheckbox.setChecked(false);
             holder.toDoFinishedCheckbox.setOnClickListener(view -> {
-                mTodoViewModel.updateTodo(todo, "", 5);
+                mTodoViewModel.updateTodo(todo, "", Constants.COMPLETE);
                 notifyDataSetChanged();
             });
 
@@ -107,6 +119,25 @@ public class ToDoItemRecyclerViewAdapter
                 popup.show();
             });
 
+            // listener on notes Button
+            holder.toDoNotesButton.setOnClickListener(view -> {
+                toggleTodoDetailHeight(holder.todoDetail, holder.toDoNotesText, holder.toDoNotesSaveButton);
+                view.clearFocus();
+            });
+
+            // listener on notes edit text
+            holder.toDoNotesText.setOnClickListener(view -> {
+                view.change
+            });
+
+
+
+            // listener on notes save button
+            holder.toDoNotesSaveButton.setOnClickListener(view -> {
+                Log.i(TAG, "onClick: Ya did it");
+                listener.onUpdateTodo(todo, String.valueOf(holder.toDoNotesText.getText()), Constants.NOTES);
+            });
+
             // show DatePicker and TimePicker
             setDatePickerShowOnClick(context, c, holder.toDoDateButton, date);
             setTimePickerShowOnClick(context, c, holder.toDoTimeButton, time);
@@ -117,6 +148,9 @@ public class ToDoItemRecyclerViewAdapter
             // listener on Title TextView
             holder.toDoTaskName.setOnClickListener(v -> {
                 mExpandedPosition = isExpanded ? -1:position;
+                holder.todoDetail.getLayoutParams().height = 263;
+                holder.toDoNotesText.setVisibility(View.GONE);
+                holder.toDoNotesSaveButton.setVisibility(View.GONE);
                 notifyItemChanged(previousExpandedPosition);
                 notifyItemChanged(position);
             });
@@ -124,6 +158,9 @@ public class ToDoItemRecyclerViewAdapter
             // listener on time TextView
             holder.toDoTime.setOnClickListener(v -> {
                 mExpandedPosition = isExpanded ? -1:position;
+                holder.todoDetail.getLayoutParams().height = 263;
+                holder.toDoNotesText.setVisibility(View.GONE);
+                holder.toDoNotesSaveButton.setVisibility(View.GONE);
                 notifyItemChanged(previousExpandedPosition);
                 notifyItemChanged(position);
             });
@@ -143,6 +180,20 @@ public class ToDoItemRecyclerViewAdapter
         notifyDataSetChanged();
     }
 
+    void toggleTodoDetailHeight(ConstraintLayout constraintLayout, EditText notesText, ImageButton saveButton) {
+        ViewGroup.LayoutParams layoutParams = constraintLayout.getLayoutParams();
+        Log.i(TAG, String.valueOf(layoutParams.height));
+        if (layoutParams.height == 263) {
+            layoutParams.height = layoutParams.height * 2;
+            notesText.setVisibility(View.VISIBLE);
+            saveButton.setVisibility(View.VISIBLE);
+        } else if (layoutParams.height == 526){
+            layoutParams.height = 263;
+            notesText.setVisibility(View.GONE);
+            saveButton.setVisibility(View.GONE);
+        }
+        constraintLayout.setLayoutParams(layoutParams);
+    }
 
     static class ToDoItemViewHolder extends RecyclerView.ViewHolder {
         TextView toDoTaskName;
@@ -152,7 +203,10 @@ public class ToDoItemRecyclerViewAdapter
         ImageButton rescheduleButton;
         ImageButton toDoDateButton;
         ImageButton toDoTimeButton;
+        ImageButton toDoNotesButton;
+        ImageButton toDoNotesSaveButton;
         CheckBox toDoFinishedCheckbox;
+        EditText toDoNotesText;
 
         ToDoItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -164,6 +218,9 @@ public class ToDoItemRecyclerViewAdapter
             rescheduleButton = itemView.findViewById(R.id.reschedule_btn);
             toDoDateButton = itemView.findViewById(R.id.date_btn);
             toDoTimeButton = itemView.findViewById(R.id.time_btn);
+            toDoNotesButton = itemView.findViewById(R.id.notes_btn);
+            toDoNotesText = itemView.findViewById(R.id.notes_text);
+            toDoNotesSaveButton = itemView.findViewById(R.id.notes_save_btn);
         }
     }
 }
