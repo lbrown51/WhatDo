@@ -23,6 +23,9 @@
                 android:resource="@xml/todo_list_widget_info" />
         </receiver>
 
+        <service android:name=".TodoListWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
