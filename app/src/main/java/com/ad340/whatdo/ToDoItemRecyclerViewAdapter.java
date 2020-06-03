@@ -1,18 +1,16 @@
 package com.ad340.whatdo;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -27,10 +25,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.w3c.dom.Text;
-
 import java.util.Calendar;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.ad340.whatdo.PickerUtils.setDatePickerShowOnClick;
 import static com.ad340.whatdo.PickerUtils.onDateSetListener;
@@ -55,7 +53,7 @@ public class ToDoItemRecyclerViewAdapter
         listener = (OnTodoInteractionListener) this.context;
         mTodoViewModel = new ViewModelProvider((ViewModelStoreOwner) context)
                 .get(TodoViewModel.class);
-        fab = ((Activity) context).findViewById(R.id.fab);
+        fab = ((Activity) this.context).findViewById(R.id.fab);
     }
 
     @NonNull
@@ -72,6 +70,7 @@ public class ToDoItemRecyclerViewAdapter
             Todo todo = todos.get(position);
             Calendar c = Calendar.getInstance();
             final boolean isExpanded = position==mExpandedPosition;
+
 
             // user sets date in DatePicker
             final DatePickerDialog.OnDateSetListener date = onDateSetListener(c, todo, holder, listener);
@@ -122,20 +121,26 @@ public class ToDoItemRecyclerViewAdapter
             // listener on notes Button
             holder.toDoNotesButton.setOnClickListener(view -> {
                 toggleTodoDetailHeight(holder.todoDetail, holder.toDoNotesText, holder.toDoNotesSaveButton);
-                view.clearFocus();
             });
-
-            // listener on notes edit text
-            holder.toDoNotesText.setOnClickListener(view -> {
-                view.change
-            });
-
-
 
             // listener on notes save button
             holder.toDoNotesSaveButton.setOnClickListener(view -> {
-                Log.i(TAG, "onClick: Ya did it");
+                closeKeyboard();
+                holder.toDoNotesText.setVisibility(View.GONE);
+                holder.toDoNotesSaveButton.setVisibility(View.GONE);
+                holder.todoDetail.getLayoutParams().height = 263;
+                holder.todoDetail.setLayoutParams(holder.todoDetail.getLayoutParams());
+
                 listener.onUpdateTodo(todo, String.valueOf(holder.toDoNotesText.getText()), Constants.NOTES);
+            });
+
+            holder.toDoNotesText.setOnFocusChangeListener((v, hasFocus) -> {
+                if(hasFocus)
+                    fab.setVisibility(View.INVISIBLE);
+                else {
+                    Handler handler = new Handler();
+                    handler.postDelayed(() -> fab.setVisibility(View.VISIBLE), 62);
+                }
             });
 
             // show DatePicker and TimePicker
@@ -148,9 +153,10 @@ public class ToDoItemRecyclerViewAdapter
             // listener on Title TextView
             holder.toDoTaskName.setOnClickListener(v -> {
                 mExpandedPosition = isExpanded ? -1:position;
-                holder.todoDetail.getLayoutParams().height = 263;
                 holder.toDoNotesText.setVisibility(View.GONE);
                 holder.toDoNotesSaveButton.setVisibility(View.GONE);
+                holder.todoDetail.getLayoutParams().height = 263;
+                holder.todoDetail.setLayoutParams(holder.todoDetail.getLayoutParams());
                 notifyItemChanged(previousExpandedPosition);
                 notifyItemChanged(position);
             });
@@ -158,9 +164,11 @@ public class ToDoItemRecyclerViewAdapter
             // listener on time TextView
             holder.toDoTime.setOnClickListener(v -> {
                 mExpandedPosition = isExpanded ? -1:position;
-                holder.todoDetail.getLayoutParams().height = 263;
                 holder.toDoNotesText.setVisibility(View.GONE);
                 holder.toDoNotesSaveButton.setVisibility(View.GONE);
+                holder.todoDetail.getLayoutParams().height = 263;
+                holder.todoDetail.setLayoutParams(holder.todoDetail.getLayoutParams());
+
                 notifyItemChanged(previousExpandedPosition);
                 notifyItemChanged(position);
             });
@@ -175,6 +183,14 @@ public class ToDoItemRecyclerViewAdapter
             return 0;
     }
 
+    void closeKeyboard() {
+        View view = ((Activity) this.context).getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
     void setTodos(List<Todo> todos) {
         this.todos = todos;
         notifyDataSetChanged();
@@ -182,7 +198,7 @@ public class ToDoItemRecyclerViewAdapter
 
     void toggleTodoDetailHeight(ConstraintLayout constraintLayout, EditText notesText, ImageButton saveButton) {
         ViewGroup.LayoutParams layoutParams = constraintLayout.getLayoutParams();
-        Log.i(TAG, String.valueOf(layoutParams.height));
+
         if (layoutParams.height == 263) {
             layoutParams.height = layoutParams.height * 2;
             notesText.setVisibility(View.VISIBLE);
