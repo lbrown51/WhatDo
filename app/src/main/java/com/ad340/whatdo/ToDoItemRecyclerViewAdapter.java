@@ -125,6 +125,7 @@ public class ToDoItemRecyclerViewAdapter
             // if current task is expanded, previous = current
             if (isExpanded) previousExpandedPosition = position;
 
+
             // listener on Title TextView
             holder.toDoTaskName.setOnClickListener(v -> {
                 mExpandedPosition = isExpanded ? -1:position;

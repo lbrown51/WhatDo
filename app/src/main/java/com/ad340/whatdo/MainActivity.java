@@ -9,6 +9,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -29,7 +30,7 @@ import static com.ad340.whatdo.PickerUtils.onTimeSetListener;
 import static com.ad340.whatdo.PickerUtils.setTimePickerShowOnClick;
 
 public class MainActivity extends AppCompatActivity implements OnTodoInteractionListener {
-
+    private static final String TAG = MainActivity.class.getName();
     private MaterialToolbar header;
     private TodoViewModel mTodoViewModel;
     public static final int NEW_TODO_ACTIVITY_REQUEST_CODE = 1;
@@ -51,8 +52,8 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
             adapter.setTodos(todos);
         });
 
-        int largePadding = getResources().getDimensionPixelSize(R.dimen.large_item_spacing);
-        int smallPadding = getResources().getDimensionPixelSize(R.dimen.small_item_spacing);
+        int largePadding = getResources().getDimensionPixelSize(R.dimen.dp_16);
+        int smallPadding = getResources().getDimensionPixelSize(R.dimen.dp_6);
         toDoRecyclerView.addItemDecoration(new ToDoItemDecoration(largePadding, smallPadding));
 
         fab = findViewById(R.id.fab);

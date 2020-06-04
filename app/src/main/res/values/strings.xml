@@ -12,4 +12,8 @@
     <string name="notes">Notes</string>
     <string name="date_button">Date button</string>
     <string name="time_button">Time button</string>
+    <string name="create_a_todo">Create a Todo</string>
+    <string name="closes_create_todo_dialog">Closes Create Todo Dialog</string>
+    <string name="this_todo_is_about">This todo is about...</string>
+    <string name="save_notes_button">Save Notes Button</string>
 </resources>
