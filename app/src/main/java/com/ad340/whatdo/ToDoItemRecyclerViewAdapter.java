@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +30,6 @@ import static com.ad340.whatdo.PickerUtils.setTimePickerShowOnClick;
 
 public class ToDoItemRecyclerViewAdapter
         extends RecyclerView.Adapter<ToDoItemRecyclerViewAdapter.ToDoItemViewHolder>{
-    private static final String TAG = ToDoItemRecyclerViewAdapter.class.getName();
     private Context context;
     private List<Todo> todos;
     private TodoViewModel mTodoViewModel;
@@ -108,9 +106,7 @@ public class ToDoItemRecyclerViewAdapter
                 popup.show();
             });
 
-            holder.toDoNotesButton.setOnClickListener(view -> {
-                toggleNotes(holder.toDoNotesText, holder.toDoNotesSaveButton);
-            });
+            holder.toDoNotesButton.setOnClickListener(view -> toggleNotes(holder.toDoNotesText, holder.toDoNotesSaveButton));
 
             holder.toDoNotesSaveButton.setOnClickListener(view -> {
                 holder.toDoNotesText.setVisibility(View.GONE);
