@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         finishNewTodoButton.setOnClickListener(view -> {
             String newTodoText = newTodoEditText.getText().toString();
             if (newTodoText.isEmpty()) {
-                newTodoEditText.setError("Cannot make an empty task");
+                newTodoEditText.setError(getString(R.string.empty_task_error));
             } else {
                 Todo newTodo = new Todo(null, newTodoText, String.valueOf(dateString),
                         String.valueOf(timeString), String.valueOf(newTodoNotesText.getText()),

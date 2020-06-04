@@ -16,4 +16,5 @@
     <string name="closes_create_todo_dialog">Closes Create Todo Dialog</string>
     <string name="this_todo_is_about">This todo is about...</string>
     <string name="save_notes_button">Save Notes Button</string>
+    <string name="empty_task_error">Cannot make an empty task</string>
 </resources>
