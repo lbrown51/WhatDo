@@ -14,9 +14,9 @@
 
     <style name="Divider">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/divider_height</item>
+        <item name="android:layout_height">@dimen/dp_1</item>
         <item name="android:background">?android:attr/listDivider</item>
-        <item name="android:layout_marginTop">@dimen/small_item_spacing</item>
+        <item name="android:layout_marginTop">@dimen/dp_6</item>
     </style>
 
 </resources>

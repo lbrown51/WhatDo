@@ -15,4 +15,9 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="upcoming_tasks_widget_header">Upcoming Tasks</string>
+    <string name="create_a_todo">Create a Todo</string>
+    <string name="closes_create_todo_dialog">Closes Create Todo Dialog</string>
+    <string name="this_todo_is_about">This todo is about...</string>
+    <string name="save_notes_button">Save Notes Button</string>
+    <string name="empty_task_error">Cannot make an empty task</string>
 </resources>
