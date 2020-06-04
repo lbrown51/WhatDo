@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,8 @@ public class ToDoItemRecyclerViewAdapter
     private int mExpandedPosition = -1;
     private int previousExpandedPosition = -1;
     private OnTodoInteractionListener listener;
+    private static final String TAG = ToDoItemRecyclerViewAdapter.class.getName();
+
 
 
     ToDoItemRecyclerViewAdapter(Context context) {
@@ -106,12 +109,12 @@ public class ToDoItemRecyclerViewAdapter
                 popup.show();
             });
 
-            holder.toDoNotesButton.setOnClickListener(view -> toggleNotes(holder.toDoNotesText, holder.toDoNotesSaveButton));
+            holder.toDoNotesButton.setOnClickListener(
+                    view -> toggleNotes(holder.toDoNotesText));
 
-            holder.toDoNotesSaveButton.setOnClickListener(view -> {
-                holder.toDoNotesText.setVisibility(View.GONE);
-                holder.toDoNotesSaveButton.setVisibility(View.GONE);
-                listener.onUpdateTodo(todo, String.valueOf(holder.toDoNotesText.getText()), Constants.NOTES);
+            holder.toDoNotesText.setOnFocusChangeListener((view, b) -> {
+                if (!b) listener.onUpdateTodo(
+                        todo, String.valueOf(holder.toDoNotesText.getText()), Constants.NOTES);
             });
 
             // show DatePicker and TimePicker
@@ -126,7 +129,6 @@ public class ToDoItemRecyclerViewAdapter
             holder.toDoTaskName.setOnClickListener(v -> {
                 mExpandedPosition = isExpanded ? -1:position;
                 holder.toDoNotesText.setVisibility(View.GONE);
-                holder.toDoNotesSaveButton.setVisibility(View.GONE);
                 notifyItemChanged(previousExpandedPosition);
                 notifyItemChanged(position);
             });
@@ -135,7 +137,6 @@ public class ToDoItemRecyclerViewAdapter
             holder.toDoTime.setOnClickListener(v -> {
                 mExpandedPosition = isExpanded ? -1:position;
                 holder.toDoNotesText.setVisibility(View.GONE);
-                holder.toDoNotesSaveButton.setVisibility(View.GONE);
                 notifyItemChanged(previousExpandedPosition);
                 notifyItemChanged(position);
             });
@@ -155,14 +156,12 @@ public class ToDoItemRecyclerViewAdapter
         notifyDataSetChanged();
     }
 
-    void toggleNotes(EditText notesText, ImageButton saveButton) {
+    void toggleNotes(EditText notesText) {
 
         if (notesText.getVisibility() == View.GONE) {
             notesText.setVisibility(View.VISIBLE);
-            saveButton.setVisibility(View.VISIBLE);
         } else {
             notesText.setVisibility(View.GONE);
-            saveButton.setVisibility(View.GONE);
         }
     }
 
@@ -175,7 +174,6 @@ public class ToDoItemRecyclerViewAdapter
         ImageButton toDoDateButton;
         ImageButton toDoTimeButton;
         ImageButton toDoNotesButton;
-        ImageButton toDoNotesSaveButton;
         CheckBox toDoFinishedCheckbox;
         EditText toDoNotesText;
 
@@ -191,7 +189,6 @@ public class ToDoItemRecyclerViewAdapter
             toDoTimeButton = itemView.findViewById(R.id.time_btn);
             toDoNotesButton = itemView.findViewById(R.id.notes_btn);
             toDoNotesText = itemView.findViewById(R.id.notes_text);
-            toDoNotesSaveButton = itemView.findViewById(R.id.notes_save_btn);
         }
     }
 }

@@ -11,7 +11,6 @@ import androidx.test.espresso.Espresso;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -625,10 +624,6 @@ public class MainActivityTest {
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.notes_text))
                 .perform(typeText("About my task"));
-
-        onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(0, R.id.notes_save_btn))
-                .perform(click());
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.notes_text))
