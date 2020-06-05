@@ -636,9 +636,5 @@ public class MainActivityTest {
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.notes_text))
                 .check(matches(withText("About my task")));
-
-        onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(0, R.id.notes_text))
-                .check(matches(withText("About my task")));
     }
 }
