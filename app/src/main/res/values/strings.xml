@@ -12,4 +12,5 @@
     <string name="notes">Notes</string>
     <string name="date_button">Date button</string>
     <string name="time_button">Time button</string>
+    <string name="view_by_title">View ToDos By...</string>
 </resources>

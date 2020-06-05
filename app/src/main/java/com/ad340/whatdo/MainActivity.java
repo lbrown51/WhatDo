@@ -60,8 +60,6 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                 showCreateDialog();
             });
 
-
-
         Calendar today = Calendar.getInstance();
         header = findViewById(R.id.top_app_bar);
         StringBuilder displayText = new StringBuilder(header.getTitle());
@@ -71,6 +69,43 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                 today.get(Calendar.DAY_OF_MONTH),
                 today.get(Calendar.YEAR)));
         header.setTitle(displayText);
+        header.setOnClickListener(view -> {
+            showViewByDialog();
+        });
+    }
+
+    private void showViewByDialog() {
+        final View createView = View.inflate(this, R.layout.view_by_dialog, null);
+        final Dialog dialog = new Dialog(this, android.R.style.Theme_DeviceDefault_NoActionBar_Overscan);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(createView);
+
+        // EditText blah = dialog.findViewById()
+
+        //Button finishNewTodoButton = dialog.findViewById(R.id.create_todo_finish_btn);
+        //TextView dateText = dialog.findViewById(R.id.create_todo_date_text);
+        //ImageButton newTodoDateButton = dialog.findViewById(R.id.create_todo_date_btn);
+        //final DatePickerDialog.OnDateSetListener date = onDateSetListener(c, dateString, dateText);
+        //setDatePickerShowOnClick(this, c, newTodoDateButton, date);
+
+//        finishNewTodoButton.setOnClickListener(view -> {
+//                dialog.dismiss();
+//        });
+
+        ImageButton closeButton = dialog.findViewById(R.id.close_view_by_dialog);
+        closeButton.setOnClickListener((view) -> {
+            view.setVisibility(View.INVISIBLE);
+            dialog.dismiss();
+        });
+
+        dialog.setOnKeyListener((dialogInterface, key, keyEvent) -> {
+            if (key == KeyEvent.KEYCODE_BACK) {
+                dialogInterface.dismiss();
+                return true;
+            } else return false;
+        });
+
+        dialog.show();
     }
 
 
