@@ -70,8 +70,8 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                 today.get(Calendar.YEAR)));
         header.setTitle(displayText);
         header.setOnClickListener(view -> {
-            showViewByDialog();
-        });
+                showViewByDialog();
+            });
     }
 
     private void showViewByDialog() {
@@ -82,13 +82,28 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
 
         // EditText blah = dialog.findViewById()
 
-        //Button finishNewTodoButton = dialog.findViewById(R.id.create_todo_finish_btn);
-        //TextView dateText = dialog.findViewById(R.id.create_todo_date_text);
-        //ImageButton newTodoDateButton = dialog.findViewById(R.id.create_todo_date_btn);
-        //final DatePickerDialog.OnDateSetListener date = onDateSetListener(c, dateString, dateText);
-        //setDatePickerShowOnClick(this, c, newTodoDateButton, date);
+//        Calendar fromC = Calendar.getInstance();
+//        Calendar toC = Calendar.getInstance();
+        //Button setViewBy = dialog.findViewById(R.id.set_view_by_btn);
+        //Button setAllUpcoming = dialog.findViewById(R.id.set_all_upcoming_btn);
 
-//        finishNewTodoButton.setOnClickListener(view -> {
+        //TextView fromDateText = dialog.findViewById(R.id.view_by_from_date_text);
+        //TextView toDateText = dialog.findViewById(R.id.view_by_to_date_text);
+
+        //ImageButton fromDateButton = dialog.findViewById(R.id.view_by_from_date_btn);
+        //ImageButton toDateButton = dialog.findViewById(R.id.view_by_to_date_btn);
+
+        //final DatePickerDialog.OnDateSetListener fromDate = onDateSetListener(fromDate, fromDateString, fromDateText);
+        //final DatePickerDialog.OnDateSetListener toDate = onDateSetListener(toDate, toDateString, toDateText);
+
+        //setDatePickerShowOnClick(this, fromC, fromDateButton, fromDate);
+        //setDatePickerShowOnClick(this, toC, toDateButton, toDate);
+
+        //setAllUpcoming.setOnClickListener(view -> {
+//                make other buttons inactive/gray
+//        });
+
+//        setViewBy.setOnClickListener(view -> {
 //                dialog.dismiss();
 //        });
 
