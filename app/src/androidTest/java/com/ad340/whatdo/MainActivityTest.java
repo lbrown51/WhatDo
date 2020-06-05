@@ -130,6 +130,8 @@ public class MainActivityTest {
     /*
         Tests whether the floating action button opens a dialog on click,
         and the x button in the dialog closes the dialog
+
+        Why do we have this? I don't see how this differs from the following test
      */
     @Test
     public void openCloseDialog() {
@@ -148,11 +150,11 @@ public class MainActivityTest {
     }
 
     /*
-        Tests whether the floating action button opens a dialog on click,
+        Tests whether the floating action button opens a create todo dialog on click,
         and the x button in the dialog closes the dialog
      */
     @Test
-    public void openCloseDialogWithButton() {
+    public void openCloseCreateDialogWithButton() {
         onView(withId(R.id.fab)).perform(click());
         onView(withId(R.id.create_todo_dialog))
                 .check(matches(isDisplayed()));
@@ -171,7 +173,7 @@ public class MainActivityTest {
         Tests whether the create to-do dialog closes with back button
     */
     @Test
-    public void openCloseDialogWithBackKey() throws InterruptedException {
+    public void openCloseCreateDialogWithBackKey() throws InterruptedException {
         Thread.sleep(250);
 
         onView(withId(R.id.fab)).perform(click());
@@ -591,5 +593,86 @@ public class MainActivityTest {
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.time_text))
                 .check(matches(withText("4:30 PM")));
+    }
+
+    /*
+    Tests whether the fake header button is displayed.
+*/
+    @Test
+    public void hasFakeHeaderButton() {
+        onView(withId(R.id.more_view_by))
+                .check(matches(isDisplayed()));
+    }
+
+    /*
+    Tests whether a click on the header opens a view-by dialog on click,
+    and the x button in the dialog closes the dialog
+ */
+    @Test
+    public void openCloseViewByDialogWithButton() {
+        onView(withId(R.id.top_app_bar)).perform(click());
+        onView(withId(R.id.view_by_dialog))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.close_view_by_dialog)).perform(click());
+        try {
+            onView(withId(R.id.view_by_dialog))
+                    .check(matches(not(isDisplayed())));
+            // TODO Add more add todo checks
+        } catch (NoMatchingViewException e) {
+            onView(withId(R.id.top_app_bar))
+                    .check(matches(isDisplayed()));
+        }
+    }
+
+    /*
+        Tests whether the view-by dialog closes with back button
+    */
+    @Test
+    public void openCloseViewByDialogWithBackKey() throws InterruptedException {
+        Thread.sleep(250);
+
+        onView(withId(R.id.top_app_bar)).perform(click());
+        onView(withId(R.id.view_by_dialog))
+                .check(matches(isDisplayed()));
+        pressKey(KeyEvent.KEYCODE_0);
+        Espresso.pressBack();
+        try {
+            onView(withId(R.id.view_by_dialog))
+                    .check(matches(not(isDisplayed())));
+            // TODO Add more add todo checks
+        } catch (NoMatchingViewException e) {
+            onView(withId(R.id.top_app_bar))
+                    .check(matches(isDisplayed()));
+        }
+    }
+
+    /*
+   Tests whether create new task form has correct fields
+*/
+    @Test
+    public void viewByHasCorrectViews() throws InterruptedException {
+        onView(withId(R.id.top_app_bar)).perform(click());
+        Thread.sleep(2000);
+        onView(withId(R.id.view_by_dialog))
+                .check(matches(isDisplayed()));
+
+        onView(withId(R.id.view_by_title))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.close_view_by_dialog))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.from_date_text))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.view_by_from_date_btn))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.to_date_text))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.view_by_to_date_btn))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.view_by_optional))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.set_all_upcoming_btn))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.set_view_by_btn))
+                .check(matches(isDisplayed()));
     }
 }

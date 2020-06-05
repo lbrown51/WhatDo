@@ -74,17 +74,6 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <ImageButton
-                    android:id="@+id/create_todo_time_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/todo_item_padding"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="@string/time_button"
-                    app:layout_constraintBottom_toBottomOf="@id/create_todo_finish_btn"
-                    app:layout_constraintStart_toEndOf="@+id/create_todo_date_btn"
-                    app:srcCompat="@drawable/ic_access_time_24dp" />
-
                 <TextView
                     android:id="@+id/create_todo_date_text"
                     android:layout_width="wrap_content"
@@ -123,6 +112,17 @@
                     app:layout_constraintBottom_toBottomOf="@id/create_todo_finish_btn"
                     app:layout_constraintStart_toEndOf="@+id/create_todo_notes_btn"
                     app:srcCompat="@drawable/ic_date_range_24dp" />
+
+                <ImageButton
+                    android:id="@+id/create_todo_time_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/todo_item_padding"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/time_button"
+                    app:layout_constraintBottom_toBottomOf="@id/create_todo_finish_btn"
+                    app:layout_constraintStart_toEndOf="@+id/create_todo_date_btn"
+                    app:srcCompat="@drawable/ic_access_time_24dp" />
 
                 <Button
                     android:id="@+id/create_todo_finish_btn"

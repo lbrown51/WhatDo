@@ -80,8 +80,6 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(createView);
 
-        // EditText blah = dialog.findViewById()
-
 //        Calendar fromC = Calendar.getInstance();
 //        Calendar toC = Calendar.getInstance();
         //Button setViewBy = dialog.findViewById(R.id.set_view_by_btn);

@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/view_by_dialog"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/view_by_dialog">
+    android:backgroundTint="@color/clear">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="@dimen/std_elevation"
+        android:layout_centerInParent="true"
         android:layout_gravity="center_vertical"
-        android:layout_centerInParent="true">
+        android:elevation="@dimen/std_elevation">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@color/colorPrimary">
+            android:background="@color/colorPrimary"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/view_by_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/view_by_title"
-                android:textColor="@android:color/white"
                 android:padding="20dp"
+                android:text="@string/view_by_title"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:textColor="@android:color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
                 android:id="@+id/close_view_by_dialog"
@@ -47,21 +47,85 @@
                 android:id="@+id/view_by_body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="20dp"
                 android:background="@android:color/white"
-                app:layout_constraintTop_toBottomOf="@id/view_by_title"
-                app:layout_constraintStart_toStartOf="parent">
+                android:padding="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_by_title">
+
+                <TextView
+                    android:id="@+id/from_date_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/todo_item_margin"
+                    android:text="Date(s)"
+                    app:layout_constraintStart_toStartOf="@id/view_by_body"
+                    app:layout_constraintTop_toTopOf="@id/view_by_body" />
 
                 <ImageButton
                     android:id="@+id/view_by_from_date_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/todo_item_padding"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/date_button"
-                    app:layout_constraintTop_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/from_date_text"
+                    app:layout_constraintStart_toEndOf="@id/from_date_text"
                     app:srcCompat="@drawable/ic_date_range_24dp" />
+
+                <TextView
+                    android:id="@+id/to_date_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/todo_item_margin"
+                    android:text="to"
+                    app:layout_constraintBottom_toBottomOf="@id/from_date_text"
+                    app:layout_constraintStart_toEndOf="@id/view_by_from_date_btn" />
+
+                <ImageButton
+                    android:id="@+id/view_by_to_date_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/date_button"
+                    app:layout_constraintBottom_toBottomOf="@id/from_date_text"
+                    app:layout_constraintStart_toEndOf="@id/to_date_text"
+                    app:srcCompat="@drawable/ic_date_range_24dp" />
+
+                <TextView
+                    android:id="@+id/view_by_optional"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/todo_item_margin"
+                    android:text="(optional)"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@id/from_date_text"
+                    app:layout_constraintStart_toEndOf="@id/view_by_to_date_btn" />
+
+                <Button
+                    android:id="@+id/set_all_upcoming_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/todo_item_margin"
+                    android:backgroundTint="@color/colorAccent"
+                    android:text="All Upcoming"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintStart_toStartOf="@id/from_date_text"
+                    app:layout_constraintTop_toBottomOf="@id/from_date_text" />
+
+                <Button
+                    android:id="@+id/set_view_by_btn"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/clear"
+                    app:iconGravity="textStart"
+                    android:contentDescription="@string/set_view_by_conditions"
+                    android:icon="@drawable/ic_check_circle"
+                    android:iconTint="@color/colorPrimary"
+                    android:layout="@dimen/todo_item_padding"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/from_date_text" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
