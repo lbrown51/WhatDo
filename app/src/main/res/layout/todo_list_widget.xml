@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:text="@string/upcoming_tasks_widget_header"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            android:padding="@dimen/widget_header_padding"
+            android:padding="@dimen/widget_heading_padding"
             android:background="@color/colorPrimary"
             android:textColor="@android:color/white" />
 

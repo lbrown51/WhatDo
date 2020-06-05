@@ -1,9 +1,11 @@
 package com.ad340.whatdo;
 
 import android.app.Application;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -68,10 +70,21 @@ public class TodoListWidgetDataProvider implements RemoteViewsService.RemoteView
     @Override
     public RemoteViews getViewAt(int position) {
         RemoteViews view = new RemoteViews(mContext.getPackageName(),
-                simple_list_item_1);
+                R.layout.todo_list_widget_item);
+        setupItemLaunchMainOnClick(view, position);
 
-        view.setTextViewText(text1, todoList.get(position));
+        view.setTextViewText(R.id.todo_list_widget_item_task_name_label, todoList.get(position));
+
         return view;
+    }
+
+    private void setupItemLaunchMainOnClick(RemoteViews view, int position) {
+        Bundle extras = new Bundle();
+        extras.putInt("SELECTED ITEM", position);
+        Intent fillInIntent = new Intent();
+        fillInIntent.putExtras(extras);
+
+        view.setOnClickFillInIntent(R.id.todo_list_widget_item_task_name_label, fillInIntent);
     }
 
     @Override
