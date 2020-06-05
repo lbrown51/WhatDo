@@ -240,7 +240,8 @@ public class MainActivityTest {
          int year = 2020;
          int month = 5;
          int dayOfMonth = 28;
-
+         
+         Thread.sleep(500);
          onView(withId(R.id.fab)).perform(click());
          Thread.sleep(500);
          onView(withId(R.id.create_todo_dialog))
