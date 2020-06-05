@@ -40,7 +40,6 @@ public class ToDoItemRecyclerViewAdapter
     private static final String TAG = ToDoItemRecyclerViewAdapter.class.getName();
 
 
-
     ToDoItemRecyclerViewAdapter(Context context) {
         this.context = context;
         listener = (OnTodoInteractionListener) this.context;
@@ -75,6 +74,11 @@ public class ToDoItemRecyclerViewAdapter
             holder.toDoDate.setText(todo.getDate());
             holder.toDoTime.setText(todo.getTime());
             holder.toDoNotesText.setText(todo.getNotes());
+            if (todo.getNotes() == null || todo.getNotes().equals("")) {
+                holder.toDoNotesText.setVisibility(View.GONE);
+            } else {
+                holder.toDoNotesText.setVisibility(View.VISIBLE);
+            }
             holder.toDoFinishedCheckbox.setChecked(false);
 
             holder.toDoFinishedCheckbox.setOnClickListener(view -> {
@@ -83,11 +87,8 @@ public class ToDoItemRecyclerViewAdapter
             });
 
             holder.rescheduleButton.setOnClickListener(view -> {
-                //make popup menu
                 PopupMenu popup = new PopupMenu(context, holder.rescheduleButton);
-                //inflating menu
                 popup.inflate(R.menu.submit_menu);
-                //add click listener
                 popup.setOnMenuItemClickListener(item -> {
                     switch (item.getItemId()) {
                         case R.id.reschedule:
@@ -105,7 +106,6 @@ public class ToDoItemRecyclerViewAdapter
                     }
                     return false;
                 });
-                //displaying the popup
                 popup.show();
             });
 
@@ -124,11 +124,9 @@ public class ToDoItemRecyclerViewAdapter
             // if current task is expanded, previous = current
             if (isExpanded) previousExpandedPosition = position;
 
-
             // listener on Title TextView
             holder.toDoTaskName.setOnClickListener(v -> {
                 mExpandedPosition = isExpanded ? -1:position;
-                holder.toDoNotesText.setVisibility(View.GONE);
                 notifyItemChanged(previousExpandedPosition);
                 notifyItemChanged(position);
             });
@@ -136,7 +134,6 @@ public class ToDoItemRecyclerViewAdapter
             // listener on time TextView
             holder.toDoTime.setOnClickListener(v -> {
                 mExpandedPosition = isExpanded ? -1:position;
-                holder.toDoNotesText.setVisibility(View.GONE);
                 notifyItemChanged(previousExpandedPosition);
                 notifyItemChanged(position);
             });
@@ -160,7 +157,7 @@ public class ToDoItemRecyclerViewAdapter
 
         if (notesText.getVisibility() == View.GONE) {
             notesText.setVisibility(View.VISIBLE);
-        } else {
+        } else if (String.valueOf(notesText.getText()).equals("")){
             notesText.setVisibility(View.GONE);
         }
     }
