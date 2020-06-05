@@ -18,8 +18,9 @@ import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
     @Test
-    public void useAppContext() {
+    public void useAppContext() throws InterruptedException {
         // Context of the app under test.
+        Thread.sleep(5000);
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
         assertEquals("com.ad340.whatdo", appContext.getPackageName());

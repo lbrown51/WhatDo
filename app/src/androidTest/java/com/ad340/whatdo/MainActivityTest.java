@@ -599,7 +599,8 @@ public class MainActivityTest {
     Tests whether the fake header button is displayed.
 */
     @Test
-    public void hasFakeHeaderButton() {
+    public void hasFakeHeaderButton() throws InterruptedException {
+        Thread.sleep(5000);
         onView(withId(R.id.more_view_by))
                 .check(matches(isDisplayed()));
     }
@@ -609,8 +610,9 @@ public class MainActivityTest {
     and the x button in the dialog closes the dialog
  */
     @Test
-    public void openCloseViewByDialogWithButton() {
+    public void openCloseViewByDialogWithButton() throws InterruptedException {
         onView(withId(R.id.top_app_bar)).perform(click());
+        Thread.sleep(5000);
         onView(withId(R.id.view_by_dialog))
                 .check(matches(isDisplayed()));
         onView(withId(R.id.close_view_by_dialog)).perform(click());
@@ -629,9 +631,8 @@ public class MainActivityTest {
     */
     @Test
     public void openCloseViewByDialogWithBackKey() throws InterruptedException {
-        Thread.sleep(250);
-
         onView(withId(R.id.top_app_bar)).perform(click());
+        Thread.sleep(5000);
         onView(withId(R.id.view_by_dialog))
                 .check(matches(isDisplayed()));
         pressKey(KeyEvent.KEYCODE_0);
@@ -652,7 +653,7 @@ public class MainActivityTest {
     @Test
     public void viewByHasCorrectViews() throws InterruptedException {
         onView(withId(R.id.top_app_bar)).perform(click());
-        Thread.sleep(2000);
+        Thread.sleep(5000);
         onView(withId(R.id.view_by_dialog))
                 .check(matches(isDisplayed()));
 
