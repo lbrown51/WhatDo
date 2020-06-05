@@ -66,8 +66,9 @@ public class TodoListWidget extends AppWidgetProvider {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 
         Log.d("onReceiveTodoListWidget", intent.getAction());
-        if (Objects.equals(intent.getAction(), "com.example.list.item.click")) {
+        if (Objects.equals(intent.getAction(), "com.ad340.whatdo.widget.item.click")) {
             Intent launchMainIntent = new Intent(context, MainActivity.class);
+            launchMainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(launchMainIntent);
         }
     }
@@ -87,7 +88,8 @@ public class TodoListWidget extends AppWidgetProvider {
         todoWidgetListItemClickIntent.setAction("com.ad340.whatdo.widget.item.click");
         todoWidgetListItemClickIntent.setData(
                 Uri.parse(todoWidgetListItemClickIntent.toUri(Intent.URI_INTENT_SCHEME)));
-        PendingIntent todoWidgetListItemClickPendingIntent = PendingIntent.getActivity(
+
+        PendingIntent todoWidgetListItemClickPendingIntent = PendingIntent.getBroadcast(
                         context, 0,
                         todoWidgetListItemClickIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT

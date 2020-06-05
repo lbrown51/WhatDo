@@ -84,7 +84,7 @@ public class TodoListWidgetDataProvider implements RemoteViewsService.RemoteView
         Intent fillInIntent = new Intent();
         fillInIntent.putExtras(extras);
 
-        view.setOnClickFillInIntent(R.id.todo_list_widget_item_task_name_label, fillInIntent);
+        view.setOnClickFillInIntent(R.id.todo_list_widget_item_layout, fillInIntent);
     }
 
     @Override
