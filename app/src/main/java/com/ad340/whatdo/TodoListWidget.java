@@ -38,6 +38,7 @@ public class TodoListWidget extends AppWidgetProvider {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
 
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.todo_widget_list);
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 

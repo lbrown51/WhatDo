@@ -2,8 +2,11 @@ package com.ad340.whatdo;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,6 +82,15 @@ public class ToDoItemRecyclerViewAdapter
 
             holder.toDoFinishedCheckbox.setOnClickListener(view -> {
                 mTodoViewModel.updateTodo(todo, "", Constants.COMPLETE);
+                Intent updateWidgetIntent = new Intent(context, TodoListWidget.class);
+                updateWidgetIntent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+                int ids[] = AppWidgetManager
+                        .getInstance(context.getApplicationContext())
+                        .getAppWidgetIds(
+                                new ComponentName(context.getApplicationContext(), TodoListWidget.class)
+                        );
+                updateWidgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+                context.sendBroadcast(updateWidgetIntent);
                 notifyDataSetChanged();
             });
 
@@ -101,6 +113,17 @@ public class ToDoItemRecyclerViewAdapter
                             mExpandedPosition = isExpanded ? -1:position;
                             notifyItemChanged(previousExpandedPosition);
                             notifyItemChanged(position);
+
+                            Intent updateWidgetIntent = new Intent(context, TodoListWidget.class);
+                            updateWidgetIntent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+                            int ids[] = AppWidgetManager
+                                    .getInstance(context.getApplicationContext())
+                                    .getAppWidgetIds(
+                                            new ComponentName(context.getApplicationContext(), TodoListWidget.class)
+                                    );
+                            updateWidgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+                            context.sendBroadcast(updateWidgetIntent);
+
                             break;
                     }
                     return false;
