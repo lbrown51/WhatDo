@@ -4,7 +4,7 @@
     android:initialLayout="@layout/todo_list_widget"
     android:minWidth="180dp"
     android:minHeight="180dp"
-    android:previewImage="@drawable/example_appwidget_preview"
+    android:previewImage="@drawable/todo_list_widget_preview"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="1800000"
     android:widgetCategory="home_screen" />
