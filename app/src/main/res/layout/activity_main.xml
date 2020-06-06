@@ -3,53 +3,51 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:id="@+id/top_app_bar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="@string/app_bar_title"
             android:key="@id/top_app_bar"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary" />
+            app:title="@string/app_bar_title"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:iconSize="@dimen/add_button_dimen"
-        app:fabCustomSize="@dimen/add_button_dimen"
         android:scaleType="center"
         android:backgroundTint="@color/colorAccent"
-        app:srcCompat="@drawable/ic_add"
         android:clickable="true"
         android:contentDescription="@string/floating_action_button"
-        android:layout_margin="@dimen/large_item_spacing"
+        android:layout_margin="@dimen/dp_16"
         android:background="?attr/selectableItemBackgroundBorderless"
-        />
-
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:iconSize="@dimen/dp_100"
+        app:fabCustomSize="@dimen/dp_100"
+        app:srcCompat="@drawable/ic_add" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/todo_list_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/match_constraint"
         android:clipToPadding="false"
-        android:paddingLeft="@dimen/recycler_view_padding"
-        android:paddingTop="@dimen/recycler_view_padding"
-        android:paddingBottom="@dimen/recycler_view_padding"
+        android:paddingStart="@dimen/dp_8"
+        android:paddingTop="@dimen/dp_8"
+        android:paddingBottom="@dimen/dp_8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

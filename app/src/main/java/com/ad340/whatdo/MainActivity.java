@@ -9,6 +9,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -29,7 +30,7 @@ import static com.ad340.whatdo.PickerUtils.onTimeSetListener;
 import static com.ad340.whatdo.PickerUtils.setTimePickerShowOnClick;
 
 public class MainActivity extends AppCompatActivity implements OnTodoInteractionListener {
-
+    private static final String TAG = MainActivity.class.getName();
     private MaterialToolbar header;
     private TodoViewModel mTodoViewModel;
     public static final int NEW_TODO_ACTIVITY_REQUEST_CODE = 1;
@@ -51,8 +52,8 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
             adapter.setTodos(todos);
         });
 
-        int largePadding = getResources().getDimensionPixelSize(R.dimen.large_item_spacing);
-        int smallPadding = getResources().getDimensionPixelSize(R.dimen.small_item_spacing);
+        int largePadding = getResources().getDimensionPixelSize(R.dimen.dp_16);
+        int smallPadding = getResources().getDimensionPixelSize(R.dimen.dp_6);
         toDoRecyclerView.addItemDecoration(new ToDoItemDecoration(largePadding, smallPadding));
 
         fab = findViewById(R.id.fab);
@@ -90,6 +91,8 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         Button finishNewTodoButton = dialog.findViewById(R.id.create_todo_finish_btn);
         ImageButton newTodoDateButton = dialog.findViewById(R.id.create_todo_date_btn);
         ImageButton newTodoTimeButton = dialog.findViewById(R.id.create_todo_time_btn);
+        ImageButton newTodoNotesButton = dialog.findViewById(R.id.create_todo_notes_btn);
+        EditText newTodoNotesText = dialog.findViewById(R.id.create_todo_notes_text);
 
         final DatePickerDialog.OnDateSetListener date = onDateSetListener(c, dateString, dateText);
         final TimePickerDialog.OnTimeSetListener time = onTimeSetListener(c, timeString, timeText);
@@ -97,13 +100,22 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         setDatePickerShowOnClick(this, c, newTodoDateButton, date);
         setTimePickerShowOnClick(this, c, newTodoTimeButton, time);
 
+        newTodoNotesButton.setOnClickListener(view -> {
+            if (newTodoNotesText.getVisibility() == View.GONE) {
+                newTodoNotesText.setVisibility(View.VISIBLE);
+            } else {
+                newTodoNotesText.setVisibility(View.GONE);
+            }
+        });
+
         finishNewTodoButton.setOnClickListener(view -> {
             String newTodoText = newTodoEditText.getText().toString();
             if (newTodoText.isEmpty()) {
-                newTodoEditText.setError("Cannot make an empty task");
+                newTodoEditText.setError(getString(R.string.empty_task_error));
             } else {
                 Todo newTodo = new Todo(null, newTodoText, String.valueOf(dateString),
-                        String.valueOf(timeString), null, false);
+                        String.valueOf(timeString), String.valueOf(newTodoNotesText.getText()),
+                        false);
                 mTodoViewModel.insert(newTodo);
                 dialog.dismiss();
             }

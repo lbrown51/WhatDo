@@ -11,7 +11,6 @@ import androidx.test.espresso.Espresso;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -209,6 +208,11 @@ public class MainActivityTest {
                  .check(matches(isDisplayed()));
          onView(withId(R.id.create_todo_date_btn))
                  .check(matches(isDisplayed()));
+         onView(withId(R.id.create_todo_notes_btn))
+                 .perform(click())
+                 .check(matches(isDisplayed()));
+         onView(withId(R.id.create_todo_notes_text))
+                 .check(matches(isDisplayed()));
      }
 
      /*
@@ -237,6 +241,8 @@ public class MainActivityTest {
          int month = 5;
          int dayOfMonth = 28;
 
+         closeSoftKeyboard();
+         Thread.sleep(500);
          onView(withId(R.id.fab)).perform(click());
          Thread.sleep(500);
          onView(withId(R.id.create_todo_dialog))
@@ -265,6 +271,13 @@ public class MainActivityTest {
          onView(withId(R.id.create_todo_date_text))
                  .check(matches(withText("Thursday, May 28, 2020")));
 
+         Thread.sleep(500);
+         onView(withId(R.id.create_todo_notes_btn))
+                 .perform(click());
+
+         onView(withId(R.id.create_todo_notes_text))
+                 .perform(typeText("About my new task"));
+
          onView(withId(R.id.create_todo_finish_btn))
                  .perform(click());
 
@@ -282,6 +295,10 @@ public class MainActivityTest {
          onView(withRecyclerView(R.id.todo_list_recycler_view)
                  .atPositionOnView(2, R.id.date_text))
                  .check(matches(withText("Thursday, May 28, 2020")));
+
+         onView(withRecyclerView(R.id.todo_list_recycler_view)
+                 .atPositionOnView(2, R.id.notes_text))
+                 .check(matches(withText("About my new task")));
 
      }
 
@@ -591,5 +608,35 @@ public class MainActivityTest {
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.time_text))
                 .check(matches(withText("4:30 PM")));
+    }
+
+    /*
+    Tests that notes can be added and saved
+    */
+    @Test
+    public void notesWork() {
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.name_text))
+                .perform(click());
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.notes_text))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.notes_btn))
+                .perform(click());
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.notes_text))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.notes_text))
+                .perform(typeText("About my task"));
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.notes_text))
+                .check(matches(withText("About my task")));
     }
 }
