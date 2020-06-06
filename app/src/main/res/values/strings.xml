@@ -12,6 +12,7 @@
     <string name="notes">Notes</string>
     <string name="date_button">Date button</string>
     <string name="time_button">Time button</string>
-    <string name="view_by_title">View ToDos By...</string>
+    <string name="view_by_title">View ToDos By…</string>
     <string name="set_view_by_conditions">set view by conditions</string>
+    <string name="view_by_picker_title">Select which date(s) to view</string>
 </resources>

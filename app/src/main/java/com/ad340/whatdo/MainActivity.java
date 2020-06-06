@@ -1,6 +1,9 @@
 package com.ad340.whatdo;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -8,7 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -18,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Calendar;
@@ -70,39 +76,26 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                 today.get(Calendar.YEAR)));
         header.setTitle(displayText);
         header.setOnClickListener(view -> {
-                showViewByDialog();
+                //Fragment viewByFragment = new ViewByDialog();
+                //replaceFragment(viewByFragment);
+                showDateRangeDialog();
             });
     }
 
-    private void showViewByDialog() {
+    private void showDateRangeDialog() {
         final View createView = View.inflate(this, R.layout.view_by_dialog, null);
         final Dialog dialog = new Dialog(this, android.R.style.Theme_DeviceDefault_NoActionBar_Overscan);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(createView);
 
-//        Calendar fromC = Calendar.getInstance();
-//        Calendar toC = Calendar.getInstance();
-        //Button setViewBy = dialog.findViewById(R.id.set_view_by_btn);
-        //Button setAllUpcoming = dialog.findViewById(R.id.set_all_upcoming_btn);
 
-        //TextView fromDateText = dialog.findViewById(R.id.view_by_from_date_text);
-        //TextView toDateText = dialog.findViewById(R.id.view_by_to_date_text);
+        Button dateBtn = dialog.findViewById(R.id.view_by_date);
+        Button dateRangeBtn = dialog.findViewById(R.id.view_by_date_range);
+        Button allUpcomingBtn = dialog.findViewById(R.id.view_by_all_upcoming);
 
-        //ImageButton fromDateButton = dialog.findViewById(R.id.view_by_from_date_btn);
-        //ImageButton toDateButton = dialog.findViewById(R.id.view_by_to_date_btn);
-
-        //final DatePickerDialog.OnDateSetListener fromDate = onDateSetListener(fromDate, fromDateString, fromDateText);
-        //final DatePickerDialog.OnDateSetListener toDate = onDateSetListener(toDate, toDateString, toDateText);
-
-        //setDatePickerShowOnClick(this, fromC, fromDateButton, fromDate);
-        //setDatePickerShowOnClick(this, toC, toDateButton, toDate);
-
-        //setAllUpcoming.setOnClickListener(view -> {
-//                make other buttons inactive/gray
-//        });
-
-//        setViewBy.setOnClickListener(view -> {
-//                dialog.dismiss();
+//        dateRangeBtn.setOnClickListener(view -> {
+//                //make other buttons inactive/gray
+//            launchDateRangePicker();
 //        });
 
         ImageButton closeButton = dialog.findViewById(R.id.close_view_by_dialog);
@@ -119,6 +112,28 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         });
 
         dialog.show();
+    }
+
+    public void launchDateRangePicker(View rootView) {
+        //Date Range Picker
+        MaterialDatePicker.Builder dateRangeBuilder = MaterialDatePicker.Builder.dateRangePicker();
+        dateRangeBuilder.setTitleText(R.string.view_by_picker_title);
+        MaterialDatePicker dateRangePicker = dateRangeBuilder.build();
+
+        dateRangePicker.show(this.getSupportFragmentManager(), dateRangePicker.toString());
+
+        dateRangePicker.addOnCancelListener ((dialogInterface) -> {
+            dialogInterface.cancel();
+            Log.d("DatePicker Activity", "Dialog was cancelled");
+        });
+        dateRangePicker.addOnNegativeButtonClickListener ((view) -> {
+            view.setVisibility(View.GONE);
+            Log.d("DatePicker Activity", "Dialog Negative Button was clicked");
+        });
+
+        dateRangePicker.addOnPositiveButtonClickListener ((dialogInterface) -> {
+            Log.d("DatePicker Activity", "Dialog Positive Button was clicked");
+        });
     }
 
 
