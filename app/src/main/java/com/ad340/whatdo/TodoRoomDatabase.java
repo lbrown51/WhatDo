@@ -11,10 +11,11 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Todo.class}, version = 3, exportSchema = false)
+@Database(entities = {Todo.class, Tag.class}, version = 4, exportSchema = false)
 public abstract class TodoRoomDatabase extends RoomDatabase {
 
     public abstract TodoDao todoDao();
+    public abstract TagDao tagDao();
 
     private static volatile TodoRoomDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
@@ -54,20 +55,30 @@ public abstract class TodoRoomDatabase extends RoomDatabase {
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
             databaseWriteExecutor.execute(() -> {
-                TodoDao dao = INSTANCE.todoDao();
-                dao.deleteAll();
-                Todo todo = new Todo(null, "First Todo", null, null, null, false);
-                dao.insert(todo);
-                todo = new Todo(null, "Second Todo", null, null, null, false);
-                dao.insert(todo);
-                todo = new Todo(null, "Third Todo", null, null, null, false);
-                dao.insert(todo);
-                todo = new Todo(null, "Fourth Todo", null, null, null, false);
-                dao.insert(todo);
-                todo = new Todo(null, "Fifth Todo", null, null, null, false);
-                dao.insert(todo);
-                todo = new Todo(null, "Finished Todo", null, null, null, true);
-                dao.insert(todo);
+                TodoDao todoDao = INSTANCE.todoDao();
+                TagDao tagDao = INSTANCE.tagDao();
+                todoDao.deleteAll();
+                tagDao.deleteAll();
+
+                Todo todo = new Todo(null, "First Todo", null, null, null, false, null);
+                todoDao.insert(todo);
+                todo = new Todo(null, "Second Todo", null, null, null, false, null);
+                todoDao.insert(todo);
+                todo = new Todo(null, "Third Todo", null, null, null, false, null);
+                todoDao.insert(todo);
+                todo = new Todo(null, "Fourth Todo", null, null, null, false, null);
+                todoDao.insert(todo);
+                todo = new Todo(null, "Fifth Todo", null, null, null, false, null);
+                todoDao.insert(todo);
+                todo = new Todo(null, "Finished Todo", null, null, null, true, null);
+                todoDao.insert(todo);
+
+                Tag tag = new Tag(null, "Home");
+                tagDao.insert(tag);
+                tag = new Tag(null, "Work");
+                tagDao.insert(tag);
+                tag = new Tag(null, "Anniversary");
+                tagDao.insert(tag);
             });
         }
     };

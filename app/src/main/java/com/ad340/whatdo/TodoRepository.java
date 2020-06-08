@@ -26,26 +26,28 @@ public class TodoRepository {
     void updateTodo(Todo todo, String data, int type) {
         int id = todo.getId();
         switch (type) {
-            case 1: // update title
+            case Constants.TITLE: // update title
                 TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoTitle(id, data));
                 break;
-            case 2: // update date
+            case Constants.DATE: // update date
                 TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoDate(id, data));
                 break;
-            case 3: // update time
+            case Constants.TIME: // update time
                 TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoTime(id, data));
                 break;
-            case 4: // update notes
+            case Constants.NOTES: // update notes
                 TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoNotes(id, data));
                 break;
-            case 5: // set to completed
+            case Constants.COMPLETE: // set to completed
                 TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.setTodoCompleted(id));
+                break;
+            case Constants.TAG:
+                TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoTag(id, data));
                 break;
             default: // type not recognized
                 StringBuilder errMessage  = new StringBuilder("Data type of ")
                         .append(type).append(" not recognized.");
                 throw new IllegalArgumentException(String.valueOf(errMessage));
-
         }
     }
 
