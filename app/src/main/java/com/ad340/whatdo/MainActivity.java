@@ -48,11 +48,20 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         ToDoItemRecyclerViewAdapter adapter = new ToDoItemRecyclerViewAdapter(this);
         RecyclerView toDoRecyclerView = findViewById(R.id.todo_list_recycler_view);
 
+
         toDoRecyclerView.setAdapter(adapter);
         toDoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mTodoViewModel.getUncompletedTodos().observe(this, todos -> {
             adapter.setTodos(todos);
+        });
+
+        mTodoViewModel.getAllTags().observe(this, tags -> {
+            Log.i(TAG, "onCreate: ");
+            for (Tag tag :
+                    tags) {
+                Log.i(TAG, tag.getName());
+            }
         });
 
         int largePadding = getResources().getDimensionPixelSize(R.dimen.dp_16);
@@ -118,8 +127,8 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
             } else {
                 Todo newTodo = new Todo(null, newTodoText, String.valueOf(dateString),
                         String.valueOf(timeString), String.valueOf(newTodoNotesText.getText()),
-                        false);
-                mTodoViewModel.insert(newTodo);
+                        false, null);
+                mTodoViewModel.insertTodo(newTodo);
 
                 Intent updateWidgetIntent = new Intent(this, TodoListWidget.class);
                 updateWidgetIntent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
