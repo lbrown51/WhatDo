@@ -20,6 +20,9 @@ public interface TodoDao {
     @Query("SELECT * FROM todo_table WHERE NOT isCompleted")
     LiveData<List<Todo>> getUncompletedTodos();
 
+    @Query("SELECT title FROM todo_table WHERE NOT isCompleted")
+    List<String> getStaticUncompletedTodoTitles();
+
     @Query("DELETE FROM todo_table")
     void deleteAll();
 

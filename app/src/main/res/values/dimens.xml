@@ -13,4 +13,5 @@
     <dimen name="dp_20">20dp</dimen>
     <dimen name="dp_19">19dp</dimen>
     <dimen name="dp_25">25dp</dimen>
+    <dimen name="widget_heading_padding">8dp</dimen>
 </resources>

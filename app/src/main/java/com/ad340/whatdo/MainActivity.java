@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -117,6 +120,17 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                         String.valueOf(timeString), String.valueOf(newTodoNotesText.getText()),
                         false);
                 mTodoViewModel.insert(newTodo);
+
+                Intent updateWidgetIntent = new Intent(this, TodoListWidget.class);
+                updateWidgetIntent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+                int ids[] = AppWidgetManager
+                        .getInstance(getApplicationContext())
+                        .getAppWidgetIds(
+                                new ComponentName(getApplicationContext(), TodoListWidget.class)
+                        );
+                updateWidgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+                sendBroadcast(updateWidgetIntent);
+
                 dialog.dismiss();
             }
         });

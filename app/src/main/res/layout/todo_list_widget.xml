@@ -1,0 +1,32 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:padding="@dimen/widget_margin"
+    android:id="@+id/todo_list_widget_layout">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/upcoming_tasks_widget_header"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:padding="@dimen/widget_heading_padding"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white" />
+
+
+        <ListView
+            android:id="@+id/todo_widget_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </ListView>
+
+    </LinearLayout>
+</FrameLayout>
