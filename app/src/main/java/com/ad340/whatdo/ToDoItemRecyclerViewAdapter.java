@@ -1,10 +1,12 @@
 package com.ad340.whatdo;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +21,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static com.ad340.whatdo.PickerUtils.setDatePickerShowOnClick;
@@ -30,6 +38,7 @@ import static com.ad340.whatdo.PickerUtils.setTimePickerShowOnClick;
 
 public class ToDoItemRecyclerViewAdapter
         extends RecyclerView.Adapter<ToDoItemRecyclerViewAdapter.ToDoItemViewHolder>{
+
     private static final String TAG = ToDoItemRecyclerViewAdapter.class.getName();
     private Context context;
     private List<Todo> todos;
@@ -46,6 +55,19 @@ public class ToDoItemRecyclerViewAdapter
                 .get(TodoViewModel.class);
     }
 
+    // Overloaded this for testing purposes
+    ToDoItemRecyclerViewAdapter(Context context, int pos) {
+        this(context);
+        mTodoViewModel.getAllTodos((List<Todo> todos) -> {
+            for (Todo todo : todos) {
+                if (!this.todos.contains(todo)) {
+                    this.todos.add(todo);
+                }
+            }
+            Log.e(TAG, "alt adapter constructor");
+        });
+    }
+
     @NonNull
     @Override
     public ToDoItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -59,6 +81,8 @@ public class ToDoItemRecyclerViewAdapter
     public void onBindViewHolder(@NonNull final ToDoItemViewHolder holder, int position) {
         if (todos != null && position < todos.size()) {
             Todo todo = todos.get(position);
+            // REMOVE THIS LOG - doesn't have date, can't compare?
+            //Log.e(TAG, todo.getDate());
             Calendar c = Calendar.getInstance();
             final boolean isExpanded = position==mExpandedPosition;
 
@@ -140,6 +164,29 @@ public class ToDoItemRecyclerViewAdapter
 
     void setTodos(List<Todo> todos) {
         this.todos = todos;
+        notifyDataSetChanged();
+    }
+
+    void filterTodosByDate(Calendar startDate, Calendar endDate) throws ParseException {
+        if (startDate.equals(endDate)) {
+            endDate.add(Calendar.DAY_OF_YEAR, 1);
+        }
+        Calendar tempDate = Calendar.getInstance();
+        ArrayList<Todo> tempList = new ArrayList<>();
+        tempList.addAll(todos);
+        //String[] tempList = Arrays.stream((ArrayList<Todo>) todos).map(p -> p.getDate()).toArray(size -> new String[todos.size()]);
+        for (Todo todo: tempList) {
+            // Calendar is saved to task via DateFormat_SHORT
+            SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.YY");
+            Date date = sdf.parse(todo.getDate());
+            tempDate.setTime(date);
+            if (tempDate.before(startDate) || tempDate.after(endDate)) {
+                tempList.remove(todo);
+                Log.e(TAG, "removed " + todo.getTitle());
+            }
+        }
+        todos = (List<Todo>) tempList;
+        Log.e(TAG, "filtered todos from " + startDate.toString() + " to " + endDate.toString());
         notifyDataSetChanged();
     }
 

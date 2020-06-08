@@ -3,9 +3,11 @@ package com.ad340.whatdo;
 import android.app.Application;
 import android.content.Context;
 
+import androidx.core.util.Consumer;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TodoViewModel extends AndroidViewModel {
@@ -21,7 +23,7 @@ public class TodoViewModel extends AndroidViewModel {
         uncompletedTodos = repository.getUncompletedTodos();
     }
 
-    LiveData<List<Todo>> getAllTodos() { return allTodos; }
+    LiveData<List<Todo>> getAllTodos(Consumer<List<Todo>> responseCallback) { return allTodos; }
 
     LiveData<List<Todo>> getUncompletedTodos() { return uncompletedTodos; }
 

@@ -38,7 +38,8 @@ public class PickerUtils {
             c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
             dateString.setLength(0);
-            dateString.append(DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime()));
+            // I changed this to DateFormat.SHORT format so I can parse it more easily
+            dateString.append(DateFormat.getDateInstance(DateFormat.SHORT).format(c.getTime()));
             v.setText(dateString);
         };
     }

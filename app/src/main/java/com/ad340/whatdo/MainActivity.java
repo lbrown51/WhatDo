@@ -1,6 +1,7 @@
 package com.ad340.whatdo;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -8,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -24,9 +26,13 @@ import android.widget.TextView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import static com.ad340.whatdo.PickerUtils.setDatePickerShowOnClick;
@@ -38,8 +44,12 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
 
     private MaterialToolbar header;
     private TodoViewModel mTodoViewModel;
+    ToDoItemRecyclerViewAdapter adapter;
     public static final int NEW_TODO_ACTIVITY_REQUEST_CODE = 1;
     public FloatingActionButton fab;
+    private Calendar startDate;
+    private Calendar endDate;
+    private boolean dateFiltered = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +57,23 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         setContentView(R.layout.activity_main);
 
         mTodoViewModel = new ViewModelProvider(this).get(TodoViewModel.class);
-        ToDoItemRecyclerViewAdapter adapter = new ToDoItemRecyclerViewAdapter(this);
+        adapter = new ToDoItemRecyclerViewAdapter(this, 1);
         RecyclerView toDoRecyclerView = findViewById(R.id.todo_list_recycler_view);
 
         toDoRecyclerView.setAdapter(adapter);
         toDoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mTodoViewModel.getUncompletedTodos().observe(this, todos -> {
-            adapter.setTodos(todos);
+            this.runOnUiThread(() -> {
+                adapter.setTodos(todos);
+                if (dateFiltered) {
+                    try {
+                        adapter.filterTodosByDate(startDate, endDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         });
 
         int largePadding = getResources().getDimensionPixelSize(R.dimen.large_item_spacing);
@@ -75,28 +94,21 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                 today.get(Calendar.DAY_OF_MONTH),
                 today.get(Calendar.YEAR)));
         header.setTitle(displayText);
-        header.setOnClickListener(view -> {
-                //Fragment viewByFragment = new ViewByDialog();
-                //replaceFragment(viewByFragment);
-                showDateRangeDialog();
-            });
+        header.setOnClickListener(view -> { showViewByDialog(); });
+
+        // DATE FILTRATION
+        startDate = today;
+        endDate = today;
+        // use vm.getAllTodos()
     }
 
-    private void showDateRangeDialog() {
+    // VIEW BY DIALOG
+
+    private void showViewByDialog() {
         final View createView = View.inflate(this, R.layout.view_by_dialog, null);
         final Dialog dialog = new Dialog(this, android.R.style.Theme_DeviceDefault_NoActionBar_Overscan);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(createView);
-
-
-        Button dateBtn = dialog.findViewById(R.id.view_by_date);
-        Button dateRangeBtn = dialog.findViewById(R.id.view_by_date_range);
-        Button allUpcomingBtn = dialog.findViewById(R.id.view_by_all_upcoming);
-
-//        dateRangeBtn.setOnClickListener(view -> {
-//                //make other buttons inactive/gray
-//            launchDateRangePicker();
-//        });
 
         ImageButton closeButton = dialog.findViewById(R.id.close_view_by_dialog);
         closeButton.setOnClickListener((view) -> {
@@ -114,10 +126,44 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         dialog.show();
     }
 
+    public void launchSingleDatePicker(View rootView) {
+        //Single Date Picker
+        MaterialDatePicker.Builder dateBuilder = MaterialDatePicker.Builder.datePicker();
+        dateBuilder.setTitleText(R.string.view_by_picker_date_title);
+        MaterialDatePicker datePicker = dateBuilder.build();
+
+        datePicker.show(this.getSupportFragmentManager(), datePicker.toString());
+
+        datePicker.addOnCancelListener ((dialogInterface) -> {
+            dialogInterface.cancel();
+            Log.d("DatePicker Activity", "Dialog was cancelled");
+        });
+        datePicker.addOnNegativeButtonClickListener ((view) -> {
+            view.setVisibility(View.GONE);
+            Log.d("DatePicker Activity", "Dialog Negative Button was clicked");
+        });
+
+        datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+            @Override
+            public void onPositiveButtonClick(Object selection) {
+                Date inputDate = new Date((Long) selection);
+                startDate.setTime(inputDate);
+                endDate.setTime(inputDate);
+                try {
+                    adapter.filterTodosByDate(startDate, endDate);
+                    dateFiltered = true;
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Log.d("DatePicker Activity", "Dialog Positive Button was clicked");
+            }
+        });
+    }
+
     public void launchDateRangePicker(View rootView) {
         //Date Range Picker
         MaterialDatePicker.Builder dateRangeBuilder = MaterialDatePicker.Builder.dateRangePicker();
-        dateRangeBuilder.setTitleText(R.string.view_by_picker_title);
+        dateRangeBuilder.setTitleText(R.string.view_by_picker_date_range_title);
         MaterialDatePicker dateRangePicker = dateRangeBuilder.build();
 
         dateRangePicker.show(this.getSupportFragmentManager(), dateRangePicker.toString());
@@ -131,11 +177,30 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
             Log.d("DatePicker Activity", "Dialog Negative Button was clicked");
         });
 
-        dateRangePicker.addOnPositiveButtonClickListener ((dialogInterface) -> {
-            Log.d("DatePicker Activity", "Dialog Positive Button was clicked");
+        dateRangePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+            @Override
+            public void onPositiveButtonClick(Object selection) {
+                Pair<Long, Long> dateRange = (Pair<Long, Long>) selection;
+                Date inputStartDate = new Date(dateRange.first);
+                Date inputEndDate = new Date(dateRange.second);
+                if (inputStartDate != null) startDate.setTime(inputStartDate);
+                if (inputEndDate != null) endDate.setTime(inputEndDate);
+                try {
+                    adapter.filterTodosByDate(startDate, endDate);
+                    dateFiltered = true;
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Log.d("DatePicker Activity", "Dialog Positive Button was clicked");
+            }
         });
     }
 
+    public void allUpcomingHandler(View rootView) {
+        // STUB
+    }
+
+    // CREATE TODO DIALOG
 
     private void showCreateDialog() {
         final View createView = View.inflate(this, R.layout.create_todo_dialog, null);
@@ -171,7 +236,6 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                 dialog.dismiss();
             }
         });
-
 
         ImageButton closeButton = dialog.findViewById(R.id.close_dialog);
         closeButton.setOnClickListener((view) -> {
