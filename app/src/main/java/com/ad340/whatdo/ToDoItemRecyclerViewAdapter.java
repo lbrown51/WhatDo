@@ -41,7 +41,9 @@ public class ToDoItemRecyclerViewAdapter
 
     private static final String TAG = ToDoItemRecyclerViewAdapter.class.getName();
     private Context context;
+    private Todo[] allTodos;
     private List<Todo> todos;
+    private Todo[] todoArray;
     private TodoViewModel mTodoViewModel;
     private int mExpandedPosition = -1;
     private int previousExpandedPosition = -1;
@@ -58,13 +60,24 @@ public class ToDoItemRecyclerViewAdapter
     // Overloaded this for testing purposes
     ToDoItemRecyclerViewAdapter(Context context, int pos) {
         this(context);
-        mTodoViewModel.getAllTodos((List<Todo> todos) -> {
-            for (Todo todo : todos) {
-                if (!this.todos.contains(todo)) {
-                    this.todos.add(todo);
+        todos = (List<Todo>) new ArrayList<Todo>();
+        mTodoViewModel.getAllTodos((List<Todo> newTodos) -> {
+            Log.e(TAG, "alt adapter constructor starting");
+            todoArray = new Todo[newTodos.size()];
+            allTodos = new Todo[newTodos.size()];
+            for (int i = 0; i < todoArray.length; i++) {
+                Todo ithTodo = newTodos.get(i);
+                if (!this.todos.contains(ithTodo)) {
+                    this.todos.add(ithTodo);
+                    // this is the ONLY place allTodos gets modified
+                    allTodos[i] = ithTodo;
+                    todoArray[i] = ithTodo;
+                    Log.e(TAG, "adapter constructor adding " + ithTodo.getTitle());
                 }
             }
-            Log.e(TAG, "alt adapter constructor");
+            // Cast throws exception
+            //todoArray = (Todo[]) todos.toArray();
+            Log.e(TAG, "alt adapter constructor complete");
         });
     }
 
@@ -164,6 +177,7 @@ public class ToDoItemRecyclerViewAdapter
 
     void setTodos(List<Todo> todos) {
         this.todos = todos;
+        resetArray();
         notifyDataSetChanged();
     }
 
@@ -172,22 +186,38 @@ public class ToDoItemRecyclerViewAdapter
             endDate.add(Calendar.DAY_OF_YEAR, 1);
         }
         Calendar tempDate = Calendar.getInstance();
-        ArrayList<Todo> tempList = new ArrayList<>();
-        tempList.addAll(todos);
+        //Todo[] todoArray = (Todo[]) todos.toArray();
+        int size = todos.size();
         //String[] tempList = Arrays.stream((ArrayList<Todo>) todos).map(p -> p.getDate()).toArray(size -> new String[todos.size()]);
-        for (Todo todo: tempList) {
-            // Calendar is saved to task via DateFormat_SHORT
-            SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.YY");
-            Date date = sdf.parse(todo.getDate());
-            tempDate.setTime(date);
-            if (tempDate.before(startDate) || tempDate.after(endDate)) {
-                tempList.remove(todo);
-                Log.e(TAG, "removed " + todo.getTitle());
-            }
+        if (todoArray != null)
+        {            for (int i = 0; i < size; i++) {
+                // Calendar is saved to task via DateFormat_SHORT
+                SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.YY");
+                Todo currTodo = todoArray[i];
+                Date date = sdf.parse(currTodo.getDate());
+                tempDate.setTime(date);
+                if (tempDate.before(startDate) || tempDate.after(endDate)) {
+                    todos.remove(currTodo);
+                    Log.e(TAG, "removed " + currTodo.getTitle());
+                } else if (tempDate.after(startDate)
+                            && tempDate.before(endDate)
+                            && !todos.contains(currTodo)) {
+                    todos.add(currTodo);
+                    Log.e(TAG, "re=adding " + currTodo.getTitle());
+                }
+            }} else {
+            resetArray();
         }
-        todos = (List<Todo>) tempList;
+        //todos = (List<Todo>) tempList;
         Log.e(TAG, "filtered todos from " + startDate.toString() + " to " + endDate.toString());
         notifyDataSetChanged();
+    }
+
+    private void resetArray() {
+        todoArray = new Todo[todos.size()];
+        for (int i = 0; i < todoArray.length; i++) {
+            todoArray[i] = todos.get(i);
+        }
     }
 
 
