@@ -242,12 +242,12 @@ public class ToDoItemRecyclerViewAdapter
 
     public static String calToString(Calendar cal) {
         Date date = cal.getTime();
-        DateFormat dateFormat = new SimpleDateFormat("MM.dd.YY");
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/YY");
         return dateFormat.format(date);
     }
 
     public static String dateToString(Date date) {
-        DateFormat dateFormat = new SimpleDateFormat("MM.dd.YY");
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/YY");
         return dateFormat.format(date);
     }
 
