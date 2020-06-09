@@ -97,7 +97,8 @@ public class MainActivityTest {
         we expect it to.
     */
     @Test
-    public void hasAtLeastOneTask() {
+    public void hasAtLeastOneTask() throws InterruptedException {
+        Thread.sleep(2000);
         onView(withId(R.id.todo_list_recycler_view))
                 .check(matches(hasDescendant(withText("First Todo"))));
     }
@@ -265,7 +266,7 @@ public class MainActivityTest {
 
          Thread.sleep(500);
          onView(withId(R.id.create_todo_date_text))
-                 .check(matches(withText("05/28/20")));
+                 .check(matches(withText("5/28/20")));
 
          onView(withId(R.id.create_todo_finish_btn))
                  .perform(click());
@@ -274,16 +275,16 @@ public class MainActivityTest {
                  .check(matches(isDisplayed()));
 
          onView(withRecyclerView(R.id.todo_list_recycler_view)
-                 .atPositionOnView(2, R.id.name_text))
+                 .atPositionOnView(4, R.id.name_text))
                  .check(matches(withText("New Task")));
 
          onView(withRecyclerView(R.id.todo_list_recycler_view)
-                 .atPositionOnView(2, R.id.time_text))
+                 .atPositionOnView(4, R.id.time_text))
                  .check(matches(withText("4:30 PM")));
 
          onView(withRecyclerView(R.id.todo_list_recycler_view)
-                 .atPositionOnView(2, R.id.date_text))
-                 .check(matches(withText("Thursday, May 28, 2020")));
+                 .atPositionOnView(4, R.id.date_text))
+                 .check(matches(withText("5/28/20")));
 
      }
 
