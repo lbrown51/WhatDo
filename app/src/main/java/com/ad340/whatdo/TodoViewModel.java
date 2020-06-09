@@ -23,6 +23,7 @@ public class TodoViewModel extends AndroidViewModel {
         uncompletedTodos = repository.getUncompletedTodos();
     }
 
+    LiveData<List<Todo>> getAllTodos() { return allTodos; }
     LiveData<List<Todo>> getAllTodos(Consumer<List<Todo>> responseCallback) { return allTodos; }
 
     LiveData<List<Todo>> getUncompletedTodos() { return uncompletedTodos; }

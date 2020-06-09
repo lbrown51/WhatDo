@@ -42,6 +42,7 @@ import static com.ad340.whatdo.PickerUtils.setTimePickerShowOnClick;
 
 public class MainActivity extends AppCompatActivity implements OnTodoInteractionListener {
 
+    private static final String TAG = MainActivity.class.getName();
     private MaterialToolbar header;
     private TodoViewModel mTodoViewModel;
     ToDoItemRecyclerViewAdapter adapter;
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         toDoRecyclerView.setAdapter(adapter);
         toDoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        mTodoViewModel.getUncompletedTodos().observe(this, todos -> {
+        mTodoViewModel.getAllTodos().observe(this, todos -> {
             this.runOnUiThread(() -> {
                 adapter.setTodos(todos);
                 if (dateFiltered) {
@@ -98,8 +99,8 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
 
         // DATE FILTRATION
         startDate = today;
-        endDate = today;
-        // use vm.getAllTodos()
+        endDate = Calendar.getInstance();
+        Log.d(TAG, "onCreate invoked");
     }
 
     // VIEW BY DIALOG
@@ -148,7 +149,9 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
             public void onPositiveButtonClick(Object selection) {
                 Date inputDate = new Date((Long) selection);
                 startDate.setTime(inputDate);
+                startDate.add(Calendar.DATE, 1);
                 endDate.setTime(inputDate);
+                endDate.add(Calendar.DATE, 2);
                 try {
                     adapter.filterTodosByDate(startDate, endDate);
                     dateFiltered = true;
@@ -183,15 +186,26 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                 Pair<Long, Long> dateRange = (Pair<Long, Long>) selection;
                 Date inputStartDate = new Date(dateRange.first);
                 Date inputEndDate = new Date(dateRange.second);
-                if (inputStartDate != null) startDate.setTime(inputStartDate);
-                if (inputEndDate != null) endDate.setTime(inputEndDate);
+                Log.e("DateRangePicker", "range start: " + ToDoItemRecyclerViewAdapter.dateToString(inputStartDate));
+                Log.e("DateRangePicker", "range end: " + ToDoItemRecyclerViewAdapter.dateToString(inputEndDate));
+                if (inputStartDate != null) {
+                    startDate.setTime(inputStartDate);
+                    startDate.add(Calendar.DATE, 1);
+                }
+                if (inputEndDate != null) {
+                    endDate.setTime(inputEndDate);
+                    endDate.add(Calendar.DATE, 1);
+                }
                 try {
+                    // WHY IS THIS GOING THROUGH AS EQUAL???
+                    Log.e(TAG, "range start: " + ToDoItemRecyclerViewAdapter.dateToString(startDate.getTime()));
+                    Log.e(TAG, "range end: " + ToDoItemRecyclerViewAdapter.dateToString(endDate.getTime()));
                     adapter.filterTodosByDate(startDate, endDate);
                     dateFiltered = true;
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                Log.d("DatePicker Activity", "Dialog Positive Button was clicked");
+                Log.d("DateRangePicker", "Dialog Positive Button was clicked");
             }
         });
     }

@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static com.ad340.whatdo.PickerUtils.setDatePickerShowOnClick;
 import static com.ad340.whatdo.PickerUtils.onDateSetListener;
@@ -41,7 +42,8 @@ public class ToDoItemRecyclerViewAdapter
 
     private static final String TAG = ToDoItemRecyclerViewAdapter.class.getName();
     private Context context;
-    private Todo[] allTodos;
+    private List<Todo> allTodos;
+    private Todo[] allTodosArray;
     private List<Todo> todos;
     private Todo[] todoArray;
     private TodoViewModel mTodoViewModel;
@@ -55,22 +57,26 @@ public class ToDoItemRecyclerViewAdapter
         listener = (OnTodoInteractionListener) this.context;
         mTodoViewModel = new ViewModelProvider((ViewModelStoreOwner) context)
                 .get(TodoViewModel.class);
+        Log.e(TAG, "1-arg constructor called for adapter");
     }
 
     // Overloaded this for testing purposes
-    ToDoItemRecyclerViewAdapter(Context context, int pos) {
+    ToDoItemRecyclerViewAdapter(Context context, int overload) {
         this(context);
         todos = (List<Todo>) new ArrayList<Todo>();
+        allTodos = (List<Todo>) new ArrayList<Todo>();
+        // the next section of code doesn't run at all :(
         mTodoViewModel.getAllTodos((List<Todo> newTodos) -> {
             Log.e(TAG, "alt adapter constructor starting");
             todoArray = new Todo[newTodos.size()];
-            allTodos = new Todo[newTodos.size()];
-            for (int i = 0; i < todoArray.length; i++) {
+            allTodosArray = new Todo[newTodos.size()];
+            for (int i = 0; i < newTodos.size(); i++) {
                 Todo ithTodo = newTodos.get(i);
                 if (!this.todos.contains(ithTodo)) {
                     this.todos.add(ithTodo);
+                    this.allTodos.add(ithTodo);
                     // this is the ONLY place allTodos gets modified
-                    allTodos[i] = ithTodo;
+                    allTodosArray[i] = ithTodo;
                     todoArray[i] = ithTodo;
                     Log.e(TAG, "adapter constructor adding " + ithTodo.getTitle());
                 }
@@ -79,6 +85,7 @@ public class ToDoItemRecyclerViewAdapter
             //todoArray = (Todo[]) todos.toArray();
             Log.e(TAG, "alt adapter constructor complete");
         });
+        Log.e(TAG, "2-arg adapter constructor called");
     }
 
     @NonNull
@@ -176,41 +183,72 @@ public class ToDoItemRecyclerViewAdapter
     }
 
     void setTodos(List<Todo> todos) {
-        this.todos = todos;
+        // won't be edited until next setTodos call
+        this.allTodos = (List<Todo>) new ArrayList<Todo>();
+        this.allTodos.addAll(todos);
+        allTodosArray = (Todo[]) todos.toArray(new Todo[todos.size()]);
+        // filtered list
+        this.todos = (List<Todo>) new ArrayList<Todo>();
+        this.todos.addAll(todos);
+        todoArray = allTodosArray;
+
+        Log.e(TAG, "setTodos called");
         resetArray();
         notifyDataSetChanged();
     }
 
     void filterTodosByDate(Calendar startDate, Calendar endDate) throws ParseException {
-        if (startDate.equals(endDate)) {
-            endDate.add(Calendar.DAY_OF_YEAR, 1);
-        }
-        Calendar tempDate = Calendar.getInstance();
-        //Todo[] todoArray = (Todo[]) todos.toArray();
-        int size = todos.size();
+
+        Log.e("in filterTodosByDate: ", "range start: " + ToDoItemRecyclerViewAdapter.dateToString(startDate.getTime()));
+        Log.e("in filterTodosByDate: ", "range end: " + ToDoItemRecyclerViewAdapter.dateToString(endDate.getTime()));
+
+        Calendar tempCal = Calendar.getInstance();
+        // Get original list of todos
         //String[] tempList = Arrays.stream((ArrayList<Todo>) todos).map(p -> p.getDate()).toArray(size -> new String[todos.size()]);
-        if (todoArray != null)
-        {            for (int i = 0; i < size; i++) {
+        if (allTodos != null) {
+            for (int i = 0; i < allTodosArray.length; i++) {
                 // Calendar is saved to task via DateFormat_SHORT
                 SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.YY");
-                Todo currTodo = todoArray[i];
+                Todo currTodo = allTodosArray[i];
                 Date date = sdf.parse(currTodo.getDate());
-                tempDate.setTime(date);
-                if (tempDate.before(startDate) || tempDate.after(endDate)) {
-                    todos.remove(currTodo);
-                    Log.e(TAG, "removed " + currTodo.getTitle());
-                } else if (tempDate.after(startDate)
-                            && tempDate.before(endDate)
-                            && !todos.contains(currTodo)) {
-                    todos.add(currTodo);
-                    Log.e(TAG, "re=adding " + currTodo.getTitle());
-                }
-            }} else {
+                tempCal.setTime(date);
+                if (todos.contains(currTodo)) {
+                    if (tempCal.compareTo(startDate) < 0 || tempCal.compareTo(endDate) > 0) {
+                        todos.remove(currTodo);
+                        Log.e(TAG, "removed " + currTodo.getTitle() + ", from " + currTodo.getDate());
+                    } // end out of range if-statement
+                    else {
+                        Log.e(TAG, "already contains " + currTodo.getTitle() + ", from " + currTodo.getDate());
+                    }
+                } // end contains() if-statement
+                else { // does not already contain currTodo
+                    if (tempCal.compareTo(startDate) >= 0 && tempCal.compareTo(endDate) <= 0) {
+                        todos.add(currTodo);
+                        Log.e(TAG, "re-adding " + currTodo.getTitle() + ", from " + currTodo.getDate());
+                    } // end within range if-statement
+                    else {
+                        Log.e(TAG, "not adding " + currTodo.getTitle() + ", from " + currTodo.getDate());
+                    }
+                } // end this loop
+            } // end adding/removing
+        } else {
+            Log.e(TAG, "allTodos is null");
             resetArray();
         }
         //todos = (List<Todo>) tempList;
-        Log.e(TAG, "filtered todos from " + startDate.toString() + " to " + endDate.toString());
+        Log.e(TAG, "filtered todos from " + calToString(startDate) + " to " + calToString(endDate));
         notifyDataSetChanged();
+    }
+
+    public static String calToString(Calendar cal) {
+        Date date = cal.getTime();
+        DateFormat dateFormat = new SimpleDateFormat("MM.dd.YY");
+        return dateFormat.format(date);
+    }
+
+    public static String dateToString(Date date) {
+        DateFormat dateFormat = new SimpleDateFormat("MM.dd.YY");
+        return dateFormat.format(date);
     }
 
     private void resetArray() {
