@@ -204,52 +204,52 @@ public class ToDoItemRecyclerViewAdapter
         notifyDataSetChanged();
     }
 
-    void filterTodosByDate(Calendar startDate, Calendar endDate) throws ParseException {
-        Calendar start = startDate;
-        Calendar end = endDate;
-        Log.e("in filterTodosByDate: ", "range start: " + ToDoItemRecyclerViewAdapter.dateToString(start));
-        Log.e("in filterTodosByDate: ", "range end: " + ToDoItemRecyclerViewAdapter.dateToString(end));
-
-        if (allTodos != null) {
-            for (int i = 0; i < allTodosArray.length; i++) {
-                // Calendar is saved to task via DateFormat_SHORT
-                SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.YY");
-                Todo currTodo = allTodosArray[i];
-                Calendar currDate = currTodo.getDate();
-                //tempCal.setTime(date);
-                if (todos.contains(currTodo)) {
-                    if (currDate.compareTo(start) < 0 || currDate.compareTo(end) > 0) {
-                        Log.e("remove if currDate.compareTo(start) < 0", ((Integer) currDate.compareTo(start)).toString());
-                        Log.e("remove if currDate.compareTo(end) > 0", ((Integer) currDate.compareTo(end)).toString());
-                        todos.remove(currTodo);
-                        Log.e(TAG, "removed " + currTodo.getTitle() + ", from " + currTodo.getDate());
-                    } // end out of range if-statement
-                    else {
-                        Log.e(TAG, "already contains " + currTodo.getTitle() + ", from " + currTodo.getDate());
-                    }
-                } // end contains() if-statement
-                else { // does not already contain currTodo
-                    if (currDate.compareTo(start) >= 0 && currDate.compareTo(end) <= 0) {
-                        Log.e("add if currDate.compareTo(start)) >= 0", ((Integer) currDate.compareTo(start)).toString());
-                        Log.e("add if currDate.compareTo(end)) <= 0", ((Integer) currDate.compareTo(end)).toString());
-                        todos.add(currTodo);
-                        Log.e(TAG, "re-adding " + currTodo.getTitle() + ", from " + currTodo.getDate());
-                    } // end within range if-statement
-                    else {
-                        Log.e("add if currDate.compareTo(start)) >= 0", ((Integer) currDate.compareTo(start)).toString());
-                        Log.e("add if currDate.compareTo(end)) <= 0", ((Integer) currDate.compareTo(end)).toString());
-                        Log.e(TAG, "not adding " + currTodo.getTitle() + ", from " + currTodo.getDate());
-                    }
-                } // end this loop
-            } // end adding/removing
-        } else {
-            Log.e(TAG, "allTodos is null");
-            resetArray();
-        }
-        //todos = (List<Todo>) tempList;
-        Log.e(TAG, "filtered todos from " + calToString(startDate) + " to " + calToString(endDate));
-        notifyDataSetChanged();
-    }
+//    void filterTodosByDate(Calendar startDate, Calendar endDate) throws ParseException {
+//        Date start = startDate.getTime();
+//        Date end = endDate.getTime();
+//        Log.e("in filterTodosByDate: ", "range start: " + ToDoItemRecyclerViewAdapter.dateToString(start));
+//        Log.e("in filterTodosByDate: ", "range end: " + ToDoItemRecyclerViewAdapter.dateToString(end));
+//
+//        if (allTodos != null) {
+//            for (int i = 0; i < allTodosArray.length; i++) {
+//                // Calendar is saved to task via DateFormat_SHORT
+//                SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.YY");
+//                Todo currTodo = allTodosArray[i];
+//                Date currDate = currTodo.getDate();
+//                //tempCal.setTime(date);
+//                if (todos.contains(currTodo)) {
+//                    if (currDate.compareTo(start) < 0 || currDate.compareTo(end) > 0) {
+//                        Log.e("remove if currDate.compareTo(start) < 0", ((Integer) currDate.compareTo(start)).toString());
+//                        Log.e("remove if currDate.compareTo(end) > 0", ((Integer) currDate.compareTo(end)).toString());
+//                        todos.remove(currTodo);
+//                        Log.e(TAG, "removed " + currTodo.getTitle() + ", from " + currTodo.getDate());
+//                    } // end out of range if-statement
+//                    else {
+//                        Log.e(TAG, "already contains " + currTodo.getTitle() + ", from " + currTodo.getDate());
+//                    }
+//                } // end contains() if-statement
+//                else { // does not already contain currTodo
+//                    if (currDate.compareTo(start) >= 0 && currDate.compareTo(end) <= 0) {
+//                        Log.e("add if currDate.compareTo(start)) >= 0", ((Integer) currDate.compareTo(start)).toString());
+//                        Log.e("add if currDate.compareTo(end)) <= 0", ((Integer) currDate.compareTo(end)).toString());
+//                        todos.add(currTodo);
+//                        Log.e(TAG, "re-adding " + currTodo.getTitle() + ", from " + currTodo.getDate());
+//                    } // end within range if-statement
+//                    else {
+//                        Log.e("add if currDate.compareTo(start)) >= 0", ((Integer) currDate.compareTo(start)).toString());
+//                        Log.e("add if currDate.compareTo(end)) <= 0", ((Integer) currDate.compareTo(end)).toString());
+//                        Log.e(TAG, "not adding " + currTodo.getTitle() + ", from " + currTodo.getDate());
+//                    }
+//                } // end this loop
+//            } // end adding/removing
+//        } else {
+//            Log.e(TAG, "allTodos is null");
+//            resetArray();
+//        }
+//        //todos = (List<Todo>) tempList;
+//        Log.e(TAG, "filtered todos from " + calToString(startDate) + " to " + calToString(endDate));
+//        notifyDataSetChanged();
+//    }
 
     public static String calToString(Calendar cal) {
         Date date = cal.getTime();
@@ -257,9 +257,9 @@ public class ToDoItemRecyclerViewAdapter
         return dateFormat.format(date);
     }
 
-    public static String dateToString(Calendar date) {
+    public static String dateToString(Date date) {
         DateFormat dateFormat = new SimpleDateFormat("MM.dd.YY");
-        return dateFormat.format(date.getTime());
+        return dateFormat.format(date);
     }
 
     private void resetArray() {

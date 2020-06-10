@@ -13,6 +13,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +30,8 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -48,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
     ToDoItemRecyclerViewAdapter adapter;
     public static final int NEW_TODO_ACTIVITY_REQUEST_CODE = 1;
     public FloatingActionButton fab;
+    private TodoCalendar dateRange;
     private Calendar startDate;
     private Calendar endDate;
     private boolean dateFiltered = false;
@@ -68,16 +72,28 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         startDate = Calendar.getInstance();
         endDate = Calendar.getInstance();
         endDate.add(Calendar.DATE, 1);
+        dateRange = new TodoCalendar(startDate, endDate);
+        dateRange.setListener(new PropertyChangeListener() {
+                                  @Override
+                                  public void propertyChange(PropertyChangeEvent evt) {
+                                      mTodoViewModel.getTodosInRange(dateRange.getStartDate(),
+                                              dateRange.getEndDate()).observe(MainActivity.this, todos -> {
+                                          MainActivity.this.runOnUiThread(() -> {
+                                              adapter.setTodos(todos);
+                                          });
+                                      });
+                                      }});
+
 
         mTodoViewModel.getAllTodos().observe(this, todos -> {
             this.runOnUiThread(() -> {
                 adapter.setTodos(todos);
                 if (dateFiltered) {
-                    try {
-                        adapter.filterTodosByDate(startDate, endDate);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    //try {
+                        //adapter.filterTodosByDate(startDate, endDate);
+                    //} catch (ParseException e) {
+                    //    e.printStackTrace();
+                    //}
                 }
             });
         });
@@ -96,8 +112,8 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         displayText.append(getString(R.string.text_whitespace));
         displayText.append(startDate.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH));
         displayText.append(String.format(" %02d, %04d",
-                startDate.get(Calendar.DAY_OF_MONTH),
-                startDate.get(Calendar.YEAR)));
+                dateRange.getStartDate().get(Calendar.DAY_OF_MONTH),
+                dateRange.getStartDate().get(Calendar.YEAR)));
         header.setTitle(displayText);
         header.setOnClickListener(view -> { showViewByDialog(); });
 
@@ -153,12 +169,13 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                 startDate.add(Calendar.DATE, 1);
                 endDate.setTime(inputDate);
                 endDate.add(Calendar.DATE, 2);
-                try {
-                    adapter.filterTodosByDate(startDate, endDate);
+                dateRange.setDateRange(startDate, endDate);
+                //try {
+                    //adapter.filterTodosByDate(startDate, endDate);
                     dateFiltered = true;
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
                 Log.d("DatePicker Activity", "Dialog Positive Button was clicked");
             }
         });
@@ -184,27 +201,28 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         dateRangePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
             @Override
             public void onPositiveButtonClick(Object selection) {
-                Pair<Long, Long> dateRange = (Pair<Long, Long>) selection;
-                Date inputStartDate = new Date(dateRange.first);
-                Date inputEndDate = new Date(dateRange.second);
+                Pair<Long, Long> inputDateRange = (Pair<Long, Long>) selection;
+                Date inputStartDate = new Date(inputDateRange.first);
+                Date inputEndDate = new Date(inputDateRange.second);
                 //Log.e("DateRangePicker", "range start: " + ToDoItemRecyclerViewAdapter.dateToString(inputStartDate));
                 //Log.e("DateRangePicker", "range end: " + ToDoItemRecyclerViewAdapter.dateToString(inputEndDate));
-                if (inputStartDate != null) {
+                if (inputStartDate != null && inputEndDate != null) {
                     startDate.setTime(inputStartDate);
                     startDate.add(Calendar.DATE, 1);
                 }
                 if (inputEndDate != null) {
                     endDate.setTime(inputEndDate);
                     endDate.add(Calendar.DATE, 1);
+                    dateRange.setDateRange(startDate, endDate);
                 }
-                try {
+                //try {
                     //Log.e(TAG, "range start: " + ToDoItemRecyclerViewAdapter.dateToString(startDate.getTime()));
                     //Log.e(TAG, "range end: " + ToDoItemRecyclerViewAdapter.dateToString(endDate.getTime()));
-                    adapter.filterTodosByDate(startDate, endDate);
+                    //adapter.filterTodosByDate(startDate, endDate);
                     dateFiltered = true;
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
                 Log.d("DateRangePicker", "Dialog Positive Button was clicked");
             }
         });
@@ -238,6 +256,8 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
 
         setDatePickerShowOnClick(this, c, newTodoDateButton, date);
         setTimePickerShowOnClick(this, c, newTodoTimeButton, time);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("DD.mm.YY");
 
         finishNewTodoButton.setOnClickListener(view -> {
             String newTodoText = newTodoEditText.getText().toString();
