@@ -57,36 +57,37 @@ public class ToDoItemRecyclerViewAdapter
         listener = (OnTodoInteractionListener) this.context;
         mTodoViewModel = new ViewModelProvider((ViewModelStoreOwner) context)
                 .get(TodoViewModel.class);
-        Log.e(TAG, "1-arg constructor called for adapter");
+        Log.e(TAG, "constructor invoked");
     }
 
     // Overloaded this for testing purposes
-    ToDoItemRecyclerViewAdapter(Context context, int overload) {
-        this(context);
-        todos = (List<Todo>) new ArrayList<Todo>();
-        allTodos = (List<Todo>) new ArrayList<Todo>();
-        // the next section of code doesn't run at all :(
-        mTodoViewModel.getAllTodos((List<Todo> newTodos) -> {
-            Log.e(TAG, "alt adapter constructor starting");
-            todoArray = new Todo[newTodos.size()];
-            allTodosArray = new Todo[newTodos.size()];
-            for (int i = 0; i < newTodos.size(); i++) {
-                Todo ithTodo = newTodos.get(i);
-                if (!this.todos.contains(ithTodo)) {
-                    this.todos.add(ithTodo);
-                    this.allTodos.add(ithTodo);
-                    // this is the ONLY place allTodos gets modified
-                    allTodosArray[i] = ithTodo;
-                    todoArray[i] = ithTodo;
-                    Log.e(TAG, "adapter constructor adding " + ithTodo.getTitle());
-                }
-            }
-            // Cast throws exception
-            //todoArray = (Todo[]) todos.toArray();
-            Log.e(TAG, "alt adapter constructor complete");
-        });
-        Log.e(TAG, "2-arg adapter constructor called");
-    }
+//    ToDoItemRecyclerViewAdapter(Context context, int overload) {
+//        this(context);
+//        todos = (List<Todo>) new ArrayList<Todo>();
+//        allTodos = (List<Todo>) new ArrayList<Todo>();
+//        // the next section of code doesn't run at all :(
+//        mTodoViewModel.getAllTodos((List<Todo> newTodos) -> {
+//            Log.e(TAG, "alt adapter constructor starting");
+//            todoArray = new Todo[newTodos.size()];
+//            allTodosArray = new Todo[newTodos.size()];
+//            for (int i = 0; i < newTodos.size(); i++) {
+//                Todo ithTodo = newTodos.get(i);
+//                if (!this.todos.contains(ithTodo)) {
+//                    this.todos.add(ithTodo);
+//                    this.allTodos.add(ithTodo);
+//                    // this is the ONLY place allTodos gets modified
+//                    allTodosArray[i] = ithTodo;
+//                    todoArray[i] = ithTodo;
+//                    Log.e(TAG, "adapter constructor adding " + ithTodo.getTitle());
+//                }
+//            }
+//            // Cast throws exception
+//            todoArray = new Todo[todos.size()];
+//            todoArray = todos.toArray(todoArray);
+//            Log.e(TAG, "alt adapter constructor complete");
+//        });
+//        Log.e(TAG, "2-arg adapter constructor called");
+//    }
 
     @NonNull
     @Override
@@ -101,6 +102,8 @@ public class ToDoItemRecyclerViewAdapter
     public void onBindViewHolder(@NonNull final ToDoItemViewHolder holder, int position) {
         if (todos != null && position < todos.size()) {
             Todo todo = todos.get(position);
+            // date comes in as Date, need to change to string to update
+            SimpleDateFormat sdf = new SimpleDateFormat("DD.mm.yy");
             // REMOVE THIS LOG - doesn't have date, can't compare?
             //Log.e(TAG, todo.getDate());
             Calendar c = Calendar.getInstance();
@@ -115,12 +118,16 @@ public class ToDoItemRecyclerViewAdapter
             holder.todoDetail.setVisibility(isExpanded?View.VISIBLE:View.GONE);
             holder.itemView.setActivated(isExpanded);
             holder.toDoTaskName.setText(todo.getTitle());
-            holder.toDoDate.setText(todo.getDate());
+            holder.toDoDate.setText(sdf.format(todo.getDate()));
             holder.toDoTime.setText(todo.getTime());
 
             holder.toDoFinishedCheckbox.setChecked(false);
             holder.toDoFinishedCheckbox.setOnClickListener(view -> {
-                mTodoViewModel.updateTodo(todo, "", 5);
+                try {
+                    mTodoViewModel.updateTodo(todo, "", 5);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 notifyDataSetChanged();
             });
 
@@ -198,22 +205,22 @@ public class ToDoItemRecyclerViewAdapter
     }
 
     void filterTodosByDate(Calendar startDate, Calendar endDate) throws ParseException {
+        Date start = startDate.getTime();
+        Date end = endDate.getTime();
+        Log.e("in filterTodosByDate: ", "range start: " + ToDoItemRecyclerViewAdapter.dateToString(start));
+        Log.e("in filterTodosByDate: ", "range end: " + ToDoItemRecyclerViewAdapter.dateToString(end));
 
-        Log.e("in filterTodosByDate: ", "range start: " + ToDoItemRecyclerViewAdapter.dateToString(startDate.getTime()));
-        Log.e("in filterTodosByDate: ", "range end: " + ToDoItemRecyclerViewAdapter.dateToString(endDate.getTime()));
-
-        Calendar tempCal = Calendar.getInstance();
-        // Get original list of todos
-        //String[] tempList = Arrays.stream((ArrayList<Todo>) todos).map(p -> p.getDate()).toArray(size -> new String[todos.size()]);
         if (allTodos != null) {
             for (int i = 0; i < allTodosArray.length; i++) {
                 // Calendar is saved to task via DateFormat_SHORT
                 SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.YY");
                 Todo currTodo = allTodosArray[i];
-                Date date = sdf.parse(currTodo.getDate());
-                tempCal.setTime(date);
+                Date currDate = currTodo.getDate();
+                //tempCal.setTime(date);
                 if (todos.contains(currTodo)) {
-                    if (tempCal.compareTo(startDate) < 0 || tempCal.compareTo(endDate) > 0) {
+                    if (currDate.compareTo(start) < 0 || currDate.compareTo(end) > 0) {
+                        Log.e("remove if currDate.compareTo(start) < 0", ((Integer) currDate.compareTo(start)).toString());
+                        Log.e("remove if currDate.compareTo(end) > 0", ((Integer) currDate.compareTo(end)).toString());
                         todos.remove(currTodo);
                         Log.e(TAG, "removed " + currTodo.getTitle() + ", from " + currTodo.getDate());
                     } // end out of range if-statement
@@ -222,11 +229,15 @@ public class ToDoItemRecyclerViewAdapter
                     }
                 } // end contains() if-statement
                 else { // does not already contain currTodo
-                    if (tempCal.compareTo(startDate) >= 0 && tempCal.compareTo(endDate) <= 0) {
+                    if (currDate.compareTo(start) >= 0 && currDate.compareTo(end) <= 0) {
+                        Log.e("add if currDate.compareTo(start)) >= 0", ((Integer) currDate.compareTo(start)).toString());
+                        Log.e("add if currDate.compareTo(end)) <= 0", ((Integer) currDate.compareTo(end)).toString());
                         todos.add(currTodo);
                         Log.e(TAG, "re-adding " + currTodo.getTitle() + ", from " + currTodo.getDate());
                     } // end within range if-statement
                     else {
+                        Log.e("add if currDate.compareTo(start)) >= 0", ((Integer) currDate.compareTo(start)).toString());
+                        Log.e("add if currDate.compareTo(end)) <= 0", ((Integer) currDate.compareTo(end)).toString());
                         Log.e(TAG, "not adding " + currTodo.getTitle() + ", from " + currTodo.getDate());
                     }
                 } // end this loop
@@ -242,12 +253,12 @@ public class ToDoItemRecyclerViewAdapter
 
     public static String calToString(Calendar cal) {
         Date date = cal.getTime();
-        DateFormat dateFormat = new SimpleDateFormat("MM/dd/YY");
+        DateFormat dateFormat = new SimpleDateFormat("MM.dd.YY");
         return dateFormat.format(date);
     }
 
     public static String dateToString(Date date) {
-        DateFormat dateFormat = new SimpleDateFormat("MM/dd/YY");
+        DateFormat dateFormat = new SimpleDateFormat("MM.dd.YY");
         return dateFormat.format(date);
     }
 

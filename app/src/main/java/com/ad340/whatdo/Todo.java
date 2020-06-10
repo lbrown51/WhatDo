@@ -6,6 +6,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.util.Date;
+
 @Entity(tableName = "todo_table")
 public class Todo {
 
@@ -20,8 +22,8 @@ public class Todo {
     public String getTitle() { return this.title; }
 
     @ColumnInfo(name = "date")
-    private String date;
-    public String getDate() { return this.date; }
+    private Date date;
+    public Date getDate() { return this.date; }
 
     @ColumnInfo(name = "time")
     private String time;
@@ -35,7 +37,7 @@ public class Todo {
     private String notes;
     public String getNotes() { return this.notes; }
 
-    public Todo(Integer id, @NonNull String title, String date, String time, String notes, Boolean isCompleted) {
+    public Todo(Integer id, @NonNull String title, Date date, String time, String notes, Boolean isCompleted) {
         this.id = id;
         this.title = title;
         this.date = date;

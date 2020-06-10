@@ -4,6 +4,9 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class TodoRepository {
@@ -23,14 +26,18 @@ public class TodoRepository {
 
     LiveData<List<Todo>> getUncompletedTodos() { return uncompletedTodos; }
 
-    void updateTodo(Todo todo, String data, int type) {
+    LiveData<List<Todo>> getTodosInRange(Date start, Date end) { return todoDao.getTodosInRange(start, end); }
+
+    void updateTodo(Todo todo, String data, int type) throws ParseException {
         int id = todo.getId();
         switch (type) {
             case 1: // update title
                 TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoTitle(id, data));
                 break;
             case 2: // update date
-                TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoDate(id, data));
+                SimpleDateFormat sdf = new SimpleDateFormat("DD.mm.YY");
+                Date date = sdf.parse(data);
+                TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoDate(id, date));
                 break;
             case 3: // update time
                 TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoTime(id, data));

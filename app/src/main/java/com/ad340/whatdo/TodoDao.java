@@ -6,6 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -20,6 +21,9 @@ public interface TodoDao {
     @Query("SELECT * FROM todo_table WHERE NOT isCompleted")
     LiveData<List<Todo>> getUncompletedTodos();
 
+    @Query("SELECT * FROM todo_table WHERE date >= :start AND date <= :end")
+    LiveData<List<Todo>> getTodosInRange(Date start, Date end);
+
     @Query("DELETE FROM todo_table")
     void deleteAll();
 
@@ -30,7 +34,7 @@ public interface TodoDao {
     void updateTodoTitle(int id, String title);
 
     @Query("UPDATE todo_table SET date = :date WHERE id = :id")
-    void updateTodoDate(int id, String date);
+    void updateTodoDate(int id, Date date);
 
     @Query("UPDATE todo_table SET time = :time WHERE id = :id")
     void updateTodoTime(int id, String time);

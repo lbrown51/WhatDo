@@ -58,11 +58,16 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         setContentView(R.layout.activity_main);
 
         mTodoViewModel = new ViewModelProvider(this).get(TodoViewModel.class);
-        adapter = new ToDoItemRecyclerViewAdapter(this, 1);
+        adapter = new ToDoItemRecyclerViewAdapter(this);
         RecyclerView toDoRecyclerView = findViewById(R.id.todo_list_recycler_view);
 
         toDoRecyclerView.setAdapter(adapter);
         toDoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // DATE FILTRATION
+        startDate = Calendar.getInstance();
+        endDate = Calendar.getInstance();
+        endDate.add(Calendar.DATE, 1);
 
         mTodoViewModel.getAllTodos().observe(this, todos -> {
             this.runOnUiThread(() -> {
@@ -86,20 +91,16 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                 showCreateDialog();
             });
 
-        Calendar today = Calendar.getInstance();
         header = findViewById(R.id.top_app_bar);
         StringBuilder displayText = new StringBuilder(header.getTitle());
         displayText.append(getString(R.string.text_whitespace));
-        displayText.append(today.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH));
+        displayText.append(startDate.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH));
         displayText.append(String.format(" %02d, %04d",
-                today.get(Calendar.DAY_OF_MONTH),
-                today.get(Calendar.YEAR)));
+                startDate.get(Calendar.DAY_OF_MONTH),
+                startDate.get(Calendar.YEAR)));
         header.setTitle(displayText);
         header.setOnClickListener(view -> { showViewByDialog(); });
 
-        // DATE FILTRATION
-        startDate = today;
-        endDate = Calendar.getInstance();
         Log.d(TAG, "onCreate invoked");
     }
 
@@ -186,8 +187,8 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                 Pair<Long, Long> dateRange = (Pair<Long, Long>) selection;
                 Date inputStartDate = new Date(dateRange.first);
                 Date inputEndDate = new Date(dateRange.second);
-                Log.e("DateRangePicker", "range start: " + ToDoItemRecyclerViewAdapter.dateToString(inputStartDate));
-                Log.e("DateRangePicker", "range end: " + ToDoItemRecyclerViewAdapter.dateToString(inputEndDate));
+                //Log.e("DateRangePicker", "range start: " + ToDoItemRecyclerViewAdapter.dateToString(inputStartDate));
+                //Log.e("DateRangePicker", "range end: " + ToDoItemRecyclerViewAdapter.dateToString(inputEndDate));
                 if (inputStartDate != null) {
                     startDate.setTime(inputStartDate);
                     startDate.add(Calendar.DATE, 1);
@@ -197,9 +198,8 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                     endDate.add(Calendar.DATE, 1);
                 }
                 try {
-                    // WHY IS THIS GOING THROUGH AS EQUAL???
-                    Log.e(TAG, "range start: " + ToDoItemRecyclerViewAdapter.dateToString(startDate.getTime()));
-                    Log.e(TAG, "range end: " + ToDoItemRecyclerViewAdapter.dateToString(endDate.getTime()));
+                    //Log.e(TAG, "range start: " + ToDoItemRecyclerViewAdapter.dateToString(startDate.getTime()));
+                    //Log.e(TAG, "range end: " + ToDoItemRecyclerViewAdapter.dateToString(endDate.getTime()));
                     adapter.filterTodosByDate(startDate, endDate);
                     dateFiltered = true;
                 } catch (ParseException e) {
