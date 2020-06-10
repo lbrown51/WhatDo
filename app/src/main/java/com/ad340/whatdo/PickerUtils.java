@@ -5,7 +5,6 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
-import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -27,12 +26,14 @@ public class PickerUtils {
             cDate.set(Calendar.MONTH, monthOfYear);
             cDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-            StringBuilder dateString = new StringBuilder(DateFormat.getDateInstance(DateFormat.FULL).format(cDate.getTime()));
+            StringBuilder dateString = new StringBuilder(
+                    DateFormat.getDateInstance(DateFormat.FULL).format(cDate.getTime()));
             Log.i(TAG, "onDateSetListener: original");
             Log.i(TAG, DateFormat.getDateInstance(DateFormat.FULL).format(cDate.getTime()));
             holder.toDoDate.setText(dateString);
             listener.onUpdateTodo(todo, String.valueOf(dateString), Constants.DATE);
             resetDate();
+            Log.i(TAG, DateFormat.getDateInstance(DateFormat.FULL).format(cDate.getTime()));
         };
     }
 
@@ -52,90 +53,54 @@ public class PickerUtils {
         };
     }
 
-
-
-    public static void setDatePicker(Context context, ImageButton imageButton, DatePickerDialog.OnDateSetListener date) {
+    public static void setDatePicker(
+            Context context, ImageButton imageButton, DatePickerDialog.OnDateSetListener date) {
         imageButton.setOnClickListener(view -> {
-                    DatePickerDialog dialog = new DatePickerDialog(context, date,
-                            cDate.get(Calendar.YEAR),
-                            cDate.get(Calendar.MONTH),
-                            cDate.get(Calendar.DAY_OF_MONTH));
-                    dialog.setButton(DialogInterface.BUTTON_NEUTRAL,
-                            "Rec", (dialogInterface, i) -> {
-                                Log.i(TAG, "setDatePickerShowOnClick: ");
-                                Log.i(TAG, String.valueOf(dialog.getDatePicker().getDayOfMonth()));
-                                Log.i(TAG, DateFormat.getDateInstance(DateFormat.FULL).format(cDate.getTime()));
-
-
-                                RecurringTodoFragment recurringTodoFragment =
-                                        new RecurringTodoFragment(date, imageButton, cDate);
-                                recurringTodoFragment.show(((MainActivity) context)
-                                        .getSupportFragmentManager(), "recurringFrag");
-                            });
-                    dialog.show();
-        });
-    }
-
-    public static void setDatePicker(Context context, DatePickerDialog.OnDateSetListener date) {
-        DatePickerDialog dialog = new DatePickerDialog(context, date,
-                cDate.get(Calendar.YEAR),
-                cDate.get(Calendar.MONTH),
-                cDate.get(Calendar.DAY_OF_MONTH));
-        dialog.setButton(DialogInterface.BUTTON_NEUTRAL,
+            DatePickerDialog dialog = new DatePickerDialog(context, date,
+                    cDate.get(Calendar.YEAR),
+                    cDate.get(Calendar.MONTH),
+                    cDate.get(Calendar.DAY_OF_MONTH));
+            dialog.setButton(DialogInterface.BUTTON_NEUTRAL,
                 "Rec", (dialogInterface, i) -> {
                     Log.i(TAG, "setDatePickerShowOnClick: ");
                     Log.i(TAG, String.valueOf(dialog.getDatePicker().getDayOfMonth()));
                     Log.i(TAG, DateFormat.getDateInstance(DateFormat.FULL).format(cDate.getTime()));
 
+                    cDate.set(Calendar.YEAR, dialog.getDatePicker().getYear());
+                    cDate.set(Calendar.MONTH, dialog.getDatePicker().getMonth());
+                    cDate.set(Calendar.DAY_OF_MONTH, dialog.getDatePicker().getDayOfMonth());
 
                     RecurringTodoFragment recurringTodoFragment =
                             new RecurringTodoFragment(date, cDate);
                     recurringTodoFragment.show(((MainActivity) context)
                             .getSupportFragmentManager(), "recurringFrag");
                 });
-        dialog.show();
+            dialog.show();
+        });
     }
 
-    public static void showDatePicker(Context context, ImageButton imageButton,
-                                      DatePickerDialog.OnDateSetListener date) { // Recurring Dialog
-
-        DatePickerDialog dialog = new DatePickerDialog(context, date,
-                cDate.get(Calendar.YEAR),
+    public static void setDatePicker(Context context, DatePickerDialog.OnDateSetListener date) {
+        DatePickerDialog dialog = new DatePickerDialog(context, date, cDate.get(Calendar.YEAR),
                 cDate.get(Calendar.MONTH),
                 cDate.get(Calendar.DAY_OF_MONTH));
 
-        DatePicker.OnDateChangedListener onDateChangedListener =
-                (datePicker, year, month, dayOfMonth) -> {
-            Log.i(TAG, "onDateChanged: ");
-            Log.i(TAG, DateFormat.getDateInstance(DateFormat.FULL).format(cDate.getTime()));
-            datePicker.updateDate(year, month, dayOfMonth);
-        };
-
-        DatePickerDialog.OnDateSetListener onDateSetListener =
-                (datePicker, year, month, dayOfMonth) -> {
-            Log.i(TAG, "onDateSet: ");
-            Log.i(TAG, DateFormat.getDateInstance(DateFormat.FULL).format(cDate.getTime()));
-            datePicker.updateDate(cDate.get(Calendar.YEAR), cDate.get(Calendar.MONTH), cDate.get(Calendar.DAY_OF_MONTH));
-        };
-
         dialog.setButton(DialogInterface.BUTTON_NEUTRAL,
                 "Rec", (dialogInterface, i) -> {
-                    Log.i(TAG, "showDatePicker: ");
-                    Log.i(TAG, DateFormat.getDateInstance(DateFormat.FULL).format(cDate.getTime()));
-                    RecurringTodoFragment recurringTodoFragment =
-                            new RecurringTodoFragment(date, imageButton, cDate);
-                    recurringTodoFragment.show(((MainActivity) context)
-                            .getSupportFragmentManager(), "recurringFrag");
-                });
-        onDateChangedListener.onDateChanged(dialog.getDatePicker(),
-                dialog.getDatePicker().getYear(), dialog.getDatePicker().getMonth(),
-                dialog.getDatePicker().getDayOfMonth());
-        onDateSetListener.onDateSet(dialog.getDatePicker(), dialog.getDatePicker().getYear(),
-                dialog.getDatePicker().getMonth(), dialog.getDatePicker().getDayOfMonth());
 
+            Log.i(TAG, "setDatePickerShowOnClick: ");
+            Log.i(TAG, String.valueOf(dialog.getDatePicker().getDayOfMonth()));
+
+            cDate.set(Calendar.YEAR, dialog.getDatePicker().getYear());
+            cDate.set(Calendar.MONTH, dialog.getDatePicker().getMonth());
+            cDate.set(Calendar.DAY_OF_MONTH, dialog.getDatePicker().getDayOfMonth());
+
+            RecurringTodoFragment recurringTodoFragment =
+                    new RecurringTodoFragment(date, cDate);
+            recurringTodoFragment.show(((MainActivity) context)
+                    .getSupportFragmentManager(), "recurringFrag");
+        });
         dialog.show();
     }
-
 
     public static TimePickerDialog.OnTimeSetListener onTimeSetListener ( // RecyclerViewAdapter
             Todo todo, ToDoItemRecyclerViewAdapter.ToDoItemViewHolder holder,
@@ -176,8 +141,9 @@ public class PickerUtils {
                         cTime.get(Calendar.MINUTE), false).show());
     }
 
-    // private helpers
-    private static void resetDate() {
+    // helpers
+    public static void resetDate() {
+        Log.i(TAG, "resetDate: ");
         Calendar cTodayDate = Calendar.getInstance();
         cDate.set(Calendar.YEAR, cTodayDate.get(Calendar.YEAR));
         cDate.set(Calendar.MONTH, cTodayDate.get(Calendar.MONTH));
