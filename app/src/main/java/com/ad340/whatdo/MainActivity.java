@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
             if (newTodoText.isEmpty()) {
                 newTodoEditText.setError("Cannot make an empty task");
             } else {
-                Todo newTodo = new Todo(null, newTodoText, String.valueOf(dateString),
+                Todo newTodo = new Todo(null, newTodoText, c,
                         String.valueOf(timeString), null, false);
                 mTodoViewModel.insert(newTodo);
                 dialog.dismiss();
@@ -269,6 +269,10 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
 
     @Override
     public void onUpdateTodo(Todo todo, String data, int type) {
-        mTodoViewModel.updateTodo(todo, data, type);
+        try {
+            mTodoViewModel.updateTodo(todo, data, type);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }
