@@ -17,13 +17,13 @@ public interface TodoDao {
     void insert(Todo todo);
 
     @Query("SELECT * from todo_table ORDER BY title ASC")
-    LiveData<List<Todo>> getAllTodos();
+    List<Todo> getAllTodos();
 
     @Query("SELECT * FROM todo_table WHERE NOT isCompleted")
     LiveData<List<Todo>> getUncompletedTodos();
 
-    @Query("SELECT * FROM todo_table WHERE (date >= :start AND date <= :end)")
-    LiveData<List<Todo>> getTodosInRange(Calendar start, Calendar end);
+    @Query("SELECT * FROM todo_table WHERE date BETWEEN :start AND :end")
+    List<Todo> getTodosInRange(Calendar start, Calendar end);
 
     @Query("DELETE FROM todo_table")
     void deleteAll();

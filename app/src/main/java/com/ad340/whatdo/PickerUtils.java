@@ -23,7 +23,7 @@ public class PickerUtils {
             c.set(Calendar.MONTH, monthOfYear);
             c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-            StringBuilder dateString = new StringBuilder(DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime()));
+            StringBuilder dateString = new StringBuilder(DateFormat.getDateInstance(DateFormat.SHORT).format(c.getTime()));
 
             holder.toDoDate.setText(dateString);
             try {

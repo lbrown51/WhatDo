@@ -5,6 +5,7 @@ import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,6 +37,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import static com.ad340.whatdo.PickerUtils.setDatePickerShowOnClick;
@@ -78,27 +80,18 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                                   public void propertyChange(PropertyChangeEvent evt) {
                                       Log.e(TAG, "propertyChange invoked on dateRange");
                                       mTodoViewModel.getTodosInRange(dateRange.getStartDate(),
-                                              dateRange.getEndDate()).observe(MainActivity.this, todos -> {
-                                                  Log.e(TAG, "vm returning todosInRange");
-                                                  MainActivity.this.runOnUiThread(() -> {
-                                                    adapter.setTodos(todos);
-                                                  });
-                                      });
+                                              dateRange.getEndDate());
                                   }
         });
 
-        mTodoViewModel.getAllTodos().observe(this, todos -> {
-            this.runOnUiThread(() -> {
-                adapter.setTodos(todos);
-                if (dateFiltered) {
-                    //try {
-                        //adapter.filterTodosByDate(startDate, endDate);
-                    //} catch (ParseException e) {
-                    //    e.printStackTrace();
-                    //}
-                }
-            });
-        });
+        final Observer<List<Todo>> todoObserver = newTodos -> {
+            if (newTodos == null || newTodos.size() <= 0) {
+                return;
+            }
+            adapter.setTodos(newTodos);
+        };
+
+        mTodoViewModel.getAllTodos().observe(this, todoObserver);
 
         int largePadding = getResources().getDimensionPixelSize(R.dimen.large_item_spacing);
         int smallPadding = getResources().getDimensionPixelSize(R.dimen.small_item_spacing);

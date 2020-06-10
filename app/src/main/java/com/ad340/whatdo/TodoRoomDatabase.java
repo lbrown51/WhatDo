@@ -50,7 +50,7 @@ public abstract class TodoRoomDatabase extends RoomDatabase {
                 TodoDao dao = INSTANCE.todoDao();
                 dao.deleteAll();
                 Calendar c = Calendar.getInstance();
-                c.set(2020, 6, 9);
+                c.set(2020, 5, 10);
 
                 Todo todo = new Todo(null, "First Todo", c, null, null, false);
                 dao.insert(todo);

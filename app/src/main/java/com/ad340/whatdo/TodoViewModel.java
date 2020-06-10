@@ -2,33 +2,38 @@ package com.ad340.whatdo;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import androidx.core.util.Consumer;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class TodoViewModel extends AndroidViewModel {
+import static android.content.ContentValues.TAG;
 
+public class TodoViewModel extends AndroidViewModel implements TodoHandler{
+
+    private static final String TAG = TodoViewModel.class.getSimpleName();
     private TodoRepository repository;
-    private LiveData<List<Todo>> allTodos;
+    private MutableLiveData<List<Todo>> allTodos;
     private LiveData<List<Todo>> uncompletedTodos;
 
     public TodoViewModel(Application application) {
         super(application);
-        repository = new TodoRepository(application);
-        allTodos = repository.getAllTodos();
+        allTodos = new MutableLiveData<>();
+        repository = new TodoRepository(application, this);
         uncompletedTodos = repository.getUncompletedTodos();
     }
 
     LiveData<List<Todo>> getAllTodos() { return allTodos; }
 
-    LiveData<List<Todo>> getTodosInRange(Calendar start, Calendar end) {
-        return repository.getTodosInRange(start, end);
+    void getTodosInRange(Calendar start, Calendar end) {
+        repository.getTodosInRange(start, end);
     }
 
     //LiveData<List<Todo>> getAllTodos(Consumer<List<Todo>> responseCallback) { return allTodos; }
@@ -40,4 +45,10 @@ public class TodoViewModel extends AndroidViewModel {
     public void updateTodo(Todo todo, String data, int type) throws ParseException { repository.updateTodo(todo, data, type); }
 
     public void removeTodo(Todo todo) { repository.removeTodo(todo); }
+
+    @Override
+    public void setTodos(List<Todo> todos) {
+        allTodos.postValue(todos);
+        Log.d(TAG, "setTodos: " + todos.size());
+    }
 }

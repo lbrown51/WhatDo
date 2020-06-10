@@ -1,6 +1,7 @@
 package com.ad340.whatdo;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -9,25 +10,42 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Consumer;
+
+import static android.content.ContentValues.TAG;
 
 public class TodoRepository {
 
+    private static final String TAG = TodoRepository.class.getSimpleName();
     private TodoDao todoDao;
-    private LiveData<List<Todo>> allTodos;
+    private List<Todo> allTodos;
     private LiveData<List<Todo>> uncompletedTodos;
+    private TodoHandler handler;
 
-    TodoRepository(Application application) {
+    TodoRepository(Application application, TodoHandler handler) {
         TodoRoomDatabase db = TodoRoomDatabase.getDatabase(application);
         todoDao = db.todoDao();
-        allTodos = todoDao.getAllTodos();
-        uncompletedTodos = todoDao.getUncompletedTodos();
+        this.handler = handler;
+        TodoRoomDatabase.databaseWriteExecutor.execute(() -> {
+            getAllTodos.accept(todoDao.getAllTodos());
+            uncompletedTodos = todoDao.getUncompletedTodos();
+        });
+
     }
 
-    LiveData<List<Todo>> getAllTodos() { return allTodos; }
+    Consumer<List<Todo>> getAllTodos = todos -> {
+        Log.d(TAG, "todoRepo: " + todos.size());
+        handler.setTodos(todos);
+    };
 
     LiveData<List<Todo>> getUncompletedTodos() { return uncompletedTodos; }
 
-    LiveData<List<Todo>> getTodosInRange(Calendar start, Calendar end) { return todoDao.getTodosInRange(start, end); }
+    void getTodosInRange(Calendar start, Calendar end) {
+        Log.d(TAG, "getTodosInRange: " + start.getTime().toString() + " " + end.getTime().toString());
+        TodoRoomDatabase.databaseWriteExecutor.execute(() -> {
+            getAllTodos.accept(todoDao.getTodosInRange(start, end));
+        });
+    }
 
     void updateTodo(Todo todo, String data, int type) throws ParseException {
         int id = todo.getId();
