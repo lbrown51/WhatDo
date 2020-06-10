@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class TodoRepository {
 
     LiveData<List<Todo>> getUncompletedTodos() { return uncompletedTodos; }
 
-    LiveData<List<Todo>> getTodosInRange(Date start, Date end) { return todoDao.getTodosInRange(start, end); }
+    LiveData<List<Todo>> getTodosInRange(Calendar start, Calendar end) { return todoDao.getTodosInRange(start, end); }
 
     void updateTodo(Todo todo, String data, int type) throws ParseException {
         int id = todo.getId();
@@ -36,8 +37,9 @@ public class TodoRepository {
                 break;
             case 2: // update date
                 SimpleDateFormat sdf = new SimpleDateFormat("DD.mm.YY");
-                Date date = sdf.parse(data);
-                TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoDate(id, date));
+                Calendar c = Calendar.getInstance();
+                c.setTime(sdf.parse(data));
+                TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoDate(id, c));
                 break;
             case 3: // update time
                 TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoTime(id, data));

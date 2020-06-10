@@ -28,7 +28,7 @@ public class TodoViewModel extends AndroidViewModel {
     LiveData<List<Todo>> getAllTodos() { return allTodos; }
 
     LiveData<List<Todo>> getTodosInRange(Calendar start, Calendar end) {
-        return repository.getTodosInRange(start.getTime(), end.getTime());
+        return repository.getTodosInRange(start, end);
     }
 
     //LiveData<List<Todo>> getAllTodos(Consumer<List<Todo>> responseCallback) { return allTodos; }

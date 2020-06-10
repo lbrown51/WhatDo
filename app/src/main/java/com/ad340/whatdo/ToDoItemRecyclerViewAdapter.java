@@ -118,7 +118,7 @@ public class ToDoItemRecyclerViewAdapter
             holder.todoDetail.setVisibility(isExpanded?View.VISIBLE:View.GONE);
             holder.itemView.setActivated(isExpanded);
             holder.toDoTaskName.setText(todo.getTitle());
-            holder.toDoDate.setText(sdf.format(todo.getDate()));
+            holder.toDoDate.setText(new StringBuilder(DateFormat.getDateInstance(DateFormat.FULL).format(todo.getDate().getTime())));
             holder.toDoTime.setText(todo.getTime());
 
             holder.toDoFinishedCheckbox.setChecked(false);
@@ -205,8 +205,8 @@ public class ToDoItemRecyclerViewAdapter
     }
 
     void filterTodosByDate(Calendar startDate, Calendar endDate) throws ParseException {
-        Date start = startDate.getTime();
-        Date end = endDate.getTime();
+        Calendar start = startDate;
+        Calendar end = endDate;
         Log.e("in filterTodosByDate: ", "range start: " + ToDoItemRecyclerViewAdapter.dateToString(start));
         Log.e("in filterTodosByDate: ", "range end: " + ToDoItemRecyclerViewAdapter.dateToString(end));
 
@@ -215,7 +215,7 @@ public class ToDoItemRecyclerViewAdapter
                 // Calendar is saved to task via DateFormat_SHORT
                 SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.YY");
                 Todo currTodo = allTodosArray[i];
-                Date currDate = currTodo.getDate();
+                Calendar currDate = currTodo.getDate();
                 //tempCal.setTime(date);
                 if (todos.contains(currTodo)) {
                     if (currDate.compareTo(start) < 0 || currDate.compareTo(end) > 0) {
@@ -257,9 +257,9 @@ public class ToDoItemRecyclerViewAdapter
         return dateFormat.format(date);
     }
 
-    public static String dateToString(Date date) {
+    public static String dateToString(Calendar date) {
         DateFormat dateFormat = new SimpleDateFormat("MM.dd.YY");
-        return dateFormat.format(date);
+        return dateFormat.format(date.getTime());
     }
 
     private void resetArray() {
