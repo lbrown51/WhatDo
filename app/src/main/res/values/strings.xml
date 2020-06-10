@@ -22,4 +22,5 @@
     <string name="empty_task_error">Cannot make an empty task</string>
     <string name="recurring_tast_title">Set Recurring Task</string>
     <string name="confirm_recurring">Confirm</string>
+    <string name="set_recurring">Set Recurring</string>
 </resources>
