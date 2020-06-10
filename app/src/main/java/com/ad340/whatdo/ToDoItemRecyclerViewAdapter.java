@@ -42,8 +42,8 @@ public class ToDoItemRecyclerViewAdapter
 
     private static final String TAG = ToDoItemRecyclerViewAdapter.class.getName();
     private Context context;
-    private List<Todo> allTodos;
-    private Todo[] allTodosArray;
+//    private List<Todo> allTodos;
+//    private Todo[] allTodosArray;
     private List<Todo> todos;
     private Todo[] todoArray;
     private TodoViewModel mTodoViewModel;
@@ -58,6 +58,7 @@ public class ToDoItemRecyclerViewAdapter
         mTodoViewModel = new ViewModelProvider((ViewModelStoreOwner) context)
                 .get(TodoViewModel.class);
         Log.e(TAG, "constructor invoked");
+        //allTodos = mTodoViewModel.getAllTodos();
     }
 
     // Overloaded this for testing purposes
@@ -190,17 +191,11 @@ public class ToDoItemRecyclerViewAdapter
     }
 
     void setTodos(List<Todo> todos) {
-        // won't be edited until next setTodos call
-        this.allTodos = (List<Todo>) new ArrayList<Todo>();
-        this.allTodos.addAll(todos);
-        allTodosArray = (Todo[]) todos.toArray(new Todo[todos.size()]);
-        // filtered list
-        this.todos = (List<Todo>) new ArrayList<Todo>();
+        this.todos = new ArrayList<>();
         this.todos.addAll(todos);
-        todoArray = allTodosArray;
+        todoArray = todos.toArray(new Todo[todos.size()]);
 
         Log.e(TAG, "setTodos called");
-        resetArray();
         notifyDataSetChanged();
     }
 

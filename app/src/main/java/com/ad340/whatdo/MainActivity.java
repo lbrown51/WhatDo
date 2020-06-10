@@ -80,12 +80,12 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                                       mTodoViewModel.getTodosInRange(dateRange.getStartDate(),
                                               dateRange.getEndDate()).observe(MainActivity.this, todos -> {
                                                   Log.e(TAG, "vm returning todosInRange");
-                                          MainActivity.this.runOnUiThread(() -> {
-                                              adapter.setTodos(todos);
-                                          });
+                                                  MainActivity.this.runOnUiThread(() -> {
+                                                    adapter.setTodos(todos);
+                                                  });
                                       });
-                                      }});
-
+                                  }
+        });
 
         mTodoViewModel.getAllTodos().observe(this, todos -> {
             this.runOnUiThread(() -> {

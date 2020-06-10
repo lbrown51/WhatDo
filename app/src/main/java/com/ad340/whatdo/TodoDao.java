@@ -22,7 +22,7 @@ public interface TodoDao {
     @Query("SELECT * FROM todo_table WHERE NOT isCompleted")
     LiveData<List<Todo>> getUncompletedTodos();
 
-    @Query("SELECT * FROM todo_table WHERE date >= :start AND date <= :end")
+    @Query("SELECT * FROM todo_table WHERE (date >= :start AND date <= :end)")
     LiveData<List<Todo>> getTodosInRange(Calendar start, Calendar end);
 
     @Query("DELETE FROM todo_table")
