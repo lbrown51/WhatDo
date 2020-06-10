@@ -41,8 +41,8 @@ public class TodoCalendar extends Observable {
     public void setDateRange(Calendar start, Calendar end) {
         startDate = start;
         endDate = end;
-        notifyObservers();
-        propertyChangeSupport.firePropertyChange("Start & End Dates", startDate, endDate);
+        //notifyObservers();
+        //propertyChangeSupport.firePropertyChange("Start & End Dates", startDate, endDate);
     }
 
 }

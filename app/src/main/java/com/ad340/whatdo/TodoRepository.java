@@ -1,6 +1,7 @@
 package com.ad340.whatdo;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -15,6 +16,7 @@ public class TodoRepository {
     private TodoDao todoDao;
     private LiveData<List<Todo>> allTodos;
     private LiveData<List<Todo>> uncompletedTodos;
+    private static final String TAG = TodoRepository.class.getName();
 
     TodoRepository(Application application) {
         TodoRoomDatabase db = TodoRoomDatabase.getDatabase(application);
@@ -27,7 +29,12 @@ public class TodoRepository {
 
     LiveData<List<Todo>> getUncompletedTodos() { return uncompletedTodos; }
 
-    LiveData<List<Todo>> getTodosInRange(Calendar start, Calendar end) { return todoDao.getTodosInRange(start, end); }
+    LiveData<List<Todo>> getTodosInRange(Calendar start, Calendar end) {
+        LiveData<List<Todo>> todosInRange = todoDao.getTodosInRange(start, end);
+        Log.e(TAG, "getTodosInRange invoked on range " +
+                ToDoItemRecyclerViewAdapter.calToString(start) + ", " +
+                ToDoItemRecyclerViewAdapter.calToString(end));
+        return todosInRange; }
 
     void updateTodo(Todo todo, String data, int type) throws ParseException {
         int id = todo.getId();

@@ -17,12 +17,35 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/top_app_bar"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            app:layout_constraintTop_toTopOf="parent"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:clickable="true"
             android:elevation="6dp"
             android:key="@id/top_app_bar"
             app:title="@string/app_bar_title" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/viewing_date_card"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_by_cardview_height"
+            app:layout_constraintTop_toBottomOf="@id/top_app_bar"
+            android:backgroundTint="@color/colorAccent"
+            android:padding="@dimen/recycler_view_padding">
+
+            <TextView
+                android:id="@+id/viewing_date_text"
+                android:layout_marginTop="@dimen/recycler_view_padding"
+                style="@style/TextAppearance.MaterialComponents.Headline6"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/viewing_date_text"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="@string/viewing_default_text"
+                android:textAlignment="center"
+                android:textColor="@color/plusIcon"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
 
     </com.google.android.material.appbar.AppBarLayout>
 
