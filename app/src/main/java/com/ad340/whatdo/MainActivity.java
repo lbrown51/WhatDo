@@ -27,7 +27,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.Calendar;
 import java.util.Locale;
 
-import static com.ad340.whatdo.PickerUtils.setDatePickerShowOnClick;
+import static com.ad340.whatdo.PickerUtils.setDatePicker;
 import static com.ad340.whatdo.PickerUtils.onDateSetListener;
 import static com.ad340.whatdo.PickerUtils.onTimeSetListener;
 import static com.ad340.whatdo.PickerUtils.setTimePickerShowOnClick;
@@ -93,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(createView);
 
-        Calendar c = Calendar.getInstance();
         StringBuilder dateString = new StringBuilder();
         StringBuilder timeString = new StringBuilder();
 
@@ -106,11 +105,11 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         ImageButton newTodoNotesButton = dialog.findViewById(R.id.create_todo_notes_btn);
         EditText newTodoNotesText = dialog.findViewById(R.id.create_todo_notes_text);
 
-        final DatePickerDialog.OnDateSetListener date = onDateSetListener(c, dateString, dateText);
-        final TimePickerDialog.OnTimeSetListener time = onTimeSetListener(c, timeString, timeText);
+        final DatePickerDialog.OnDateSetListener date = onDateSetListener(dateString, dateText);
+        final TimePickerDialog.OnTimeSetListener time = onTimeSetListener(timeString, timeText);
 
-        setDatePickerShowOnClick(this, c, newTodoDateButton, date);
-        setTimePickerShowOnClick(this, c, newTodoTimeButton, time);
+        setDatePicker(this, newTodoDateButton, date);
+        setTimePickerShowOnClick(this, newTodoTimeButton, time);
 
         newTodoNotesButton.setOnClickListener(view -> {
             if (newTodoNotesText.getVisibility() == View.GONE) {
