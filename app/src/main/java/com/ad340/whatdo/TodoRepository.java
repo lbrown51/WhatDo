@@ -36,7 +36,7 @@ public class TodoRepository {
                 TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoTitle(id, data));
                 break;
             case 2: // update date
-                SimpleDateFormat sdf = new SimpleDateFormat("DD.mm.YY");
+                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy");
                 Calendar c = Calendar.getInstance();
                 c.setTime(sdf.parse(data));
                 TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoDate(id, c));
