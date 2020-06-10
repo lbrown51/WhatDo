@@ -76,8 +76,10 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         dateRange.setListener(new PropertyChangeListener() {
                                   @Override
                                   public void propertyChange(PropertyChangeEvent evt) {
+                                      Log.e(TAG, "propertyChange invoked on dateRange");
                                       mTodoViewModel.getTodosInRange(dateRange.getStartDate(),
                                               dateRange.getEndDate()).observe(MainActivity.this, todos -> {
+                                                  Log.e(TAG, "vm returning todosInRange");
                                           MainActivity.this.runOnUiThread(() -> {
                                               adapter.setTodos(todos);
                                           });
@@ -170,12 +172,8 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                 endDate.setTime(inputDate);
                 endDate.add(Calendar.DATE, 2);
                 dateRange.setDateRange(startDate, endDate);
-                //try {
-                    //adapter.filterTodosByDate(startDate, endDate);
-                    dateFiltered = true;
-//                } catch (ParseException e) {
-//                    e.printStackTrace();
-//                }
+                dateFiltered = true;
+
                 Log.d("DatePicker Activity", "Dialog Positive Button was clicked");
             }
         });

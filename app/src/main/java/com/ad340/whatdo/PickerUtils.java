@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -25,7 +26,11 @@ public class PickerUtils {
             StringBuilder dateString = new StringBuilder(DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime()));
 
             holder.toDoDate.setText(dateString);
-            listener.onUpdateTodo(todo, String.valueOf(dateString), Constants.DATE);
+            try {
+                listener.onUpdateTodo(todo, String.valueOf(dateString), Constants.DATE);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
         };
     }
@@ -66,7 +71,11 @@ public class PickerUtils {
             String timeString = sdf.format(c.getTime());
 
             holder.toDoTime.setText(timeString);
-            listener.onUpdateTodo(todo, timeString, Constants.TIME);
+            try {
+                listener.onUpdateTodo(todo, timeString, Constants.TIME);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
         };
     }

@@ -1,15 +1,18 @@
 package com.ad340.whatdo;
 
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Calendar;
 import java.util.Observable;
 
 public class TodoCalendar extends Observable {
     private Calendar startDate;
     private Calendar endDate;
-    private PropertyChangeListener listener;
+    protected PropertyChangeSupport propertyChangeSupport;
+    //private PropertyChangeListener listener;
 
     public TodoCalendar(Calendar start, Calendar end) {
+        propertyChangeSupport = new PropertyChangeSupport(this);
         startDate = start;
         endDate = end;
     }
@@ -22,7 +25,9 @@ public class TodoCalendar extends Observable {
 
     // SETTERS
 
-    public void setListener(PropertyChangeListener newListener) { listener = newListener; }
+    public void setListener(PropertyChangeListener newListener) {
+        propertyChangeSupport.addPropertyChangeListener(newListener);
+    }
 
     public void incrementDate(int pos, int dayCount) {
         if (pos == 1) {
@@ -37,6 +42,7 @@ public class TodoCalendar extends Observable {
         startDate = start;
         endDate = end;
         notifyObservers();
+        propertyChangeSupport.firePropertyChange("Start & End Dates", startDate, endDate);
     }
 
 }
