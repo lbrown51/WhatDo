@@ -39,7 +39,6 @@ public class TodoViewModel extends AndroidViewModel implements TodoHandler{
     LiveData<List<Todo>> getAllTodos() {
         return allTodos;
     }
-   // LiveData<List<Todo>> getUncompletedTodos() { return uncompletedTodos; }
 
     @Override
     public void getTodosInRange(@Nullable TodoCalendar range) {

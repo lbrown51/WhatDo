@@ -248,12 +248,22 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         Button finishNewTodoButton = dialog.findViewById(R.id.create_todo_finish_btn);
         ImageButton newTodoDateButton = dialog.findViewById(R.id.create_todo_date_btn);
         ImageButton newTodoTimeButton = dialog.findViewById(R.id.create_todo_time_btn);
+        ImageButton newTodoNotesButton = dialog.findViewById(R.id.create_todo_notes_btn);
+        EditText newTodoNotesText = dialog.findViewById(R.id.create_todo_notes_text);
 
         final DatePickerDialog.OnDateSetListener date = onDateSetListener(c, dateString, dateText);
         final TimePickerDialog.OnTimeSetListener time = onTimeSetListener(c, timeString, timeText);
 
         setDatePickerShowOnClick(this, c, newTodoDateButton, date);
         setTimePickerShowOnClick(this, c, newTodoTimeButton, time);
+
+        newTodoNotesButton.setOnClickListener(view -> {
+            if (newTodoNotesText.getVisibility() == View.GONE) {
+                newTodoNotesText.setVisibility(View.VISIBLE);
+            } else {
+                newTodoNotesText.setVisibility(View.GONE);
+            }
+        });
 
         SimpleDateFormat sdf = new SimpleDateFormat("DD.mm.YY");
 
