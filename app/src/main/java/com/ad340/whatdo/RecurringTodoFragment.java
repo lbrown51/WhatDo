@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
@@ -34,16 +35,17 @@ public class RecurringTodoFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
         AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
-        builder.setTitle(R.string.recurring_tast_title);
-        builder.setPositiveButton(R.string.confirm_recurring, (dialogInterface, i) -> {
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        builder.setView(inflater.inflate(R.layout.todo_recurring_dialog, null))
+        .setTitle(R.string.recurring_tast_title)
+        .setPositiveButton(R.string.confirm_recurring, (dialogInterface, i) -> {
             setDatePicker(getContext(), onDateSetListener);
-        });
-        builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+        })
+        .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
             resetDate();
             dismiss();
         });
 
         return builder.create();
-
     }
 }
