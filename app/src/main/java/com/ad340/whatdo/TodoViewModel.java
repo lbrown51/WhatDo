@@ -48,8 +48,6 @@ public class TodoViewModel extends AndroidViewModel implements TodoHandler{
         dateFilter.postValue(currentRange);
     }
 
-    //LiveData<List<Todo>> getAllTodos(Consumer<List<Todo>> responseCallback) { return allTodos; }
-
     LiveData<List<Todo>> getUncompletedTodos() { return uncompletedTodos; }
 
     public void insert(Todo todo) { repository.insert(todo);}
