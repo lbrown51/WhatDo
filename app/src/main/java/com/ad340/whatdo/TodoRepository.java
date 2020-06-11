@@ -92,7 +92,10 @@ public class TodoRepository {
 
     void removeTodo(Todo todo) {
         int id = todo.getId();
-        TodoRoomDatabase.databaseWriteExecutor.execute(() -> { todoDao.cancelTodo(id);});
+        TodoRoomDatabase.databaseWriteExecutor.execute(() -> {
+            todoDao.cancelTodo(id);
+            handler.getTodosInRange(null);
+        });
     }
 
 }
