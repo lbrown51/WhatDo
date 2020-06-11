@@ -14,7 +14,6 @@ public class TodoRepository {
 
     private static final String TAG = TodoRepository.class.getSimpleName();
     private TodoDao todoDao;
-    private LiveData<List<Todo>> uncompletedTodos;
     private TodoHandler handler;
 
     TodoRepository(Application application, TodoHandler handler) {
@@ -22,8 +21,6 @@ public class TodoRepository {
         TodoRoomDatabase db = TodoRoomDatabase.getDatabase(application);
         todoDao = db.todoDao();
     }
-
-    LiveData<List<Todo>> getUncompletedTodos() { return uncompletedTodos; }
 
     LiveData<List<Todo>> getTodosInRange(Calendar start, Calendar end, boolean isCompleted) {
         Log.d(TAG, "getTodosInRange: " + start.getTime().toString() + " " + end.getTime().toString());
