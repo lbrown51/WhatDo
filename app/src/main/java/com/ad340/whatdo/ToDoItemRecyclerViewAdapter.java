@@ -1,14 +1,10 @@
 package com.ad340.whatdo;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
-
-import android.util.Log;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,15 +26,12 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
-import static com.ad340.whatdo.PickerUtils.setDatePickerShowOnClick;
 import static com.ad340.whatdo.PickerUtils.onDateSetListener;
 import static com.ad340.whatdo.PickerUtils.onTimeSetListener;
+import static com.ad340.whatdo.PickerUtils.setDatePickerShowOnClick;
 import static com.ad340.whatdo.PickerUtils.setTimePickerShowOnClick;
 
 
@@ -76,8 +69,6 @@ public class ToDoItemRecyclerViewAdapter
             Log.d(TAG, "onBindViewHolder: " + todo.getDate().getTime().toString());
             // date comes in as Date, need to change to string to update
             SimpleDateFormat sdf = new SimpleDateFormat("DD.mm.yy");
-            // REMOVE THIS LOG - doesn't have date, can't compare?
-            //Log.e(TAG, todo.getDate());
             Calendar c = Calendar.getInstance();
             final boolean isExpanded = position==mExpandedPosition;
 
@@ -101,7 +92,11 @@ public class ToDoItemRecyclerViewAdapter
             holder.toDoFinishedCheckbox.setChecked(false);
 
             holder.toDoFinishedCheckbox.setOnClickListener(view -> {
-                mTodoViewModel.updateTodo(todo, "", Constants.COMPLETE);
+                try {
+                    mTodoViewModel.updateTodo(todo, "", Constants.COMPLETE);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 Intent updateWidgetIntent = new Intent(context, TodoListWidget.class);
                 updateWidgetIntent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
                 int ids[] = AppWidgetManager
@@ -153,8 +148,14 @@ public class ToDoItemRecyclerViewAdapter
                     view -> toggleNotes(holder.toDoNotesText));
 
             holder.toDoNotesText.setOnFocusChangeListener((view, b) -> {
-                if (!b) listener.onUpdateTodo(
-                        todo, String.valueOf(holder.toDoNotesText.getText()), Constants.NOTES);
+                if (!b) {
+                    try {
+                        listener.onUpdateTodo(
+                                todo, String.valueOf(holder.toDoNotesText.getText()), Constants.NOTES);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
             });
 
             // show DatePicker and TimePicker
@@ -192,7 +193,7 @@ public class ToDoItemRecyclerViewAdapter
     }
 
     void setTodos(List<Todo> todos) {
-        this.todos.clear();
+        this.todos = new ArrayList<>();
         this.todos.addAll(todos);
         notifyDataSetChanged();
     }

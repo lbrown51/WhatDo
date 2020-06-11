@@ -1,23 +1,9 @@
 package com.ad340.whatdo;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.util.Pair;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -26,13 +12,17 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Pair;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -40,9 +30,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static com.ad340.whatdo.PickerUtils.setDatePickerShowOnClick;
 import static com.ad340.whatdo.PickerUtils.onDateSetListener;
 import static com.ad340.whatdo.PickerUtils.onTimeSetListener;
+import static com.ad340.whatdo.PickerUtils.setDatePickerShowOnClick;
 import static com.ad340.whatdo.PickerUtils.setTimePickerShowOnClick;
 
 public class MainActivity extends AppCompatActivity implements OnTodoInteractionListener {
@@ -76,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
 
         dateRange = new TodoCalendar(startDate, endDate);
         dateRange.setListener(evt -> {
-            Log.e(TAG, "propertyChange invoked on dateRange");
             mTodoViewModel.getTodosInRange(dateRange);
         });
 
@@ -107,17 +96,8 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
             });
 
         header = findViewById(R.id.top_app_bar);
-//        StringBuilder displayText = new StringBuilder(header.getTitle());
-//        displayText.append(getString(R.string.text_whitespace));
-//        displayText.append(startDate.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH));
-//        displayText.append(String.format(" %02d, %04d",
-//                dateRange.getStartDate().get(Calendar.DAY_OF_MONTH),
-//                dateRange.getStartDate().get(Calendar.YEAR)));
-//        header.setTitle(displayText);
         header.setOnClickListener(view -> { showViewByDialog(); });
         viewing = findViewById(R.id.viewing_date_text);
-
-        Log.d(TAG, "onCreate invoked");
     }
 
     // EDIT TEXT BY VIEW BOUNDS
@@ -180,11 +160,9 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
 
         datePicker.addOnCancelListener ((dialogInterface) -> {
             dialogInterface.cancel();
-            Log.d("DatePicker Activity", "Dialog was cancelled");
         });
         datePicker.addOnNegativeButtonClickListener ((view) -> {
             view.setVisibility(View.GONE);
-            Log.d("DatePicker Activity", "Dialog Negative Button was clicked");
         });
 
         datePicker.addOnPositiveButtonClickListener(selection -> {
@@ -197,8 +175,6 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
             setDateMaximum(endDate);
             dateRange.setDateRange(startDate, endDate);
             setSingleDateText(viewing);
-
-            Log.d("DatePicker Activity", "Dialog Positive Button was clicked");
         });
     }
 
@@ -224,11 +200,9 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
 
         dateRangePicker.addOnCancelListener ((dialogInterface) -> {
             dialogInterface.cancel();
-            Log.d("DatePicker Activity", "Dialog was cancelled");
         });
         dateRangePicker.addOnNegativeButtonClickListener ((view) -> {
             view.setVisibility(View.GONE);
-            Log.d("DatePicker Activity", "Dialog Negative Button was clicked");
         });
 
         dateRangePicker.addOnPositiveButtonClickListener(selection -> {
@@ -242,18 +216,9 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                 endDate.setTimeInMillis(inputDateRange.second);
                 endDate.add(Calendar.DATE, 1);
                 setDateMaximum(endDate);
-                Log.d(TAG, "onPositiveButtonClick: " + startDate.getTime().toString() + " " + endDate.getTime().toString());
                 dateRange.setDateRange(startDate, endDate);
+                setDateRangeText(viewing);
             }
-            //try {
-                //Log.e(TAG, "range start: " + ToDoItemRecyclerViewAdapter.dateToString(startDate.getTime()));
-                //Log.e(TAG, "range end: " + ToDoItemRecyclerViewAdapter.dateToString(endDate.getTime()));
-                //adapter.filterTodosByDate(startDate, endDate);
-            setDateRangeText(viewing);
-//                } catch (ParseException e) {
-//                    e.printStackTrace();
-//                }
-            Log.d("DateRangePicker", "Dialog Positive Button was clicked");
         });
     }
 
@@ -299,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
             } else {
                 c.add(Calendar.SECOND, 1);
                 Todo newTodo = new Todo(null, newTodoText, c,
-                        String.valueOf(timeString), null, false);
+                        String.valueOf(timeString), null, false, null);
                 mTodoViewModel.insert(newTodo);
                 dialog.dismiss();
             }

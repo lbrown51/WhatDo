@@ -8,11 +8,7 @@ import androidx.lifecycle.LiveData;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.function.Consumer;
-
-import static android.content.ContentValues.TAG;
 
 public class TodoRepository {
 
@@ -30,8 +26,6 @@ public class TodoRepository {
         });
 
     }
-
-    LiveData<List<Todo>> getAllTodos() { return allTodos; }
 
     LiveData<List<Todo>> getUncompletedTodos() { return uncompletedTodos; }
 

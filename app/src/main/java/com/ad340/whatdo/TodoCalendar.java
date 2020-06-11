@@ -1,7 +1,5 @@
 package com.ad340.whatdo;
 
-import androidx.core.util.Pair;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Calendar;
@@ -11,8 +9,6 @@ public class TodoCalendar extends Observable {
     private Calendar startDate;
     private Calendar endDate;
     protected PropertyChangeSupport propertyChangeSupport;
-    //private PropertyChangeListener listener;
-
     public TodoCalendar(Calendar start, Calendar end) {
         propertyChangeSupport = new PropertyChangeSupport(this);
         startDate = start;
@@ -23,7 +19,6 @@ public class TodoCalendar extends Observable {
 
     public Calendar getStartDate() { return startDate; }
     public Calendar getEndDate() { return endDate; }
-    //public PropertyChangeListener getListener() { return listener; }
 
     // SETTERS
 

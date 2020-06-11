@@ -7,17 +7,14 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.TypeConverter;
-import androidx.room.TypeConverters;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.Calendar;
-import java.util.Calendar;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Todo.class, Tag.class}, version = 4, exportSchema = false)
+@Database(entities = {Todo.class, Tag.class}, version = 5, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class TodoRoomDatabase extends RoomDatabase {
 
@@ -84,6 +81,8 @@ public abstract class TodoRoomDatabase extends RoomDatabase {
                 todo = new Todo(null, "Finished Todo", c, null, null, true, null);
                 todoDao.insert(todo);
 
+                Log.d(TAG, "onOpen: dummys made");
+                
                 Tag tag = new Tag(null, "Home");
                 tagDao.insert(tag);
                 tag = new Tag(null, "Work");
