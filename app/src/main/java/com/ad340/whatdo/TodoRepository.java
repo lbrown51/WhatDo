@@ -31,6 +31,7 @@ public class TodoRepository {
 
     }
 
+    LiveData<List<Todo>> getAllTodos() { return allTodos; }
 
     LiveData<List<Todo>> getUncompletedTodos() { return uncompletedTodos; }
 
@@ -42,13 +43,13 @@ public class TodoRepository {
     void updateTodo(Todo todo, String data, int type) throws ParseException {
         int id = todo.getId();
         switch (type) {
-            case 1: // update title
+            case Constants.TITLE: // update title
                 TodoRoomDatabase.databaseWriteExecutor.execute(() -> {
                     todoDao.updateTodoTitle(id, data);
                     handler.getTodosInRange(null);
                 });
                 break;
-            case 2: // update date
+            case Constants.DATE: // update date
                 SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy");
                 Calendar c = Calendar.getInstance();
                 c.setTime(sdf.parse(data));
@@ -57,29 +58,31 @@ public class TodoRepository {
                     handler.getTodosInRange(null);
                 });
                 break;
-            case 3: // update time
+            case Constants.TIME: // update time
                 TodoRoomDatabase.databaseWriteExecutor.execute(() -> {
                     todoDao.updateTodoTime(id, data);
                     handler.getTodosInRange(null);
                 });
                 break;
-            case 4: // update notes
+            case Constants.NOTES: // update notes
                 TodoRoomDatabase.databaseWriteExecutor.execute(() -> {
                     todoDao.updateTodoNotes(id, data);
                     handler.getTodosInRange(null);
                 });
                 break;
-            case 5: // set to completed
+            case Constants.COMPLETE: // set to completed
                 TodoRoomDatabase.databaseWriteExecutor.execute(() -> {
                     todoDao.setTodoCompleted(id);
                     handler.getTodosInRange(null);
                 });
                 break;
+            case Constants.TAG:
+                TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoTag(id, data));
+                break;
             default: // type not recognized
                 StringBuilder errMessage  = new StringBuilder("Data type of ")
                         .append(type).append(" not recognized.");
                 throw new IllegalArgumentException(String.valueOf(errMessage));
-
         }
     }
 
@@ -97,5 +100,4 @@ public class TodoRepository {
             handler.getTodosInRange(null);
         });
     }
-
 }

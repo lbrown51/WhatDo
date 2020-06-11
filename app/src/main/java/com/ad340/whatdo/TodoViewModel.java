@@ -21,19 +21,23 @@ import static android.content.ContentValues.TAG;
 public class TodoViewModel extends AndroidViewModel implements TodoHandler{
 
     private static final String TAG = TodoViewModel.class.getSimpleName();
-    private TodoRepository repository;
     MutableLiveData<TodoCalendar> dateFilter;
     LiveData<List<Todo>> allTodos;
     TodoCalendar currentRange;
+    private TodoRepository todoRepository;
+    private TagRepository tagRepository;
+    private LiveData<List<Todo>> allTodos;
     private LiveData<List<Todo>> uncompletedTodos;
+    private LiveData<List<Tag>> allTags;
 
     public TodoViewModel(Application application) {
         super(application);
         dateFilter = new MutableLiveData<>();
-        repository = new TodoRepository(application, this);
-        allTodos = Transformations.switchMap(dateFilter, filter -> repository.getTodosInRange(filter.getStartDate(), filter.getEndDate()));
-
-        uncompletedTodos = repository.getUncompletedTodos();
+        todoRepository = new TodoRepository(application, this);
+        tagRepository = new TagRepository(application);
+        allTodos = Transformations.switchMap(dateFilter, filter -> todoRepository.getTodosInRange(filter.getStartDate(), filter.getEndDate()));
+        allTags = tagRepository.getAllTags();
+        uncompletedTodos = todoRepository.getUncompletedTodos();
     }
 
     LiveData<List<Todo>> getAllTodos() {
@@ -48,12 +52,14 @@ public class TodoViewModel extends AndroidViewModel implements TodoHandler{
         dateFilter.postValue(currentRange);
     }
 
+    LiveData<List<Tag>> getAllTags() { return allTags; }
+
     LiveData<List<Todo>> getUncompletedTodos() { return uncompletedTodos; }
 
-    public void insert(Todo todo) { repository.insert(todo);}
+    public void insert(Todo todo) { todoRepository.insert(todo);}
 
-    public void updateTodo(Todo todo, String data, int type) throws ParseException { repository.updateTodo(todo, data, type); }
+    public void updateTodo(Todo todo, String data, int type) throws ParseException { todoRepository.updateTodo(todo, data, type); }
 
-    public void removeTodo(Todo todo) { repository.removeTodo(todo); }
+    public void removeTodo(Todo todo) { todoRepository.removeTodo(todo); }
 
 }

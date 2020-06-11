@@ -6,4 +6,6 @@ public class Constants {
     public static final int DATE = 2;
     public static final int TIME = 3;
     public static final int NOTES = 4;
+    public static final int COMPLETE = 5;
+    public static final int TAG = 6;
 }

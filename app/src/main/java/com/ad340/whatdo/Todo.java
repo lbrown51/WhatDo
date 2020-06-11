@@ -38,17 +38,17 @@ public class Todo {
     private String notes;
     public String getNotes() { return this.notes; }
 
-    public Todo(Integer id, @NonNull String title, Calendar date, String time, String notes, Boolean isCompleted) {
+    @ColumnInfo(name = "tag")
+    private String tag;
+    public String getTag() { return this.tag; }
+
+    public Todo(Integer id, @NonNull String title, Calendar date, String time, String notes, Boolean isCompleted, String tag) {
         this.id = id;
         this.title = title;
         this.date = date;
         this.time = time;
         this.notes = notes;
         this.isCompleted = isCompleted;
+        this.tag = tag;
     }
-
-//    @Ignore
-//    public Todo(@NonNull String title) {
-//        this.title = title;
-//    }
 }

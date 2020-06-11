@@ -8,7 +8,7 @@ public class MainActivityUnitTests {
 
     @Test
     public void get_completedWorks() {
-        Todo todo = new Todo(null, "Test todo", null, null, null, false);
+        Todo todo = new Todo(null, "Test todo", null, null, null, false, null);
         assertFalse(todo.getCompleted());
     }
 }

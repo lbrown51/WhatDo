@@ -22,6 +22,9 @@ public interface TodoDao {
     @Query("SELECT * FROM todo_table WHERE NOT isCompleted")
     LiveData<List<Todo>> getUncompletedTodos();
 
+    @Query("SELECT title FROM todo_table WHERE NOT isCompleted")
+    List<String> getStaticUncompletedTodoTitles();
+
     @Query("SELECT * FROM todo_table WHERE date BETWEEN :start AND :end")
     LiveData<List<Todo>> getTodosInRange(Calendar start, Calendar end);
 
@@ -42,6 +45,12 @@ public interface TodoDao {
 
     @Query("UPDATE todo_table SET notes = :notes WHERE id = :id")
     void updateTodoNotes(int id, String notes);
+
+    @Query("UPDATE todo_table SET tag = :tag WHERE id = :id")
+    void updateTodoTag(int id, String tag);
+
+    @Query("UPDATE todo_table SET tag = null WHERE id = :id")
+    void removeTodoTag(int id);
 
     @Query("UPDATE todo_table SET isCompleted = 1 WHERE id = :id")
     void setTodoCompleted(int id);
