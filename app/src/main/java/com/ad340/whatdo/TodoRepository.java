@@ -18,7 +18,6 @@ public class TodoRepository {
 
     private static final String TAG = TodoRepository.class.getSimpleName();
     private TodoDao todoDao;
-    private List<Todo> allTodos;
     private LiveData<List<Todo>> uncompletedTodos;
     private TodoHandler handler;
 
@@ -27,7 +26,6 @@ public class TodoRepository {
         TodoRoomDatabase db = TodoRoomDatabase.getDatabase(application);
         todoDao = db.todoDao();
         TodoRoomDatabase.databaseWriteExecutor.execute(() -> {
-            allTodos = todoDao.getAllTodos();
             uncompletedTodos = todoDao.getUncompletedTodos();
         });
 

@@ -228,7 +228,11 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
     }
 
     public void allUpcomingHandler(View rootView) {
-        // STUB
+        Calendar start = Calendar.getInstance();
+        Calendar end = Calendar.getInstance();
+        setDateMinimum(start);
+        end.add(Calendar.YEAR, 1);
+        dateRange.setDateRange(start, end);
     }
 
     // CREATE TODO DIALOG
