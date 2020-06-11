@@ -66,43 +66,50 @@
             android:id="@+id/chip_monday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/monday" />
+            android:text="@string/monday"
+            android:tag="@string/m"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_tuesday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tuesday" />
+            android:text="@string/tuesday"
+            android:tag="@string/t"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_wednesday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/wednesday" />
+            android:text="@string/wednesday"
+            android:tag="w"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_thursday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/thursday" />
+            android:text="@string/thursday"
+            android:tag="@string/th"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_friday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/friday" />
+            android:text="@string/friday"
+            android:tag="@string/f"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_saturday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/saturday" />
+            android:text="@string/saturday"
+            android:tag="@string/sat"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_sunday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sunday" />
+            android:text="@string/sunday"
+            android:tag="@string/sun"/>
     </com.google.android.material.chip.ChipGroup>
 
     <EditText
@@ -114,7 +121,8 @@
         android:autofillHints="@string/recurrence_interval"
         android:fontFamily="sans-serif"
         android:hint="@string/recurrence_interval"
-        android:inputType="numberSigned"
+        android:inputType="numberDecimal"
+        android:digits="0123456789"
         android:visibility="invisible" />
 
 </LinearLayout>

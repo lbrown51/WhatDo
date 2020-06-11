@@ -29,19 +29,21 @@ public class RecurringTodoFragment extends DialogFragment {
     private static final String TAG = RecurringTodoFragment.class.getName();
     private DatePickerDialog.OnDateSetListener onDateSetListener;
     private Calendar cRecurring;
+
     private Button dailyButton;
     private Button weeklyButton;
+    private EditText rInterval;
+    private ChipGroup chipGroupDays;
+
     private boolean isDaily = false;
     private boolean isWeekly = false;
-    private EditText recurringInterval;
-    private ChipGroup chipGroupDays;
+    private int rIntervalValue = 0;
+    private String rIntervalDays = "";
 
 
     public RecurringTodoFragment(DatePickerDialog.OnDateSetListener onDateSetListener, Calendar c) {
         this.onDateSetListener = onDateSetListener;
         this.cRecurring = c;
-        Log.i(TAG, "RecurringTodoFragment: ");
-        Log.i(TAG, String.valueOf(cRecurring.get(Calendar.DAY_OF_MONTH)));
     }
 
     @NonNull
@@ -54,18 +56,22 @@ public class RecurringTodoFragment extends DialogFragment {
 
         builder.setView(view)
             .setPositiveButton(R.string.confirm_recurring, (dialogInterface, i) -> {
-                setDatePicker(getContext(), onDateSetListener);
+                String rIntVal = String.valueOf(rInterval.getText());
+                if (!rIntVal.equals("")) {
+                    rIntervalValue = Integer.parseInt(String.valueOf(rInterval.getText()));
+                    Log.i(TAG, "onCreateDialog: exiting dialog");
+                    Log.i(TAG, String.valueOf(rIntervalValue));
+                }
+
+                setDatePicker(getContext(), onDateSetListener, rIntervalValue, rIntervalDays);
             })
-            .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-            resetDate();
-            dismiss();
-        });
+            .setNegativeButton(R.string.cancel, (dialogInterface, i) -> { resetDate();dismiss(); });
 
 
         dailyButton = view.findViewById(R.id.button_daily);
         weeklyButton = view.findViewById(R.id.button_weekly);
         chipGroupDays = view.findViewById(R.id.chipgroup_days);
-        recurringInterval = view.findViewById(R.id.recurring_interval);
+        rInterval = view.findViewById(R.id.recurring_interval);
 
         dailyButton.setOnClickListener(v -> {
             isDaily = !isDaily;
@@ -74,18 +80,12 @@ public class RecurringTodoFragment extends DialogFragment {
                 chipGroupDays.setVisibility(View.INVISIBLE);
             }
 
-
             if (isDaily) {
-
-                recurringInterval.setVisibility(View.VISIBLE);
+                rInterval.setVisibility(View.VISIBLE);
             } else {
-
-                recurringInterval.setVisibility(View.INVISIBLE);
+                rInterval.setVisibility(View.INVISIBLE);
             }
-
         });
-
-
 
         weeklyButton.setOnClickListener(v -> {
             isWeekly = !isWeekly;
@@ -95,13 +95,12 @@ public class RecurringTodoFragment extends DialogFragment {
 
             if (isWeekly) {
                 chipGroupDays.setVisibility(View.VISIBLE);
-                recurringInterval.setVisibility(View.VISIBLE);
+                rInterval.setVisibility(View.VISIBLE);
             } else {
                 chipGroupDays.setVisibility(View.INVISIBLE);
-                recurringInterval.setVisibility(View.INVISIBLE);
+                rInterval.setVisibility(View.INVISIBLE);
             }
         });
-
 
 
         return builder.create();

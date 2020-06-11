@@ -18,11 +18,21 @@ public class PickerUtils {
     private static final Calendar cDate = Calendar.getInstance();
     private static final Calendar cTime = Calendar.getInstance();
 
+    private static Integer rInterval;
+    private static String rDays;
+
     public static DatePickerDialog.OnDateSetListener onDateSetListener ( // RecyclerViewAdapter
             Todo todo, ToDoItemRecyclerViewAdapter.ToDoItemViewHolder holder,
             OnTodoInteractionListener listener) {
         return (view, year, monthOfYear, dayOfMonth) -> {
             setUserDate(year, monthOfYear, dayOfMonth);
+
+            Log.i(TAG, "onDateSetListener: RecyclerViewAdapter");
+            if (rInterval != null) {
+                Log.i(TAG, String.valueOf(rInterval));
+                Log.i(TAG, rDays);
+            }
+
 
             StringBuilder dateString = new StringBuilder(
                     DateFormat.getDateInstance(DateFormat.FULL).format(cDate.getTime()));
@@ -36,6 +46,12 @@ public class PickerUtils {
             StringBuilder dateString, TextView v) {
         return (view, year, monthOfYear, dayOfMonth) -> {
             setUserDate(year, monthOfYear, dayOfMonth);
+
+            Log.i(TAG, "onDateSetListener: CreateDialog");
+            if (rInterval != null) {
+                Log.i(TAG, String.valueOf(rInterval));
+                Log.i(TAG, rDays);
+            }
 
             dateString.setLength(0);
             dateString.append(DateFormat.getDateInstance(DateFormat.FULL).format(cDate.getTime()));
@@ -52,6 +68,13 @@ public class PickerUtils {
     }
 
     public static void setDatePicker(Context context, DatePickerDialog.OnDateSetListener date) {
+        initDatePicker(context, date);
+    }
+
+    public static void setDatePicker(Context context, DatePickerDialog.OnDateSetListener date,
+                                     int recurrenceInterval, String recurrenceDays) {
+        rInterval = recurrenceInterval;
+        rDays = recurrenceDays;
         initDatePicker(context, date);
     }
 

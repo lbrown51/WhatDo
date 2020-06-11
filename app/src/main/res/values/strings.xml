@@ -33,4 +33,11 @@
     <string name="saturday">Saturday</string>
     <string name="sunday">Sunday</string>
     <string name="recurrence_interval">Recurrence interval</string>
+    <string name="m">M</string>
+    <string name="t">T</string>
+    <string name="w">W</string>
+    <string name="th">TH</string>
+    <string name="f">F</string>
+    <string name="sat">Sat</string>
+    <string name="sun">Sun</string>
 </resources>
