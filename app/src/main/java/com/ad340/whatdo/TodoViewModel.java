@@ -1,6 +1,7 @@
 package com.ad340.whatdo;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
@@ -19,7 +20,6 @@ public class TodoViewModel extends AndroidViewModel implements TodoHandler{
     TodoCalendar currentRange;
     private TodoRepository todoRepository;
     private TagRepository tagRepository;
-    private LiveData<List<Todo>> uncompletedTodos;
     private LiveData<List<Tag>> allTags;
 
     public TodoViewModel(Application application) {
@@ -27,14 +27,19 @@ public class TodoViewModel extends AndroidViewModel implements TodoHandler{
         dateFilter = new MutableLiveData<>();
         todoRepository = new TodoRepository(application, this);
         tagRepository = new TagRepository(application);
-        allTodos = Transformations.switchMap(dateFilter, filter -> todoRepository.getTodosInRange(filter.getStartDate(), filter.getEndDate()));
+        allTodos = Transformations.switchMap(dateFilter, filter -> {
+            if (!filter.getShowAll())
+                return todoRepository.getTodosInRange(filter.getStartDate(), filter.getEndDate(), filter.getIsCompleted());
+            else
+                return todoRepository.getAllTodosInRange(filter.getStartDate(), filter.getEndDate());
+        });
         allTags = tagRepository.getAllTags();
-        uncompletedTodos = todoRepository.getUncompletedTodos();
     }
 
     LiveData<List<Todo>> getAllTodos() {
         return allTodos;
     }
+   // LiveData<List<Todo>> getUncompletedTodos() { return uncompletedTodos; }
 
     @Override
     public void getTodosInRange(@Nullable TodoCalendar range) {
@@ -46,11 +51,11 @@ public class TodoViewModel extends AndroidViewModel implements TodoHandler{
 
     LiveData<List<Tag>> getAllTags() { return allTags; }
 
-    LiveData<List<Todo>> getUncompletedTodos() { return uncompletedTodos; }
-
     public void insert(Todo todo) { todoRepository.insert(todo);}
 
-    public void updateTodo(Todo todo, String data, int type) throws ParseException { todoRepository.updateTodo(todo, data, type); }
+    public void updateTodo(Todo todo, String data, int type) throws ParseException { todoRepository.updateTodo(todo, data, type);
+        Log.d(TAG, "updateTodo: viewmodel complete");
+    }
 
     public void removeTodo(Todo todo) { todoRepository.removeTodo(todo); }
 

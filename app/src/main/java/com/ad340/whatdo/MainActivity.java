@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                 dateRange.getStartDate().get(Calendar.DAY_OF_MONTH),
                 dateRange.getStartDate().get(Calendar.YEAR)))
             .append(" to ")
-            .append(dateRange.getStartDate().getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH))
+            .append(dateRange.getEndDate().getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH))
             .append(String.format(" %02d, %04d",
                 dateRange.getEndDate().get(Calendar.DAY_OF_MONTH),
                 dateRange.getEndDate().get(Calendar.YEAR)));

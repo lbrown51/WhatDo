@@ -94,7 +94,9 @@ public class ToDoItemRecyclerViewAdapter
             holder.toDoFinishedCheckbox.setOnClickListener(view -> {
                 try {
                     mTodoViewModel.updateTodo(todo, "", Constants.COMPLETE);
+                    Log.d(TAG, "onBindViewHolder: update complete");
                 } catch (ParseException e) {
+                    Log.d(TAG, "onBindViewHolder: update complete error");
                     e.printStackTrace();
                 }
                 Intent updateWidgetIntent = new Intent(context, TodoListWidget.class);

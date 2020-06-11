@@ -66,7 +66,7 @@ public abstract class TodoRoomDatabase extends RoomDatabase {
                 tagDao.deleteAll();
 
                 Calendar c = Calendar.getInstance();
-                c.set(2020, 5, 10);
+                c.set(2020, 5, c.get(Calendar.DATE));
 
                 Todo todo = new Todo(null, "First Todo", c, null, null, false, null);
                 todoDao.insert(todo);

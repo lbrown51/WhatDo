@@ -23,8 +23,11 @@ public interface TodoDao {
     @Query("SELECT title FROM todo_table WHERE NOT isCompleted")
     List<String> getStaticUncompletedTodoTitles();
 
+    @Query("SELECT * FROM todo_table WHERE date BETWEEN :start AND :end AND isCompleted = :completed")
+    LiveData<List<Todo>> getTodosInRange(Calendar start, Calendar end, boolean completed);
+
     @Query("SELECT * FROM todo_table WHERE date BETWEEN :start AND :end")
-    LiveData<List<Todo>> getTodosInRange(Calendar start, Calendar end);
+    LiveData<List<Todo>> getAllTodosInRange(Calendar start, Calendar end);
 
     @Query("DELETE FROM todo_table")
     void deleteAll();

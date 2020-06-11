@@ -21,17 +21,18 @@ public class TodoRepository {
         this.handler = handler;
         TodoRoomDatabase db = TodoRoomDatabase.getDatabase(application);
         todoDao = db.todoDao();
-        TodoRoomDatabase.databaseWriteExecutor.execute(() -> {
-            uncompletedTodos = todoDao.getUncompletedTodos();
-        });
-
     }
 
     LiveData<List<Todo>> getUncompletedTodos() { return uncompletedTodos; }
 
-    LiveData<List<Todo>> getTodosInRange(Calendar start, Calendar end) {
+    LiveData<List<Todo>> getTodosInRange(Calendar start, Calendar end, boolean isCompleted) {
         Log.d(TAG, "getTodosInRange: " + start.getTime().toString() + " " + end.getTime().toString());
-        return todoDao.getTodosInRange(start, end);
+        return todoDao.getTodosInRange(start, end, isCompleted);
+    }
+
+    LiveData<List<Todo>> getAllTodosInRange(Calendar start, Calendar end) {
+        Log.d(TAG, "getTodosInRange: " + start.getTime().toString() + " " + end.getTime().toString());
+        return todoDao.getAllTodosInRange(start, end);
     }
 
     void updateTodo(Todo todo, String data, int type) throws ParseException {
