@@ -73,15 +73,11 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         // DATE FILTRATION
         startDate = Calendar.getInstance();
         endDate = Calendar.getInstance();
-        endDate.add(Calendar.DATE, 1);
+
         dateRange = new TodoCalendar(startDate, endDate);
-        dateRange.setListener(new PropertyChangeListener() {
-                                  @Override
-                                  public void propertyChange(PropertyChangeEvent evt) {
-                                      Log.e(TAG, "propertyChange invoked on dateRange");
-                                      mTodoViewModel.getTodosInRange(dateRange.getStartDate(),
-                                              dateRange.getEndDate());
-                                  }
+        dateRange.setListener(evt -> {
+            Log.e(TAG, "propertyChange invoked on dateRange");
+            mTodoViewModel.getTodosInRange(dateRange);
         });
 
         final Observer<List<Todo>> todoObserver = newTodos -> {
@@ -92,6 +88,11 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         };
 
         mTodoViewModel.getAllTodos().observe(this, todoObserver);
+
+        setDateMinimum(startDate);
+        endDate.add(Calendar.YEAR, 1);
+
+        dateRange.setDateRange(startDate, endDate);
 
         int largePadding = getResources().getDimensionPixelSize(R.dimen.large_item_spacing);
         int smallPadding = getResources().getDimensionPixelSize(R.dimen.small_item_spacing);
@@ -156,20 +157,31 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
             Log.d("DatePicker Activity", "Dialog Negative Button was clicked");
         });
 
-        datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
-            @Override
-            public void onPositiveButtonClick(Object selection) {
-                Date inputDate = new Date((Long) selection);
-                startDate.setTime(inputDate);
-                startDate.add(Calendar.DATE, 1);
-                endDate.setTime(inputDate);
-                endDate.add(Calendar.DATE, 2);
-                dateRange.setDateRange(startDate, endDate);
-                dateFiltered = true;
+        datePicker.addOnPositiveButtonClickListener(selection -> {
+            Date inputDate = new Date((Long) selection);
+            startDate.setTime(inputDate);
+            startDate.add(Calendar.DATE, 1);
+            setDateMinimum(startDate);
+            endDate.setTime(inputDate);
+            endDate.add(Calendar.DATE, 1);
+            setDateMaximum(endDate);
+            dateRange.setDateRange(startDate, endDate);
+            dateFiltered = true;
 
-                Log.d("DatePicker Activity", "Dialog Positive Button was clicked");
-            }
+            Log.d("DatePicker Activity", "Dialog Positive Button was clicked");
         });
+    }
+
+    private static void setDateMinimum(Calendar date) {
+        date.set(Calendar.HOUR_OF_DAY, date.getMinimum(Calendar.HOUR_OF_DAY));
+        date.set(Calendar.MINUTE, date.getMinimum(Calendar.MINUTE));
+        date.set(Calendar.SECOND, date.getMinimum(Calendar.SECOND));
+    }
+
+    private static void setDateMaximum(Calendar date) {
+        date.set(Calendar.HOUR_OF_DAY, date.getActualMaximum(Calendar.HOUR_OF_DAY));
+        date.set(Calendar.MINUTE, date.getActualMaximum(Calendar.MINUTE));
+        date.set(Calendar.SECOND, date.getActualMaximum(Calendar.SECOND));
     }
 
     public void launchDateRangePicker(View rootView) {
@@ -189,33 +201,29 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
             Log.d("DatePicker Activity", "Dialog Negative Button was clicked");
         });
 
-        dateRangePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
-            @Override
-            public void onPositiveButtonClick(Object selection) {
-                Pair<Long, Long> inputDateRange = (Pair<Long, Long>) selection;
-                Date inputStartDate = new Date(inputDateRange.first);
-                Date inputEndDate = new Date(inputDateRange.second);
-                //Log.e("DateRangePicker", "range start: " + ToDoItemRecyclerViewAdapter.dateToString(inputStartDate));
-                //Log.e("DateRangePicker", "range end: " + ToDoItemRecyclerViewAdapter.dateToString(inputEndDate));
-                if (inputStartDate != null && inputEndDate != null) {
-                    startDate.setTime(inputStartDate);
-                    startDate.add(Calendar.DATE, 1);
-                }
-                if (inputEndDate != null) {
-                    endDate.setTime(inputEndDate);
-                    endDate.add(Calendar.DATE, 1);
-                    dateRange.setDateRange(startDate, endDate);
-                }
-                //try {
-                    //Log.e(TAG, "range start: " + ToDoItemRecyclerViewAdapter.dateToString(startDate.getTime()));
-                    //Log.e(TAG, "range end: " + ToDoItemRecyclerViewAdapter.dateToString(endDate.getTime()));
-                    //adapter.filterTodosByDate(startDate, endDate);
-                    dateFiltered = true;
+        dateRangePicker.addOnPositiveButtonClickListener(selection -> {
+            Pair<Long, Long> inputDateRange = (Pair<Long, Long>) selection;
+            if (inputDateRange.first != null && inputDateRange.second != null) {
+                startDate.setTimeInMillis(inputDateRange.first);
+                startDate.add(Calendar.DATE, 1);
+                setDateMinimum(startDate);
+            }
+            if (inputDateRange.second != null) {
+                endDate.setTimeInMillis(inputDateRange.second);
+                endDate.add(Calendar.DATE, 1);
+                setDateMaximum(endDate);
+                Log.d(TAG, "onPositiveButtonClick: " + startDate.getTime().toString() + " " + endDate.getTime().toString());
+                dateRange.setDateRange(startDate, endDate);
+            }
+            //try {
+                //Log.e(TAG, "range start: " + ToDoItemRecyclerViewAdapter.dateToString(startDate.getTime()));
+                //Log.e(TAG, "range end: " + ToDoItemRecyclerViewAdapter.dateToString(endDate.getTime()));
+                //adapter.filterTodosByDate(startDate, endDate);
+                dateFiltered = true;
 //                } catch (ParseException e) {
 //                    e.printStackTrace();
 //                }
-                Log.d("DateRangePicker", "Dialog Positive Button was clicked");
-            }
+            Log.d("DateRangePicker", "Dialog Positive Button was clicked");
         });
     }
 
@@ -255,6 +263,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
             if (newTodoText.isEmpty()) {
                 newTodoEditText.setError("Cannot make an empty task");
             } else {
+                c.add(Calendar.SECOND, 1);
                 Todo newTodo = new Todo(null, newTodoText, c,
                         String.valueOf(timeString), null, false);
                 mTodoViewModel.insert(newTodo);

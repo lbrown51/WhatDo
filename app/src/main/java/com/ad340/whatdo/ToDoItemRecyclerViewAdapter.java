@@ -103,6 +103,7 @@ public class ToDoItemRecyclerViewAdapter
     public void onBindViewHolder(@NonNull final ToDoItemViewHolder holder, int position) {
         if (todos != null && position < todos.size()) {
             Todo todo = todos.get(position);
+            Log.d(TAG, "onBindViewHolder: " + todo.getDate().getTime().toString());
             // date comes in as Date, need to change to string to update
             SimpleDateFormat sdf = new SimpleDateFormat("DD.mm.yy");
             // REMOVE THIS LOG - doesn't have date, can't compare?

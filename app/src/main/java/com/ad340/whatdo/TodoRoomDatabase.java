@@ -1,6 +1,7 @@
 package com.ad340.whatdo;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -14,12 +15,15 @@ import java.util.Calendar;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static android.content.ContentValues.TAG;
+
 @Database(entities = {Todo.class}, version = 4, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class TodoRoomDatabase extends RoomDatabase {
 
     public abstract TodoDao todoDao();
 
+    private static final String TAG = TodoRoomDatabase.class.getSimpleName();
     private static volatile TodoRoomDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
     static final ExecutorService databaseWriteExecutor =
@@ -33,7 +37,7 @@ public abstract class TodoRoomDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             TodoRoomDatabase.class, "todo_database")
                             .fallbackToDestructiveMigration() //
-                            .addCallback(sRoomDatabaseCallback)
+                           // .addCallback(sRoomDatabaseCallback)
                             .build();
                 }
             }
@@ -64,7 +68,7 @@ public abstract class TodoRoomDatabase extends RoomDatabase {
                 dao.insert(todo);
                 todo = new Todo(null, "Finished Todo", c, null, null, true);
                 dao.insert(todo);
-
+                Log.d(TAG, "onOpen: dummy todos added");
             });
 
 
