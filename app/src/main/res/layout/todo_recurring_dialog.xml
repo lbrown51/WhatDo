@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/recurring_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,12 +7,12 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/recurring_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/dp_8"
         android:gravity="center"
-        android:text="Make Todo Recurring"
+        android:text="@string/recurring_title"
         android:textColor="@android:color/black"
         android:textSize="24sp"
         android:textStyle="bold" />
@@ -56,73 +55,80 @@
     </LinearLayout>
 
     <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipgroup_days"
+        android:id="@+id/recurring_chipgroup"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="@dimen/dp_8"
+        android:layout_marginHorizontal="@dimen/dp_24"
         android:visibility="invisible">
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_monday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/monday"
-            android:tag="@string/m"/>
+            android:checkable="true"
+            android:tag="@integers/MONDAY"
+            android:text="@string/monday" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_tuesday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tuesday"
-            android:tag="@string/t"/>
+            android:checkable="true"
+            android:tag="@integers/TUESDAY"
+            android:text="@string/tuesday" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_wednesday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/wednesday"
-            android:tag="w"/>
+            android:checkable="true"
+            android:tag="@integers/WEDNESDAY"
+            android:text="@string/wednesday" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_thursday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/thursday"
-            android:tag="@string/th"/>
+            android:checkable="true"
+            android:tag="@integers/THURSDAY"
+            android:text="@string/thursday" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_friday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/friday"
-            android:tag="@string/f"/>
+            android:checkable="true"
+            android:tag="@integers/FRIDAY"
+            android:text="@string/friday" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_saturday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/saturday"
-            android:tag="@string/sat"/>
+            android:checkable="true"
+            android:tag="@integers/SATURDAY"
+            android:text="@string/saturday" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_sunday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sunday"
-            android:tag="@string/sun"/>
+            android:checkable="true"
+            android:tag="@integers/SUNDAY"
+            android:text="@string/sunday" />
     </com.google.android.material.chip.ChipGroup>
 
     <EditText
         android:id="@+id/recurring_interval"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/dp_8"
+        android:layout_marginHorizontal="@dimen/dp_24"
         android:layout_marginBottom="@dimen/dp_16"
         android:autofillHints="@string/recurrence_interval"
+        android:digits="0123456789"
         android:fontFamily="sans-serif"
         android:hint="@string/recurrence_interval"
         android:inputType="numberDecimal"
-        android:digits="0123456789"
         android:visibility="invisible" />
 
 </LinearLayout>
