@@ -66,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
-            android:tag="@integers/MONDAY"
+            android:tag="@string/MONDAY"
             android:text="@string/monday" />
 
         <com.google.android.material.chip.Chip
@@ -74,7 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
-            android:tag="@integers/TUESDAY"
+            android:tag="@string/TUESDAY"
             android:text="@string/tuesday" />
 
         <com.google.android.material.chip.Chip
@@ -82,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
-            android:tag="@integers/WEDNESDAY"
+            android:tag="@string/WEDNESDAY"
             android:text="@string/wednesday" />
 
         <com.google.android.material.chip.Chip
@@ -90,7 +90,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
-            android:tag="@integers/THURSDAY"
+            android:tag="@string/THURSDAY"
             android:text="@string/thursday" />
 
         <com.google.android.material.chip.Chip
@@ -98,7 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
-            android:tag="@integers/FRIDAY"
+            android:tag="@string/FRIDAY"
             android:text="@string/friday" />
 
         <com.google.android.material.chip.Chip
@@ -106,7 +106,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
-            android:tag="@integers/SATURDAY"
+            android:tag="@string/SATURDAY"
             android:text="@string/saturday" />
 
         <com.google.android.material.chip.Chip
@@ -114,7 +114,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
-            android:tag="@integers/SUNDAY"
+            android:tag="@string/SUNDAY"
             android:text="@string/sunday" />
     </com.google.android.material.chip.ChipGroup>
 

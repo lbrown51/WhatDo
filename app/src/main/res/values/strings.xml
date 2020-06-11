@@ -32,6 +32,13 @@
     <string name="friday">Friday</string>
     <string name="saturday">Saturday</string>
     <string name="sunday">Sunday</string>
+    <string name="SUNDAY">0</string>
+    <string name="MONDAY">1</string>
+    <string name="TUESDAY">2</string>
+    <string name="WEDNESDAY">3</string>
+    <string name="THURSDAY">4</string>
+    <string name="FRIDAY">5</string>
+    <string name="SATURDAY">6</string>
     <string name="recurrence_interval">Recurrence interval</string>
     <string name="recurring_title">Make Todo Recurring</string>
 </resources>

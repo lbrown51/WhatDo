@@ -62,7 +62,13 @@ public class RecurringTodoFragment extends DialogFragment {
                 String rIntVal = String.valueOf(rInterval.getText());
                 StringBuilder encodedString = new StringBuilder();
 
+
                 if (!rIntVal.equals("")) {
+                    if (isDaily) {
+                        encodedString.append("D");
+                    } else {
+                        encodedString.append("W");
+                    }
                     rIntervalValue = Integer.parseInt(String.valueOf(rInterval.getText()));
                     Log.i(TAG, "onCreateDialog: chip tags");
                     List<Integer> chipIds = chipGroupDays.getCheckedChipIds();
@@ -89,10 +95,6 @@ public class RecurringTodoFragment extends DialogFragment {
             }
 
             rInterval.setVisibility(View.VISIBLE);
-            Log.i(TAG, "onCreateDialog: DAILY");
-            Log.i(TAG, String.valueOf(isDaily));
-            Log.i(TAG, String.valueOf(isWeekly));
-
         });
 
         weeklyButton.setOnClickListener(v -> {
@@ -103,10 +105,6 @@ public class RecurringTodoFragment extends DialogFragment {
 
             chipGroupDays.setVisibility(View.VISIBLE);
             rInterval.setVisibility(View.VISIBLE);
-            Log.i(TAG, "onCreateDialog: WEEKLY");
-            Log.i(TAG, String.valueOf(isDaily));
-            Log.i(TAG, String.valueOf(isWeekly));
-
         });
 
         return builder.create();
