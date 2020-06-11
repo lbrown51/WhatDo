@@ -119,10 +119,6 @@ public class PickerUtils {
                 context, date, cDate.get(Calendar.YEAR), cDate.get(Calendar.MONTH), cDate.get(Calendar.DAY_OF_MONTH));
         dialog.setButton(DialogInterface.BUTTON_NEUTRAL,
                 context.getString(R.string.set_recurring), (dialogInterface, i) -> {
-//                    Log.i(TAG, "setDatePickerShowOnClick: ");
-//                    Log.i(TAG, String.valueOf(dialog.getDatePicker().getDayOfMonth()));
-//                    Log.i(TAG, DateFormat.getDateInstance(DateFormat.FULL).format(cDate.getTime()));
-
                     cDate.set(Calendar.YEAR, dialog.getDatePicker().getYear());
                     cDate.set(Calendar.MONTH, dialog.getDatePicker().getMonth());
                     cDate.set(Calendar.DAY_OF_MONTH, dialog.getDatePicker().getDayOfMonth());
@@ -130,7 +126,7 @@ public class PickerUtils {
                     RecurringTodoFragment recurringTodoFragment =
                             new RecurringTodoFragment(date, cDate);
                     recurringTodoFragment.show(((MainActivity) context)
-                            .getSupportFragmentManager(), "recurringFrag");
+                            .getSupportFragmentManager(), Constants.TAG_RECURRING_FRAG);
                 });
         dialog.show();
     }

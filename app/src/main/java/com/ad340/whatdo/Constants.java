@@ -8,4 +8,6 @@ public class Constants {
     public static final int NOTES = 4;
     public static final int COMPLETE = 5;
     public static final int TAG = 6;
+
+    public static final String TAG_RECURRING_FRAG = "recurringFragment";
 }

@@ -23,4 +23,14 @@
     <string name="recurring_tast_title">Set Recurring Task</string>
     <string name="confirm_recurring">Confirm</string>
     <string name="set_recurring">Set Recurring</string>
+    <string name="daily">Daily</string>
+    <string name="weekly">Weekly</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+    <string name="recurrence_interval">Recurrence interval</string>
 </resources>
