@@ -37,7 +37,7 @@ public abstract class TodoRoomDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             TodoRoomDatabase.class, "todo_database")
                             .fallbackToDestructiveMigration() //
-                           // .addCallback(sRoomDatabaseCallback)
+                            .addCallback(sRoomDatabaseCallback)
                             .build();
                 }
             }
