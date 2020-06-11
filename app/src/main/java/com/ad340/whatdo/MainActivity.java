@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
     private TodoCalendar dateRange;
     private Calendar startDate;
     private Calendar endDate;
-    private boolean dateFiltered = false;
+    private TextView viewing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +79,9 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
             Log.e(TAG, "propertyChange invoked on dateRange");
             mTodoViewModel.getTodosInRange(dateRange);
         });
+
+        viewing = findViewById(R.id.viewing_date_text);
+        setSingleDateText(viewing);
 
         final Observer<List<Todo>> todoObserver = newTodos -> {
             if (newTodos == null || newTodos.size() <= 0) {
@@ -104,16 +107,43 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
             });
 
         header = findViewById(R.id.top_app_bar);
-        StringBuilder displayText = new StringBuilder(header.getTitle());
-        displayText.append(getString(R.string.text_whitespace));
-        displayText.append(startDate.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH));
+//        StringBuilder displayText = new StringBuilder(header.getTitle());
+//        displayText.append(getString(R.string.text_whitespace));
+//        displayText.append(startDate.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH));
+//        displayText.append(String.format(" %02d, %04d",
+//                dateRange.getStartDate().get(Calendar.DAY_OF_MONTH),
+//                dateRange.getStartDate().get(Calendar.YEAR)));
+//        header.setTitle(displayText);
+        header.setOnClickListener(view -> { showViewByDialog(); });
+        viewing = findViewById(R.id.viewing_date_text);
+
+        Log.d(TAG, "onCreate invoked");
+    }
+
+    // EDIT TEXT BY VIEW BOUNDS
+
+    private void setSingleDateText(TextView view) {
+        StringBuilder displayText = new StringBuilder();
+        displayText.append(dateRange.getStartDate().getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH));
         displayText.append(String.format(" %02d, %04d",
                 dateRange.getStartDate().get(Calendar.DAY_OF_MONTH),
                 dateRange.getStartDate().get(Calendar.YEAR)));
-        header.setTitle(displayText);
-        header.setOnClickListener(view -> { showViewByDialog(); });
+        view.setText(displayText);
+    }
 
-        Log.d(TAG, "onCreate invoked");
+    private void setDateRangeText(TextView view) {
+        StringBuilder displayText = new StringBuilder();
+        displayText.append(dateRange.getStartDate().getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH))
+            .append(String.format(" %02d, %04d",
+                dateRange.getStartDate().get(Calendar.DAY_OF_MONTH),
+                dateRange.getStartDate().get(Calendar.YEAR)))
+            .append(" to ")
+            .append(dateRange.getStartDate().getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH))
+            .append(String.format(" %02d, %04d",
+                dateRange.getEndDate().get(Calendar.DAY_OF_MONTH),
+                dateRange.getEndDate().get(Calendar.YEAR)));
+
+        view.setText(displayText);
     }
 
     // VIEW BY DIALOG
@@ -166,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
             endDate.add(Calendar.DATE, 1);
             setDateMaximum(endDate);
             dateRange.setDateRange(startDate, endDate);
-            dateFiltered = true;
+            setSingleDateText(viewing);
 
             Log.d("DatePicker Activity", "Dialog Positive Button was clicked");
         });
@@ -219,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                 //Log.e(TAG, "range start: " + ToDoItemRecyclerViewAdapter.dateToString(startDate.getTime()));
                 //Log.e(TAG, "range end: " + ToDoItemRecyclerViewAdapter.dateToString(endDate.getTime()));
                 //adapter.filterTodosByDate(startDate, endDate);
-                dateFiltered = true;
+            setDateRangeText(viewing);
 //                } catch (ParseException e) {
 //                    e.printStackTrace();
 //                }

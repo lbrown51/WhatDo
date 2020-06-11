@@ -196,7 +196,7 @@ public class ToDoItemRecyclerViewAdapter
         this.todos.addAll(todos);
         todoArray = todos.toArray(new Todo[todos.size()]);
 
-        Log.e(TAG, "setTodos called");
+        Log.e(TAG, "setTodos called, size " + todos.size());
         notifyDataSetChanged();
     }
 

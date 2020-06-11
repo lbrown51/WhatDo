@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">WhatDo</string>
-    <string name="app_bar_title">Tasks Today</string>
+    <string name="app_bar_title">WhatDo        task tracking</string>
     <string name="floating_action_button">FAB to create to-do</string>
     <string name="time_picker_placeholder">Set Time: TIME_PICKER</string>
     <string name="date_picker_placeholder">Set Date: DATE_PICKER</string>
@@ -16,4 +16,6 @@
     <string name="set_view_by_conditions">set view by conditions</string>
     <string name="view_by_picker_date_range_title">Select which dates to view</string>
     <string name="view_by_picker_date_title">Select which date to view</string>
+    <string name="viewing_date_text">currently displayed date(s)</string>
+    <string name="viewing_default_text">viewing all open tasks</string>
 </resources>
