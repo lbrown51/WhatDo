@@ -590,9 +590,10 @@ public class MainActivityTest {
         Tests that the TimePicker works
      */
     @Test
-    public void timePickerWorks() {
+    public void timePickerWorks() throws InterruptedException {
         int hourOfDay = 16;
         int minute = 30;
+        Thread.sleep(500);
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.name_text))
                 .perform(click());
@@ -672,6 +673,7 @@ public class MainActivityTest {
     @Test
     public void recurringDialogToggles() throws InterruptedException {
         final DayOfWeek dayOfWeek = LocalDateTime.now().getDayOfWeek();
+        Thread.sleep(500);
         onView(withId(R.id.fab)).perform(click());
         Thread.sleep(500);
         onView(withId(R.id.create_todo_date_btn)).perform(click());
