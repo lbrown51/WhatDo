@@ -8,13 +8,11 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,9 +37,12 @@ public class RecurringTodoFragment extends DialogFragment {
     private EditText rInterval;
     private ChipGroup chipGroupDays;
 
+    private int dayOfWeek;
 
-    public RecurringTodoFragment(DatePickerDialog.OnDateSetListener onDateSetListener) {
+
+    public RecurringTodoFragment(DatePickerDialog.OnDateSetListener onDateSetListener, int dayOfWeek) {
         this.onDateSetListener = onDateSetListener;
+        this.dayOfWeek = dayOfWeek;
     }
 
     @NonNull
@@ -63,10 +64,8 @@ public class RecurringTodoFragment extends DialogFragment {
 
         dailyChip.setOnClickListener(v -> {
             rInterval.setHint(R.string.r_interval_daily);
-            if (weeklyChip.isChecked()) {
-                chipGroupDays.setVisibility(View.INVISIBLE);
-                chipGroupDays.clearCheck();
-            }
+            chipGroupDays.setVisibility(View.INVISIBLE);
+            chipGroupDays.clearCheck();
             dailyChip.setChecked(true);
         });
 
@@ -74,6 +73,7 @@ public class RecurringTodoFragment extends DialogFragment {
             rInterval.setHint(R.string.r_interval_weekly);
             weeklyChip.setChecked(true);
             chipGroupDays.setVisibility(View.VISIBLE);
+            setInitialDayOfWeek();
         });
 
         cancelButton.setOnClickListener(v -> {
@@ -102,23 +102,13 @@ public class RecurringTodoFragment extends DialogFragment {
 
         rInterval.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int count, int i2) {
-                Log.i(TAG, "onTextChanged: ");
-                Log.i(TAG, String.valueOf(charSequence.length()));
-                if (charSequence.length() == 1 && charSequence.toString().startsWith("0")) {
-                    rInterval.setText("");
-                }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() == 1 && charSequence.toString().startsWith("0")) rInterval.setText("");
             }
-
             @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
+            public void afterTextChanged(Editable editable) {}
         });
 
         return builder.create();
@@ -128,7 +118,7 @@ public class RecurringTodoFragment extends DialogFragment {
         boolean isValid = false;
         String rIntVal = String.valueOf(rInterval.getText());
         String selection = dailyChip.isChecked() ? getString(R.string.daily) : getString(R.string.weekly);
-        if (rIntVal.equals("")) { // interval empty
+        if (rIntVal.equals("")) {
             StringBuilder errMsg = new StringBuilder(getString(R.string.must_enter)).append(" ")
                     .append(selection).append(" ").append(getString(R.string.interval));
             rInterval.setError(errMsg);
@@ -136,6 +126,16 @@ public class RecurringTodoFragment extends DialogFragment {
             isValid = true;
         }
         return rInterval.getError() == null && isValid;
+    }
+
+    private void setInitialDayOfWeek() {
+        for (int i = 0; i < 7; i++) {
+            Chip chip = (Chip) chipGroupDays.getChildAt(i);
+            if (String.valueOf(chip.getTag()).equals(String.valueOf(dayOfWeek))) {
+                chip.setChecked(true);
+                break;
+            }
+        }
     }
 
 

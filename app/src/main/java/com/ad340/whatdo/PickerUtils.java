@@ -90,8 +90,6 @@ public class PickerUtils {
                 e.printStackTrace();
             }
             resetTime();
-
-
         };
     }
 
@@ -142,18 +140,16 @@ public class PickerUtils {
     private static void initDatePicker(Context context, DatePickerDialog.OnDateSetListener date) {
         DatePickerDialog dialog = new DatePickerDialog(
                 context, date, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+        dialog.setButton(DialogInterface.BUTTON_NEUTRAL, context.getString(R.string.set_recurring), (dialogInterface, i) -> {
+            c.set(Calendar.YEAR, dialog.getDatePicker().getYear());
+            c.set(Calendar.MONTH, dialog.getDatePicker().getMonth());
+            c.set(Calendar.DAY_OF_MONTH, dialog.getDatePicker().getDayOfMonth());
+            int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
 
-        dialog.setButton(DialogInterface.BUTTON_NEUTRAL, context.getString(R.string.set_recurring),
-            (dialogInterface, i) -> {
-                c.set(Calendar.YEAR, dialog.getDatePicker().getYear());
-                c.set(Calendar.MONTH, dialog.getDatePicker().getMonth());
-                c.set(Calendar.DAY_OF_MONTH, dialog.getDatePicker().getDayOfMonth());
-
-                RecurringTodoFragment recurringTodoFragment =
-                        new RecurringTodoFragment(date);
-                recurringTodoFragment.show(((MainActivity) context)
-                        .getSupportFragmentManager(), Constants.TAG_RECURRING_FRAG);
-                });
+            RecurringTodoFragment recurringTodoFragment = new RecurringTodoFragment(date, dayOfWeek);
+            recurringTodoFragment.show(((MainActivity) context).getSupportFragmentManager(),
+                    Constants.TAG_RECURRING_FRAG);
+        });
         dialog.show();
     }
 
