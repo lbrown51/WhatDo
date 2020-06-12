@@ -77,7 +77,7 @@ public class RecurringTodoFragment extends DialogFragment {
         });
 
         cancelButton.setOnClickListener(v -> {
-            resetDate();
+            setDatePicker(getContext(), onDateSetListener, getString(R.string.N));
             dismiss();
         });
 
