@@ -54,27 +54,7 @@ public class RecurringTodoFragment extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.todo_recurring_dialog, null);
 
-        builder.setView(view)
-            .setNegativeButton(R.string.cancel, (dialogInterface, i) -> { resetDate();dismiss(); })
-            .setPositiveButton(R.string.confirm_recurring, (dialogInterface, i) -> {
-                String rIntVal = String.valueOf(rInterval.getText());
-                StringBuilder encodedString = new StringBuilder();
-
-                if (!rIntVal.equals("")) {
-                    if (isDaily) {
-                        encodedString.append(getString(R.string.RD)).append(rIntVal);
-                    } else if (isWeekly) {
-                        encodedString.append(getString(R.string.RW))
-                                .append(rIntVal).append(getString(R.string.symbol_dash));
-                        List<Integer> chipIds = chipGroupDays.getCheckedChipIds();
-                        for (int j = 0; j < chipIds.size(); j++) {
-                            Chip chip = view.findViewById(chipIds.get(j));
-                            encodedString.append(chip.getTag());
-                        }
-                    }
-                    setDatePicker(getContext(), onDateSetListener, String.valueOf(encodedString));
-                }
-            });
+        builder.setView(view);
 
         dailyButton = view.findViewById(R.id.button_daily);
         weeklyButton = view.findViewById(R.id.button_weekly);
