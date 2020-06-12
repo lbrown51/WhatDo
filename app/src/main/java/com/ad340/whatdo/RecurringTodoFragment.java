@@ -97,7 +97,7 @@ public class RecurringTodoFragment extends DialogFragment {
             if (!rIntVal.equals("")) {
                 if (dailyChip.isChecked()) {
                     encodedString.append(getString(R.string.RD)).append(rIntVal);
-                } else if (isWeekly) {
+                } else {
                     encodedString.append(getString(R.string.RW))
                             .append(rIntVal).append(getString(R.string.symbol_dash));
                     List<Integer> chipIds = chipGroupDays.getCheckedChipIds();

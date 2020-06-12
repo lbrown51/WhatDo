@@ -45,8 +45,8 @@
     <string name="THURSDAY">4</string>
     <string name="FRIDAY">5</string>
     <string name="SATURDAY">6</string>
-    <string name="r_interval_daily">interval (in days)</string>
-    <string name="r_interval_weekly">interval (in weeks)</string>
+    <string name="r_interval_daily">Interval (in days)</string>
+    <string name="r_interval_weekly">Interval (in weeks)</string>
     <string name="recurring_title">Make Todo Recurring</string>
     <string name="RD">RD</string>
     <string name="symbol_dash">-</string>
