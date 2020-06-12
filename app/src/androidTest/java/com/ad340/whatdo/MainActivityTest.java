@@ -183,6 +183,7 @@ public class MainActivityTest {
      */
      @Test
      public void createNewTodoHasCorrectFields() throws InterruptedException {
+         Thread.sleep(1000);
          onView(withId(R.id.fab)).perform(click());
          Thread.sleep(2000);
          onView(withId(R.id.create_todo_dialog))
@@ -209,7 +210,8 @@ public class MainActivityTest {
         Tests if empty tasks won't be created.
      */
      @Test
-     public void emptyTaskStopsTodoCreate() {
+     public void emptyTaskStopsTodoCreate() throws InterruptedException {
+         Thread.sleep(1000);
          onView(withId(R.id.fab)).perform(click());
          onView(withId(R.id.create_todo_dialog))
                  .check(matches(isDisplayed()));
@@ -556,7 +558,8 @@ public class MainActivityTest {
         Tests that the DatePicker works
      */
     @Test
-    public void datePickerWorks() {
+    public void datePickerWorks() throws InterruptedException {
+        Thread.sleep(1000);
         int year = 2020;
         int month = 6;
         int dayOfMonth = 28;
