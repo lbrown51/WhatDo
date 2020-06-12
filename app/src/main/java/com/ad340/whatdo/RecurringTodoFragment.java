@@ -37,10 +37,6 @@ public class RecurringTodoFragment extends DialogFragment {
     private EditText rInterval;
     private ChipGroup chipGroupDays;
 
-    private boolean isDaily = false;
-    private boolean isWeekly = false;
-
-
 
     public RecurringTodoFragment(DatePickerDialog.OnDateSetListener onDateSetListener) {
         this.onDateSetListener = onDateSetListener;
@@ -64,10 +60,8 @@ public class RecurringTodoFragment extends DialogFragment {
         rInterval = view.findViewById(R.id.r_interval);
 
         dailyChip.setOnClickListener(v -> {
-            isDaily = true;
             rInterval.setHint(R.string.r_interval_daily);
-            if (isWeekly) {
-                isWeekly = false;
+            if (weeklyChip.isChecked()) {
                 chipGroupDays.setVisibility(View.INVISIBLE);
                 chipGroupDays.clearCheck();
             }
@@ -75,12 +69,7 @@ public class RecurringTodoFragment extends DialogFragment {
         });
 
         weeklyChip.setOnClickListener(v -> {
-            isWeekly = true;
             rInterval.setHint(R.string.r_interval_weekly);
-            if (isDaily) {
-                isDaily = false;
-            }
-
             weeklyChip.setChecked(true);
             chipGroupDays.setVisibility(View.VISIBLE);
         });
