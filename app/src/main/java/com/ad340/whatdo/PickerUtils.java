@@ -47,7 +47,7 @@ public class PickerUtils {
             setUserDate(year, monthOfYear, dayOfMonth);
 
             Log.i(TAG, "onDateSetListener: CreateDialog");
-            Log.i(TAG, String.valueOf(c.get(Calendar.DAY_OF_MONTH)));
+            Log.i(TAG, rEncoded);
 
             dateString.setLength(0);
             // I changed this to DateFormat.SHORT format so I can parse it more easily
@@ -124,6 +124,7 @@ public class PickerUtils {
         c.set(Calendar.YEAR, cTodayDate.get(Calendar.YEAR));
         c.set(Calendar.MONTH, cTodayDate.get(Calendar.MONTH));
         c.set(Calendar.DAY_OF_MONTH, cTodayDate.get(Calendar.DAY_OF_MONTH));
+        rEncoded = Constants.NO_RECURRENCE;
     }
 
     private static void setUserDate(int year, int month, int dayOfMonth) {

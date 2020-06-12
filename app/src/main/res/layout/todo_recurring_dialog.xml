@@ -33,6 +33,7 @@
         android:fontFamily="sans-serif"
         android:hint="@string/r_interval_daily"
         android:inputType="numberDecimal"
+        android:maxLength="3"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/r_divider_upper"
         app:layout_constraintEnd_toEndOf="@+id/r_title"

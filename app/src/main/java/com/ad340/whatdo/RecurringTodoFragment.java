@@ -5,12 +5,16 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -79,14 +83,12 @@ public class RecurringTodoFragment extends DialogFragment {
 
         confirmButton.setOnClickListener(v -> {
             String rIntVal = String.valueOf(rInterval.getText());
-            StringBuilder encodedString = new StringBuilder();
+            StringBuilder encodedString = dailyChip.isChecked()
+                    ? new StringBuilder(getString(R.string.RD)).append(rIntVal)
+                    : new StringBuilder(getString(R.string.RW)).append(rIntVal).append(getString(R.string.symbol_dash));
 
-            if (validateSelection()) {
-                if (dailyChip.isChecked()) {
-                    encodedString.append(getString(R.string.RD)).append(rIntVal);
-                } else {
-                    encodedString.append(getString(R.string.RW))
-                            .append(rIntVal).append(getString(R.string.symbol_dash));
+            if (selectionValid()) {
+                if (!dailyChip.isChecked()) {
                     List<Integer> chipIds = chipGroupDays.getCheckedChipIds();
                     for (int j = 0; j < chipIds.size(); j++) {
                         Chip chip = view.findViewById(chipIds.get(j));
@@ -95,15 +97,34 @@ public class RecurringTodoFragment extends DialogFragment {
                 }
                 setDatePicker(getContext(), onDateSetListener, String.valueOf(encodedString));
                 dismiss();
-            } else {
-                Log.i(TAG, "onCreateDialog: UH OHHH");
+            }
+        });
+
+        rInterval.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int count, int i2) {
+                Log.i(TAG, "onTextChanged: ");
+                Log.i(TAG, String.valueOf(charSequence.length()));
+                if (charSequence.length() == 1 && charSequence.toString().startsWith("0")) {
+                    rInterval.setText("");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
 
         return builder.create();
     }
 
-    private boolean validateSelection() {
+    private boolean selectionValid() {
         boolean isValid = false;
         String rIntVal = String.valueOf(rInterval.getText());
         String selection = dailyChip.isChecked() ? getString(R.string.daily) : getString(R.string.weekly);
@@ -111,12 +132,11 @@ public class RecurringTodoFragment extends DialogFragment {
             StringBuilder errMsg = new StringBuilder(getString(R.string.must_enter)).append(" ")
                     .append(selection).append(" ").append(getString(R.string.interval));
             rInterval.setError(errMsg);
-        } else if (rIntVal.length() > 3) { // interval too big
-            StringBuilder errMsg = new StringBuilder(getString(R.string.max_interval));
-            rInterval.setError(errMsg);
         } else {
             isValid = true;
         }
-        return isValid;
+        return rInterval.getError() == null && isValid;
     }
+
+
 }
