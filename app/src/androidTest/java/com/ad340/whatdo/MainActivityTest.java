@@ -11,14 +11,17 @@ import androidx.test.espresso.Espresso;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.datepicker.MaterialDatePicker;
 
 import org.hamcrest.Matchers;
+import org.hamcrest.core.IsEqual;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.time.Month;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -31,12 +34,16 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.PickerActions.setDate;
 import static androidx.test.espresso.contrib.PickerActions.setTime;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertEquals;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 
 
@@ -245,7 +252,7 @@ public class MainActivityTest {
 
          onView(withId(R.id.create_todo_time_btn)).perform(click());
          Thread.sleep(500);
-         onView(withClassName(Matchers.equalTo(
+         onView(withClassName(equalTo(
                  TimePicker.class.getName()))).perform(setTime(hourOfDay, minute));
          onView(withId(android.R.id.button1)).perform(click());
 
@@ -255,7 +262,7 @@ public class MainActivityTest {
 
          Thread.sleep(500);
          onView(withId(R.id.create_todo_date_btn)).perform(click());
-         onView(withClassName(Matchers.equalTo(
+         onView(withClassName(equalTo(
                  DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
          onView(withId(android.R.id.button1)).perform(click());
 
@@ -532,7 +539,7 @@ public class MainActivityTest {
         int year = 2020;
         int month = 6;
         int dayOfMonth = 28;
-        onView(withClassName(Matchers.equalTo(
+        onView(withClassName(equalTo(
                 DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
         onView(withId(android.R.id.button1)).perform(click());
         onView(withRecyclerView(R.id.todo_list_recycler_view)
@@ -571,7 +578,7 @@ public class MainActivityTest {
                 .atPositionOnView(0, R.id.date_btn))
                 .perform(click());
 
-        onView(withClassName(Matchers.equalTo(
+        onView(withClassName(equalTo(
                 DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
         onView(withId(android.R.id.button1)).perform(click());
         onView(withRecyclerView(R.id.todo_list_recycler_view)
@@ -594,7 +601,7 @@ public class MainActivityTest {
                 .atPositionOnView(0, R.id.time_btn))
                 .perform(click());
 
-        onView(withClassName(Matchers.equalTo(
+        onView(withClassName(equalTo(
                 TimePicker.class.getName()))).perform(setTime(hourOfDay, minute));
         onView(withId(android.R.id.button1)).perform(click());
 
@@ -632,4 +639,48 @@ public class MainActivityTest {
                 .atPositionOnView(0, R.id.notes_text))
                 .check(matches(withText("About my task")));
     }
+
+    /*
+    Tests that the "viewing" bar loads
+    */
+    @Test
+    public void viewingBarLoads() {
+        onView(withId(R.id.viewing_date_card))
+                .check(matches(isDisplayed()));
+    }
+
+    /*
+    Tests that the "viewing" bar updates
+    */
+    @Test
+    public void viewingBarUpdates() throws InterruptedException {
+        onView(withId(R.id.viewing_date_text))
+                .check(matches(withText(R.string.all_upcoming)));
+        onView(withId(R.id.top_app_bar))
+                .perform(click());
+        Thread.sleep(500);
+        int testRangeYear = 2020;
+        int testRangeMonth = 6;
+        int testRangeDay = 1;
+        onView(withId(R.id.view_by_date))
+                .perform(click());
+        Thread.sleep(3000);
+        onView(withClassName(equalTo(MaterialDatePicker.class.getName())))
+                .perform(setDate(testRangeYear, testRangeMonth, testRangeDay));
+        onView(withId(android.R.id.button1)).perform(click());
+        onView(withId(R.id.close_view_by_dialog)).perform(click());
+        onView(withId(R.id.viewing_date_text))
+                .check(matches(withText("June 01, 2020")));
+    }
+
+    // HELPERS FOR MATERIAL DATE PICKERS
+    public static void clickDay(Month month, int day) {
+        onView(
+                allOf(
+                        withTagValue(IsEqual.<Object>equalTo(month)),
+                        withText(String.valueOf(day))))
+                .perform(click());
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+    }
+
 }
