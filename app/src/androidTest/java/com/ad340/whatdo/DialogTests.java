@@ -220,6 +220,9 @@ public class DialogTests {
         onView(withText("About my new task"))
                 .check(matches(isDisplayed()));
 
+        onView(withId(R.id.fab))
+                .check(matches(isDisplayed()));
+
     }
 
     /*
@@ -227,6 +230,8 @@ public class DialogTests {
 */
     @Test
     public void canOpenRecurringDialog() throws InterruptedException {
+        closeSoftKeyboard();
+        Thread.sleep(500);
         onView(withId(R.id.fab)).perform(click());
         Thread.sleep(500);
         onView(withId(R.id.create_todo_date_btn)).perform(click());
@@ -274,6 +279,7 @@ public class DialogTests {
         int month = 7;
         int dayOfMonth = 25;
         Thread.sleep(500);
+        closeSoftKeyboard();
         onView(withId(R.id.fab)).perform(click());
         Thread.sleep(500);
         onView(withId(R.id.create_todo_date_btn)).perform(click());

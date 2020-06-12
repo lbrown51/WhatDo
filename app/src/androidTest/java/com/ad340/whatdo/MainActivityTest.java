@@ -4,6 +4,7 @@ package com.ad340.whatdo;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
+import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -85,14 +86,15 @@ public class MainActivityTest {
     @Test
     public void tasksDisplayCorrectViews() throws InterruptedException {
         Thread.sleep(250);
-        onView(withId(R.id.todo_list_recycler_view))
-                .check(matches(hasDescendant(withId(R.id.name_text))));
 
-        onView(withId(R.id.todo_list_recycler_view))
-                .check(matches(hasDescendant(withId(R.id.date_text))));
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPosition(0)).check(matches(hasDescendant(withId(R.id.name_text))));
 
-        onView(withId(R.id.todo_list_recycler_view))
-                .check(matches(hasDescendant(withId(R.id.todo_item_finished_checkbox))));
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPosition(0)).check(matches(hasDescendant(withId(R.id.date_text))));
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPosition(0)).check(matches(hasDescendant(withId(R.id.todo_item_finished_checkbox))));
     }
 
     /*
@@ -278,7 +280,11 @@ public class MainActivityTest {
                 .atPositionOnView(0, R.id.reschedule_btn))
                 .perform(click());
 
-        onView(withText(R.string.cancel)).perform(click());
+        try {
+            onView(withText(R.string.cancel)).perform(click());
+        } catch (NoMatchingViewException e) {
+            e.printStackTrace();
+        }
     }
 
     /*
@@ -355,14 +361,14 @@ public class MainActivityTest {
         Tests whether tasks can be finished
     */
     @Test
-    public void canFinishTask() {
+    public void canFinishTask() throws InterruptedException {
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(1, R.id.todo_item_finished_checkbox))
                 .perform(click());
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(1, R.id.name_text))
-                .check(matches(not(withText("Third Todo"))));
+                .check(matches(withText("Fourth Todo")));
     }
 
     /*
