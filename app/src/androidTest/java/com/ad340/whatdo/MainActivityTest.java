@@ -755,4 +755,23 @@ public class MainActivityTest {
         onView(withText("6/28/20"))
                 .check(matches(isDisplayed()));
     }
+
+    /*
+        Tests if the recurring dialog input validation works
+    */
+    @Test
+    public void recurringDialogValidatesInput() throws InterruptedException {
+        onView(withId(R.id.fab)).perform(click());
+        Thread.sleep(500);
+        onView(withId(R.id.create_todo_date_btn)).perform(click());
+        onView(withId(android.R.id.button3)).perform(click());
+        Thread.sleep(500);
+
+        onView(withId(R.id.r_confirm_button)).perform(click());
+        onView(withId(R.id.recurring_container)).check(matches(isDisplayed()));
+        onView(withId(R.id.r_interval)).perform(typeText("0"));
+        onView(withId(R.id.r_interval)).check(matches(withText("")));
+        onView(withId(R.id.r_interval)).perform(typeText("-3"));
+        onView(withId(R.id.r_interval)).check(matches(withText("3")));
+    }
 }
