@@ -32,6 +32,8 @@ public class RecurringTodoFragment extends DialogFragment {
 
     private Button dailyButton;
     private Button weeklyButton;
+    private Button cancelButton;
+    private Button confirmButton;
     private EditText rInterval;
     private ChipGroup chipGroupDays;
 
@@ -76,6 +78,8 @@ public class RecurringTodoFragment extends DialogFragment {
 
         dailyButton = view.findViewById(R.id.button_daily);
         weeklyButton = view.findViewById(R.id.button_weekly);
+        cancelButton = view.findViewById(R.id.rec_cancel_button);
+        confirmButton = view.findViewById(R.id.rec_confirm_button);
         chipGroupDays = view.findViewById(R.id.recurring_chipgroup);
         rInterval = view.findViewById(R.id.recurring_interval);
 
@@ -98,6 +102,34 @@ public class RecurringTodoFragment extends DialogFragment {
 
             chipGroupDays.setVisibility(View.VISIBLE);
             rInterval.setVisibility(View.VISIBLE);
+        });
+
+        cancelButton.setOnClickListener(v -> {
+            resetDate();
+            dismiss();
+        });
+
+        confirmButton.setOnClickListener(v -> {
+            String rIntVal = String.valueOf(rInterval.getText());
+            StringBuilder encodedString = new StringBuilder();
+
+            if (!rIntVal.equals("")) {
+                if (isDaily) {
+                    encodedString.append(getString(R.string.RD)).append(rIntVal);
+                } else if (isWeekly) {
+                    encodedString.append(getString(R.string.RW))
+                            .append(rIntVal).append(getString(R.string.symbol_dash));
+                    List<Integer> chipIds = chipGroupDays.getCheckedChipIds();
+                    for (int j = 0; j < chipIds.size(); j++) {
+                        Chip chip = view.findViewById(chipIds.get(j));
+                        encodedString.append(chip.getTag());
+                    }
+                }
+                setDatePicker(getContext(), onDateSetListener, String.valueOf(encodedString));
+                dismiss();
+            } else {
+                Log.i(TAG, "onCreateDialog: UH OHHH");
+            }
         });
 
         return builder.create();
