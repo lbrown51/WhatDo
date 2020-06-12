@@ -30,8 +30,8 @@ public class RecurringTodoFragment extends DialogFragment {
     private static final String TAG = RecurringTodoFragment.class.getName();
     private DatePickerDialog.OnDateSetListener onDateSetListener;
 
-    private Button dailyButton;
-    private Button weeklyButton;
+    private Chip dailyChip;
+    private Chip weeklyChip;
     private Button cancelButton;
     private Button confirmButton;
     private EditText rInterval;
@@ -56,32 +56,33 @@ public class RecurringTodoFragment extends DialogFragment {
 
         builder.setView(view);
 
-        dailyButton = view.findViewById(R.id.button_daily);
-        weeklyButton = view.findViewById(R.id.button_weekly);
-        cancelButton = view.findViewById(R.id.rec_cancel_button);
-        confirmButton = view.findViewById(R.id.rec_confirm_button);
-        chipGroupDays = view.findViewById(R.id.recurring_chipgroup);
-        rInterval = view.findViewById(R.id.recurring_interval);
+        dailyChip = view.findViewById(R.id.chip_daily);
+        weeklyChip = view.findViewById(R.id.chip_weekly);
+        cancelButton = view.findViewById(R.id.r_cancel_button);
+        confirmButton = view.findViewById(R.id.r_confirm_button);
+        chipGroupDays = view.findViewById(R.id.r_chipgroup_days);
+        rInterval = view.findViewById(R.id.r_interval);
 
-        dailyButton.setOnClickListener(v -> {
+        dailyChip.setOnClickListener(v -> {
             isDaily = true;
+            rInterval.setHint(R.string.r_interval_daily);
             if (isWeekly) {
                 isWeekly = false;
                 chipGroupDays.setVisibility(View.INVISIBLE);
                 chipGroupDays.clearCheck();
             }
-
-            rInterval.setVisibility(View.VISIBLE);
+            dailyChip.setChecked(true);
         });
 
-        weeklyButton.setOnClickListener(v -> {
+        weeklyChip.setOnClickListener(v -> {
             isWeekly = true;
+            rInterval.setHint(R.string.r_interval_weekly);
             if (isDaily) {
                 isDaily = false;
             }
 
+            weeklyChip.setChecked(true);
             chipGroupDays.setVisibility(View.VISIBLE);
-            rInterval.setVisibility(View.VISIBLE);
         });
 
         cancelButton.setOnClickListener(v -> {
@@ -94,7 +95,7 @@ public class RecurringTodoFragment extends DialogFragment {
             StringBuilder encodedString = new StringBuilder();
 
             if (!rIntVal.equals("")) {
-                if (isDaily) {
+                if (dailyChip.isChecked()) {
                     encodedString.append(getString(R.string.RD)).append(rIntVal);
                 } else if (isWeekly) {
                     encodedString.append(getString(R.string.RW))

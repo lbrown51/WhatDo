@@ -37,7 +37,7 @@ public class PickerUtils {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
+            resetDate();
         };
     }
 
@@ -159,5 +159,4 @@ public class PickerUtils {
     public static Calendar getCalendar() {
         return c;
     }
-
 }
