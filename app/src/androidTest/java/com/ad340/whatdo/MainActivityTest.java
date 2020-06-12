@@ -61,28 +61,6 @@ public class MainActivityTest {
     }
 
     /*
-        Tests whether the header has the correct date
-     */
-//    @Test
-//    public void headerTextUpdates() throws InterruptedException {
-//        AppCompatActivity activity = (AppCompatActivity) TestUtils.getActivity();
-//        Calendar today = Calendar.getInstance();
-//        StringBuilder expectedText = new StringBuilder(TestUtils.getString(R.string.app_bar_title));
-//        expectedText.append("      ");
-//        expectedText.append(today.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH));
-//        expectedText.append(String.format(" %02d, %04d",
-//                today.get(Calendar.DAY_OF_MONTH),
-//                today.get(Calendar.YEAR)));
-//        MaterialToolbar appBar = activity.findViewById(R.id.top_app_bar);
-//        String displayText = appBar.getTitle().toString();
-//        Log.e("displayText", displayText);
-//        Log.e("expectedText", expectedText.toString());
-//        assertEquals(displayText, expectedText.toString());
-//
-//        Thread.sleep(250);
-//    }
-
-    /*
         Tests whether the app loads the recycler view
     */
     @Test
@@ -269,7 +247,7 @@ public class MainActivityTest {
 
          Thread.sleep(500);
          onView(withId(R.id.create_todo_notes_text))
-                 .perform(typeText("About my new task"));
+                 .perform(typeText("About my new task"), closeSoftKeyboard());
 
          onView(withId(R.id.create_todo_finish_btn))
                  .perform(click());
@@ -626,7 +604,7 @@ public class MainActivityTest {
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.notes_text))
-                .perform(typeText("About my task"));
+                .perform(typeText("About my task"), closeSoftKeyboard());
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.notes_text))
