@@ -14,6 +14,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.google.android.material.chip.Chip;
 
 import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -486,6 +487,8 @@ public class MainActivityTest {
     */
     @Test
     public void canCancelTask() throws InterruptedException {
+        Thread.sleep(500);
+
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.name_text))
                 .perform(click());
@@ -698,8 +701,8 @@ public class MainActivityTest {
     @Test
     public void recurringDialogCancels() throws InterruptedException {
         int year = 2020;
-        int month = 6;
-        int dayOfMonth = 28;
+        int month = 7;
+        int dayOfMonth = 25;
         onView(withId(R.id.fab)).perform(click());
         Thread.sleep(500);
         onView(withId(R.id.create_todo_date_btn)).perform(click());
@@ -709,7 +712,7 @@ public class MainActivityTest {
         Thread.sleep(500);
         onView(withId(R.id.r_cancel_button)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
-        onView(withText("6/28/20"))
+        onView(withText("7/25/20"))
                 .check(matches(isDisplayed()));
     }
 
@@ -719,8 +722,8 @@ public class MainActivityTest {
     @Test
     public void recurringDialogDailySubmit() throws InterruptedException {
         int year = 2020;
-        int month = 6;
-        int dayOfMonth = 28;
+        int month = 8;
+        int dayOfMonth = 14;
         onView(withId(R.id.fab)).perform(click());
         Thread.sleep(500);
         onView(withId(R.id.create_todo_date_btn)).perform(click());
@@ -731,7 +734,7 @@ public class MainActivityTest {
         onView(withId(R.id.r_interval)).perform(typeText("30"));
         onView(withId(R.id.r_confirm_button)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
-        onView(withText("6/28/20"))
+        onView(withText("8/14/20"))
                 .check(matches(isDisplayed()));
     }
 
@@ -741,8 +744,8 @@ public class MainActivityTest {
     @Test
     public void recurringDialogWeeklySubmit() throws InterruptedException {
         int year = 2020;
-        int month = 6;
-        int dayOfMonth = 28;
+        int month = 12;
+        int dayOfMonth = 13;
         onView(withId(R.id.fab)).perform(click());
         Thread.sleep(500);
         onView(withId(R.id.create_todo_date_btn)).perform(click());
@@ -754,7 +757,7 @@ public class MainActivityTest {
         onView(withId(R.id.r_interval)).perform(typeText("4"));
         onView(withId(R.id.r_confirm_button)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
-        onView(withText("6/28/20"))
+        onView(withText("12/13/20"))
                 .check(matches(isDisplayed()));
     }
 
