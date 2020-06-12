@@ -29,8 +29,8 @@
     <string name="recurring_tast_title">Make Todo Recurring</string>
     <string name="confirm_recurring">Confirm</string>
     <string name="set_recurring">Set Recurring</string>
-    <string name="daily">Daily</string>
-    <string name="weekly">Weekly</string>
+    <string name="Daily">Daily</string>
+    <string name="Weekly">Weekly</string>
     <string name="monday">Monday</string>
     <string name="tuesday">Tuesday</string>
     <string name="wednesday">Wednesday</string>
@@ -54,4 +54,9 @@
     <string name="RW">RW</string>
     <string name="dd">N</string>
     <string name="confirm">Confirm</string>
+    <string name="must_enter">Must enter</string>
+    <string name="interval">interval</string>
+    <string name="max_interval">Max interval: 999</string>
+    <string name="daily">daily</string>
+    <string name="weekly">weekly</string>
 </resources>

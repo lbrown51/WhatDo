@@ -32,8 +32,6 @@ public class RecurringTodoFragment extends DialogFragment {
 
     private Chip dailyChip;
     private Chip weeklyChip;
-    private Button cancelButton;
-    private Button confirmButton;
     private EditText rInterval;
     private ChipGroup chipGroupDays;
 
@@ -54,8 +52,8 @@ public class RecurringTodoFragment extends DialogFragment {
 
         dailyChip = view.findViewById(R.id.chip_daily);
         weeklyChip = view.findViewById(R.id.chip_weekly);
-        cancelButton = view.findViewById(R.id.r_cancel_button);
-        confirmButton = view.findViewById(R.id.r_confirm_button);
+        Button cancelButton = view.findViewById(R.id.r_cancel_button);
+        Button confirmButton = view.findViewById(R.id.r_confirm_button);
         chipGroupDays = view.findViewById(R.id.r_chipgroup_days);
         rInterval = view.findViewById(R.id.r_interval);
 
@@ -83,7 +81,7 @@ public class RecurringTodoFragment extends DialogFragment {
             String rIntVal = String.valueOf(rInterval.getText());
             StringBuilder encodedString = new StringBuilder();
 
-            if (!rIntVal.equals("")) {
+            if (validateSelection()) {
                 if (dailyChip.isChecked()) {
                     encodedString.append(getString(R.string.RD)).append(rIntVal);
                 } else {
@@ -103,5 +101,22 @@ public class RecurringTodoFragment extends DialogFragment {
         });
 
         return builder.create();
+    }
+
+    private boolean validateSelection() {
+        boolean isValid = false;
+        String rIntVal = String.valueOf(rInterval.getText());
+        String selection = dailyChip.isChecked() ? getString(R.string.daily) : getString(R.string.weekly);
+        if (rIntVal.equals("")) { // interval empty
+            StringBuilder errMsg = new StringBuilder(getString(R.string.must_enter)).append(" ")
+                    .append(selection).append(" ").append(getString(R.string.interval));
+            rInterval.setError(errMsg);
+        } else if (rIntVal.length() > 3) { // interval too big
+            StringBuilder errMsg = new StringBuilder(getString(R.string.max_interval));
+            rInterval.setError(errMsg);
+        } else {
+            isValid = true;
+        }
+        return isValid;
     }
 }
