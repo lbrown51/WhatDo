@@ -16,8 +16,7 @@ import java.util.Locale;
 
 public class PickerUtils {
     private static final String TAG = PickerUtils.class.getName();
-    private static final Calendar cDate = Calendar.getInstance();
-    private static final Calendar cTime = Calendar.getInstance();
+    private static final Calendar c = Calendar.getInstance();
 
     private static String rEncoded = Constants.NO_RECURRENCE;
 
@@ -31,7 +30,7 @@ public class PickerUtils {
             Log.i(TAG, rEncoded);
 
             StringBuilder dateString = new StringBuilder(
-                    DateFormat.getDateInstance(DateFormat.SHORT).format(cDate.getTime()));
+                    DateFormat.getDateInstance(DateFormat.SHORT).format(c.getTime()));
             holder.toDoDate.setText(dateString);
             try {
                 listener.onUpdateTodo(todo, String.valueOf(dateString), Constants.DATE);
@@ -48,7 +47,7 @@ public class PickerUtils {
             setUserDate(year, monthOfYear, dayOfMonth);
 
             Log.i(TAG, "onDateSetListener: CreateDialog");
-            Log.i(TAG, rEncoded);
+            Log.i(TAG, String.valueOf(c.get(Calendar.DAY_OF_MONTH)));
 
             dateString.setLength(0);
             // I changed this to DateFormat.SHORT format so I can parse it more easily
@@ -78,11 +77,11 @@ public class PickerUtils {
             Todo todo, ToDoItemRecyclerViewAdapter.ToDoItemViewHolder holder,
             OnTodoInteractionListener listener) {
         return (view, hourOfDay, minute) -> {
-            cTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            cTime.set(Calendar.MINUTE, minute);
+            c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            c.set(Calendar.MINUTE, minute);
 
             SimpleDateFormat sdf = new SimpleDateFormat("h:mm a", Locale.US);
-            String timeString = sdf.format(cTime.getTime());
+            String timeString = sdf.format(c.getTime());
 
             holder.toDoTime.setText(timeString);
             try {
@@ -99,12 +98,12 @@ public class PickerUtils {
     public static TimePickerDialog.OnTimeSetListener onTimeSetListener ( // MainActivity
             StringBuilder timeString, TextView v) {
         return (view, hourOfDay, minute) -> {
-            cTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            cTime.set(Calendar.MINUTE, minute);
+            c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            c.set(Calendar.MINUTE, minute);
 
             SimpleDateFormat sdf = new SimpleDateFormat("h:mm a", Locale.US);
             timeString.setLength(0);
-            timeString.append(sdf.format(cTime.getTime()));
+            timeString.append(sdf.format(c.getTime()));
             v.setText(timeString);
             resetTime();
         };
@@ -115,39 +114,39 @@ public class PickerUtils {
                                                 TimePickerDialog.OnTimeSetListener time) {
         imageButton.setOnClickListener(view ->
                 new TimePickerDialog(context, time,
-                        cTime.get(Calendar.HOUR_OF_DAY),
-                        cTime.get(Calendar.MINUTE), false).show());
+                        c.get(Calendar.HOUR_OF_DAY),
+                        c.get(Calendar.MINUTE), false).show());
     }
 
     // helpers
     public static void resetDate() {
         Calendar cTodayDate = Calendar.getInstance();
-        cDate.set(Calendar.YEAR, cTodayDate.get(Calendar.YEAR));
-        cDate.set(Calendar.MONTH, cTodayDate.get(Calendar.MONTH));
-        cDate.set(Calendar.DAY_OF_MONTH, cTodayDate.get(Calendar.DAY_OF_MONTH));
+        c.set(Calendar.YEAR, cTodayDate.get(Calendar.YEAR));
+        c.set(Calendar.MONTH, cTodayDate.get(Calendar.MONTH));
+        c.set(Calendar.DAY_OF_MONTH, cTodayDate.get(Calendar.DAY_OF_MONTH));
     }
 
     private static void setUserDate(int year, int month, int dayOfMonth) {
-        cDate.set(Calendar.YEAR, year);
-        cDate.set(Calendar.MONTH, month);
-        cDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, month);
+        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
     }
 
     private static void resetTime() {
         Calendar cTodayTime = Calendar.getInstance();
-        cTime.set(Calendar.HOUR_OF_DAY, cTodayTime.get(Calendar.HOUR_OF_DAY));
-        cTime.set(Calendar.MINUTE, cTodayTime.get(Calendar.MINUTE));
+        c.set(Calendar.HOUR_OF_DAY, cTodayTime.get(Calendar.HOUR_OF_DAY));
+        c.set(Calendar.MINUTE, cTodayTime.get(Calendar.MINUTE));
     }
 
     private static void initDatePicker(Context context, DatePickerDialog.OnDateSetListener date) {
         DatePickerDialog dialog = new DatePickerDialog(
-                context, date, cDate.get(Calendar.YEAR), cDate.get(Calendar.MONTH), cDate.get(Calendar.DAY_OF_MONTH));
+                context, date, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
 
         dialog.setButton(DialogInterface.BUTTON_NEUTRAL, context.getString(R.string.set_recurring),
             (dialogInterface, i) -> {
-                cDate.set(Calendar.YEAR, dialog.getDatePicker().getYear());
-                cDate.set(Calendar.MONTH, dialog.getDatePicker().getMonth());
-                cDate.set(Calendar.DAY_OF_MONTH, dialog.getDatePicker().getDayOfMonth());
+                c.set(Calendar.YEAR, dialog.getDatePicker().getYear());
+                c.set(Calendar.MONTH, dialog.getDatePicker().getMonth());
+                c.set(Calendar.DAY_OF_MONTH, dialog.getDatePicker().getDayOfMonth());
 
                 RecurringTodoFragment recurringTodoFragment =
                         new RecurringTodoFragment(date);
@@ -156,4 +155,9 @@ public class PickerUtils {
                 });
         dialog.show();
     }
+
+    public static Calendar getCalendar() {
+        return c;
+    }
+
 }

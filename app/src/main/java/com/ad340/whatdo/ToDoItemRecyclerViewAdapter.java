@@ -23,15 +23,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import static com.ad340.whatdo.PickerUtils.setDatePicker;
 import static com.ad340.whatdo.PickerUtils.onDateSetListener;
 import static com.ad340.whatdo.PickerUtils.onTimeSetListener;
-import static com.ad340.whatdo.PickerUtils.setDatePickerShowOnClick;
 import static com.ad340.whatdo.PickerUtils.setTimePickerShowOnClick;
 
 
@@ -66,10 +63,7 @@ public class ToDoItemRecyclerViewAdapter
     public void onBindViewHolder(@NonNull final ToDoItemViewHolder holder, int position) {
         if (todos != null && position < todos.size()) {
             Todo todo = todos.get(position);
-            Log.d(TAG, "onBindViewHolder: " + todo.getDate().getTime().toString());
             // date comes in as Date, need to change to string to update
-            SimpleDateFormat sdf = new SimpleDateFormat("DD.mm.yy");
-            Calendar c = Calendar.getInstance();
             final boolean isExpanded = position==mExpandedPosition;
 
             // user sets date in DatePicker
@@ -94,9 +88,7 @@ public class ToDoItemRecyclerViewAdapter
             holder.toDoFinishedCheckbox.setOnClickListener(view -> {
                 try {
                     mTodoViewModel.updateTodo(todo, "", Constants.COMPLETE);
-                    Log.d(TAG, "onBindViewHolder: update complete");
                 } catch (ParseException e) {
-                    Log.d(TAG, "onBindViewHolder: update complete error");
                     e.printStackTrace();
                 }
                 Intent updateWidgetIntent = new Intent(context, TodoListWidget.class);
