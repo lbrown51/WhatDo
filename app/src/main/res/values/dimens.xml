@@ -4,14 +4,23 @@
     <dimen name="dp_1">1dp</dimen>
     <dimen name="dp_16">16dp</dimen>
     <dimen name="dp_8">8dp</dimen>
-    <dimen name="match_constraint">0dp</dimen>
     <dimen name="dp_100" tools:override="true">100dp</dimen>
     <dimen name="dp_24">24dp</dimen>
-
+    <dimen name="small_item_spacing">6dp</dimen>
+    <dimen name="large_item_spacing">16dp</dimen>
     <dimen name="default_text_size">24sp</dimen>
     <dimen name="dp_2">2dp</dimen>
     <dimen name="dp_20">20dp</dimen>
     <dimen name="dp_19">19dp</dimen>
     <dimen name="dp_25">25dp</dimen>
     <dimen name="widget_heading_padding">8dp</dimen>
+    <dimen name="view_by_cardview_height">40dp</dimen>
+    <dimen name="recycler_view_padding">8dp</dimen>
+    <dimen name="std_elevation">2dp</dimen>
+    <dimen name="divider_height">1dp</dimen>
+    <dimen name="todo_item_padding">12dp</dimen>
+    <dimen name="todo_item_margin">16dp</dimen>
+    <dimen name="match_constraint">0dp</dimen>
+    <dimen name="add_button_dimen" tools:override="true">100dp</dimen>
+    <dimen name="close_button_dimen">24dp</dimen>
 </resources>

@@ -1,38 +1,61 @@
 package com.ad340.whatdo;
 
 import android.app.Application;
+import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
+import java.text.ParseException;
 import java.util.List;
 
-public class TodoViewModel extends AndroidViewModel {
+public class TodoViewModel extends AndroidViewModel implements TodoHandler{
 
+    private static final String TAG = TodoViewModel.class.getSimpleName();
+    MutableLiveData<TodoCalendar> dateFilter;
+    LiveData<List<Todo>> allTodos;
+    TodoCalendar currentRange;
     private TodoRepository todoRepository;
     private TagRepository tagRepository;
-    private LiveData<List<Todo>> allTodos;
-    private LiveData<List<Todo>> uncompletedTodos;
     private LiveData<List<Tag>> allTags;
 
     public TodoViewModel(Application application) {
         super(application);
-        todoRepository = new TodoRepository(application);
+        dateFilter = new MutableLiveData<>();
+        todoRepository = new TodoRepository(application, this);
         tagRepository = new TagRepository(application);
-        allTodos = todoRepository.getAllTodos();
-        uncompletedTodos = todoRepository.getUncompletedTodos();
+        allTodos = Transformations.switchMap(dateFilter, filter -> {
+            if (!filter.getShowAll())
+                return todoRepository.getTodosInRange(filter.getStartDate(), filter.getEndDate(), filter.getIsCompleted());
+            else
+                return todoRepository.getAllTodosInRange(filter.getStartDate(), filter.getEndDate());
+        });
         allTags = tagRepository.getAllTags();
     }
 
-    LiveData<List<Todo>> getAllTodos() { return allTodos; }
+    LiveData<List<Todo>> getAllTodos() {
+        return allTodos;
+    }
+
+    @Override
+    public void getTodosInRange(@Nullable TodoCalendar range) {
+        if (range != null) {
+            currentRange = range;
+        }
+        dateFilter.postValue(currentRange);
+    }
 
     LiveData<List<Tag>> getAllTags() { return allTags; }
 
-    LiveData<List<Todo>> getUncompletedTodos() { return uncompletedTodos; }
+    public void insert(Todo todo) { todoRepository.insert(todo);}
 
-    public void insertTodo(Todo todo) { todoRepository.insert(todo);}
-
-    public void updateTodo(Todo todo, String data, int type) { todoRepository.updateTodo(todo, data, type); }
+    public void updateTodo(Todo todo, String data, int type) throws ParseException { todoRepository.updateTodo(todo, data, type);
+        Log.d(TAG, "updateTodo: viewmodel complete");
+    }
 
     public void removeTodo(Todo todo) { todoRepository.removeTodo(todo); }
+
 }

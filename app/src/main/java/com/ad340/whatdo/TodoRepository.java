@@ -1,45 +1,72 @@
 package com.ad340.whatdo;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 public class TodoRepository {
 
+    private static final String TAG = TodoRepository.class.getSimpleName();
     private TodoDao todoDao;
-    private LiveData<List<Todo>> allTodos;
-    private LiveData<List<Todo>> uncompletedTodos;
+    private TodoHandler handler;
 
-    TodoRepository(Application application) {
+    TodoRepository(Application application, TodoHandler handler) {
+        this.handler = handler;
         TodoRoomDatabase db = TodoRoomDatabase.getDatabase(application);
         todoDao = db.todoDao();
-        allTodos = todoDao.getAllTodos();
-        uncompletedTodos = todoDao.getUncompletedTodos();
     }
 
-    LiveData<List<Todo>> getAllTodos() { return allTodos; }
+    LiveData<List<Todo>> getTodosInRange(Calendar start, Calendar end, boolean isCompleted) {
+        Log.d(TAG, "getTodosInRange: " + start.getTime().toString() + " " + end.getTime().toString());
+        return todoDao.getTodosInRange(start, end, isCompleted);
+    }
 
-    LiveData<List<Todo>> getUncompletedTodos() { return uncompletedTodos; }
+    LiveData<List<Todo>> getAllTodosInRange(Calendar start, Calendar end) {
+        Log.d(TAG, "getTodosInRange: " + start.getTime().toString() + " " + end.getTime().toString());
+        return todoDao.getAllTodosInRange(start, end);
+    }
 
-    void updateTodo(Todo todo, String data, int type) {
+    void updateTodo(Todo todo, String data, int type) throws ParseException {
         int id = todo.getId();
         switch (type) {
             case Constants.TITLE: // update title
-                TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoTitle(id, data));
+                TodoRoomDatabase.databaseWriteExecutor.execute(() -> {
+                    todoDao.updateTodoTitle(id, data);
+                    handler.getTodosInRange(null);
+                });
                 break;
             case Constants.DATE: // update date
-                TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoDate(id, data));
+                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy");
+                Calendar c = Calendar.getInstance();
+                c.setTime(sdf.parse(data));
+                TodoRoomDatabase.databaseWriteExecutor.execute(() -> {
+                    todoDao.updateTodoDate(id, c);
+                    handler.getTodosInRange(null);
+                });
                 break;
             case Constants.TIME: // update time
-                TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoTime(id, data));
+                TodoRoomDatabase.databaseWriteExecutor.execute(() -> {
+                    todoDao.updateTodoTime(id, data);
+                    handler.getTodosInRange(null);
+                });
                 break;
             case Constants.NOTES: // update notes
-                TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoNotes(id, data));
+                TodoRoomDatabase.databaseWriteExecutor.execute(() -> {
+                    todoDao.updateTodoNotes(id, data);
+                    handler.getTodosInRange(null);
+                });
                 break;
             case Constants.COMPLETE: // set to completed
-                TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.setTodoCompleted(id));
+                TodoRoomDatabase.databaseWriteExecutor.execute(() -> {
+                    todoDao.setTodoCompleted(id);
+                    handler.getTodosInRange(null);
+                });
                 break;
             case Constants.TAG:
                 TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoTag(id, data));
@@ -52,11 +79,17 @@ public class TodoRepository {
     }
 
     void insert(Todo todo) {
-        TodoRoomDatabase.databaseWriteExecutor.execute(() -> { todoDao.insert(todo);});
+        TodoRoomDatabase.databaseWriteExecutor.execute(() -> {
+            todoDao.insert(todo);
+            handler.getTodosInRange(null);
+        });
     }
 
     void removeTodo(Todo todo) {
         int id = todo.getId();
-        TodoRoomDatabase.databaseWriteExecutor.execute(() -> { todoDao.cancelTodo(id);});
+        TodoRoomDatabase.databaseWriteExecutor.execute(() -> {
+            todoDao.cancelTodo(id);
+            handler.getTodosInRange(null);
+        });
     }
 }
