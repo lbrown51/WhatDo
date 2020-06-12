@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/recurring_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,56 +12,43 @@
         android:id="@+id/recurring_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_24"
         android:layout_marginVertical="@dimen/dp_8"
         android:gravity="center"
         android:text="@string/recurring_title"
         android:textColor="@android:color/black"
         android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/button_daily"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/recurring_buttons"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+    <Button
+        android:id="@+id/button_daily"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/daily"
+        app:layout_constraintBottom_toTopOf="@+id/recurring_chipgroup"
+        app:layout_constraintStart_toStartOf="@+id/recurring_title" />
 
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <Button
-            android:id="@+id/button_daily"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/daily" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <Button
-            android:id="@+id/button_weekly"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/weekly" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-    </LinearLayout>
+    <Button
+        android:id="@+id/button_weekly"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/weekly"
+        app:layout_constraintBottom_toTopOf="@+id/recurring_chipgroup"
+        app:layout_constraintEnd_toEndOf="@+id/recurring_title" />
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/recurring_chipgroup"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginHorizontal="@dimen/dp_24"
-        android:visibility="invisible">
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/recurring_interval"
+        app:layout_constraintEnd_toEndOf="@+id/recurring_title"
+        app:layout_constraintStart_toStartOf="@+id/recurring_title">
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_monday"
@@ -120,52 +109,36 @@
 
     <EditText
         android:id="@+id/recurring_interval"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/dp_24"
-        android:layout_marginBottom="@dimen/dp_16"
         android:autofillHints="@string/recurrence_interval"
         android:digits="0123456789"
         android:fontFamily="sans-serif"
         android:hint="@string/recurrence_interval"
         android:inputType="numberDecimal"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/rec_cancel_button"
+        app:layout_constraintEnd_toEndOf="@+id/recurring_title"
+        app:layout_constraintStart_toStartOf="@+id/recurring_title" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+    <Button
+        android:id="@+id/rec_cancel_button"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/recurring_title" />
 
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+    <Button
+        android:id="@+id/rec_confirm_button"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/confirm"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/recurring_title" />
 
-        <Button
-            android:id="@+id/rec_cancel_button"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Cancel" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <Button
-            android:id="@+id/rec_confirm_button"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Confirm" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-    </LinearLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
