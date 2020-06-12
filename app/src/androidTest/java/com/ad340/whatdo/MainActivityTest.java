@@ -5,20 +5,23 @@ import android.view.KeyEvent;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.chip.Chip;
 
 import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.format.TextStyle;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -31,6 +34,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.PickerActions.setDate;
 import static androidx.test.espresso.contrib.PickerActions.setTime;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
@@ -42,6 +46,9 @@ import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
+    private static final String TAG = MainActivityTest.class.getName();
+
+
     @Rule
     public ActivityScenarioRule<MainActivity> activityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
@@ -631,5 +638,121 @@ public class MainActivityTest {
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.notes_text))
                 .check(matches(withText("About my task")));
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.name_text))
+                .perform(click());
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.notes_text))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+    }
+
+    /*
+        Tests if the recurring dialog opens correctly
+    */
+    @Test
+    public void canOpenRecurringDialog() throws InterruptedException {
+        onView(withId(R.id.fab)).perform(click());
+        Thread.sleep(500);
+        onView(withId(R.id.create_todo_date_btn)).perform(click());
+        onView(withId(android.R.id.button3)).perform(click());
+        Thread.sleep(500);
+        onView(withId(R.id.recurring_container)).check(matches(isDisplayed()));
+        onView(withId(R.id.r_title)).check(matches(isDisplayed()));
+        onView(withId(R.id.r_chipgroup_type)).check(matches(isDisplayed()));
+        onView(withId(R.id.r_interval)).check(matches(isDisplayed()));
+        onView(withId(R.id.r_cancel_button)).check(matches(isDisplayed()));
+        onView(withId(R.id.r_confirm_button)).check(matches(isDisplayed()));
+    }
+
+    /*
+        Tests if the recurring dialog toggles correctly
+    */
+    @Test
+    public void recurringDialogToggles() throws InterruptedException {
+        final DayOfWeek dayOfWeek = LocalDateTime.now().getDayOfWeek();
+        onView(withId(R.id.fab)).perform(click());
+        Thread.sleep(500);
+        onView(withId(R.id.create_todo_date_btn)).perform(click());
+        onView(withId(android.R.id.button3)).perform(click());
+        Thread.sleep(500);
+        onView(withId(R.id.chip_weekly)).perform(click());
+        onView(withId(R.id.r_chipgroup_days)).check(matches(isDisplayed()));
+        onView(withText(dayOfWeek.getDisplayName(TextStyle.FULL, Locale.US)))
+                .check(matches(isChecked()));
+        onView(withId(R.id.r_chipgroup_days))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+
+        onView(withId(R.id.chip_daily)).perform(click());
+        onView(withId(R.id.r_chipgroup_days))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
+
+    }
+
+    /*
+    Tests if the recurring dialog cancels correctly
+    */
+    @Test
+    public void recurringDialogCancels() throws InterruptedException {
+        int year = 2020;
+        int month = 6;
+        int dayOfMonth = 28;
+        onView(withId(R.id.fab)).perform(click());
+        Thread.sleep(500);
+        onView(withId(R.id.create_todo_date_btn)).perform(click());
+        onView(withClassName(Matchers.equalTo(
+                DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
+        onView(withId(android.R.id.button3)).perform(click());
+        Thread.sleep(500);
+        onView(withId(R.id.r_cancel_button)).perform(click());
+        onView(withId(android.R.id.button1)).perform(click());
+        onView(withText("6/28/20"))
+                .check(matches(isDisplayed()));
+    }
+
+    /*
+    Tests if the recurring dialog confirms a daily recurrence correctly
+    */
+    @Test
+    public void recurringDialogDailySubmit() throws InterruptedException {
+        int year = 2020;
+        int month = 6;
+        int dayOfMonth = 28;
+        onView(withId(R.id.fab)).perform(click());
+        Thread.sleep(500);
+        onView(withId(R.id.create_todo_date_btn)).perform(click());
+        onView(withClassName(Matchers.equalTo(
+                DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
+        onView(withId(android.R.id.button3)).perform(click());
+        Thread.sleep(500);
+        onView(withId(R.id.r_interval)).perform(typeText("30"));
+        onView(withId(R.id.r_confirm_button)).perform(click());
+        onView(withId(android.R.id.button1)).perform(click());
+        onView(withText("6/28/20"))
+                .check(matches(isDisplayed()));
+    }
+
+    /*
+   Tests if the recurring dialog confirms a weekly recurrence correctly
+   */
+    @Test
+    public void recurringDialogWeeklySubmit() throws InterruptedException {
+        int year = 2020;
+        int month = 6;
+        int dayOfMonth = 28;
+        onView(withId(R.id.fab)).perform(click());
+        Thread.sleep(500);
+        onView(withId(R.id.create_todo_date_btn)).perform(click());
+        onView(withClassName(Matchers.equalTo(
+                DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
+        onView(withId(android.R.id.button3)).perform(click());
+        Thread.sleep(500);
+        onView(withId(R.id.chip_weekly)).perform(click());
+        onView(withId(R.id.r_interval)).perform(typeText("4"));
+        onView(withId(R.id.r_confirm_button)).perform(click());
+        onView(withId(android.R.id.button1)).perform(click());
+        onView(withText("6/28/20"))
+                .check(matches(isDisplayed()));
     }
 }
