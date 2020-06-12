@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity"
+    android:id="@+id/main_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout"
@@ -15,39 +15,82 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:id="@+id/top_app_bar"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            app:layout_constraintTop_toTopOf="parent"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:clickable="true"
+            android:elevation="6dp"
             android:key="@id/top_app_bar"
-            app:title="@string/app_bar_title"/>
+            app:title="@string/app_bar_title" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/viewing_date_card"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_by_cardview_height"
+            app:layout_constraintTop_toBottomOf="@id/top_app_bar"
+            android:backgroundTint="@color/colorAccent"
+            android:padding="@dimen/recycler_view_padding">
+
+            <TextView
+                android:id="@+id/viewing_date_text"
+                android:layout_marginTop="@dimen/recycler_view_padding"
+                style="@style/TextAppearance.MaterialComponents.Headline6"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/viewing_date_text"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="@string/viewing_default_text"
+                android:textAlignment="center"
+                android:textColor="@color/plusIcon"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+    <ImageView
+        android:id="@+id/more_view_by"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scaleType="center"
+        android:elevation="@dimen/std_elevation"
+        android:translationZ="@dimen/std_elevation"
+        android:layout_marginEnd="@dimen/todo_item_margin"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="@id/app_bar_layout"
+        app:layout_constraintTop_toTopOf="@id/app_bar_layout"
+        app:srcCompat="@drawable/ic_baseline_more_horiz_24" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        style="@style/MaterialAlertDialog.MaterialComponents.Title.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/large_item_spacing"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:backgroundTint="@color/colorAccent"
         android:clickable="true"
         android:contentDescription="@string/floating_action_button"
-        android:layout_margin="@dimen/dp_16"
-        android:background="?attr/selectableItemBackgroundBorderless"
+        android:elevation="@dimen/std_elevation"
+        android:scaleType="center"
+        app:fabCustomSize="@dimen/add_button_dimen"
+        app:fabSize="auto"
+        app:iconSize="@dimen/add_button_dimen"
+        app:iconTint="@color/plusIcon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:iconSize="@dimen/dp_100"
-        app:fabCustomSize="@dimen/dp_100"
-        app:srcCompat="@drawable/ic_add" />
+        app:maxImageSize="@dimen/add_button_dimen"
+        android:src="@drawable/ic_add" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/todo_list_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/match_constraint"
         android:clipToPadding="false"
-        android:paddingStart="@dimen/dp_8"
-        android:paddingTop="@dimen/dp_8"
-        android:paddingBottom="@dimen/dp_8"
+        android:paddingLeft="@dimen/recycler_view_padding"
+        android:paddingTop="@dimen/recycler_view_padding"
+        android:paddingBottom="@dimen/recycler_view_padding"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

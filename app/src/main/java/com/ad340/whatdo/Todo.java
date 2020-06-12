@@ -3,8 +3,9 @@ package com.ad340.whatdo;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+
+import java.util.Calendar;
 
 @Entity(tableName = "todo_table")
 public class Todo {
@@ -20,8 +21,8 @@ public class Todo {
     public String getTitle() { return this.title; }
 
     @ColumnInfo(name = "date")
-    private String date;
-    public String getDate() { return this.date; }
+    private Calendar date;
+    public Calendar getDate() { return this.date; }
 
     @ColumnInfo(name = "time")
     private String time;
@@ -39,7 +40,7 @@ public class Todo {
     private String tag;
     public String getTag() { return this.tag; }
 
-    public Todo(Integer id, @NonNull String title, String date, String time, String notes, Boolean isCompleted, String tag) {
+    public Todo(Integer id, @NonNull String title, Calendar date, String time, String notes, Boolean isCompleted, String tag) {
         this.id = id;
         this.title = title;
         this.date = date;
@@ -48,9 +49,4 @@ public class Todo {
         this.isCompleted = isCompleted;
         this.tag = tag;
     }
-
-//    @Ignore
-//    public Todo(@NonNull String title) {
-//        this.title = title;
-//    }
 }

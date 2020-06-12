@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/view_by_dialog"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="@color/clear"
+    tools:context=".MainActivity">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/large_item_spacing"
+        android:layout_marginVertical="60dp"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center_vertical"
+        android:elevation="@dimen/std_elevation">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/view_by_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:text="@string/view_by_title"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:textColor="@android:color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/close_view_by_dialog"
+                android:layout_width="19dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="@dimen/large_item_spacing"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_close_black"
+                android:tint="@color/colorAccent"
+                app:layout_constraintBottom_toBottomOf="@id/view_by_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/view_by_body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="horizontal"
+                android:padding="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_by_title">
+
+                <Button
+                    android:id="@+id/view_by_date"
+                    android:text="Single Date"
+                    android:onClick="launchSingleDatePicker"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="@dimen/add_button_dimen"
+                    android:layout_margin="@dimen/large_item_spacing"
+                    android:layout_weight="1"/>
+
+                <Button
+                    android:id="@+id/view_by_date_range"
+                    android:text="Date Range"
+                    android:onClick="launchDateRangePicker"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="@dimen/add_button_dimen"
+                    android:layout_margin="@dimen/large_item_spacing"
+                    android:layout_weight="1"/>
+
+                <Button
+                    android:id="@+id/view_by_all_upcoming"
+                    android:text="All Upcoming"
+                    android:onClick="allUpcomingHandler"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="@dimen/add_button_dimen"
+                    android:layout_marginHorizontal="@dimen/large_item_spacing"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

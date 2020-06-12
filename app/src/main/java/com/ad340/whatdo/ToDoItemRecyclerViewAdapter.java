@@ -5,7 +5,6 @@ import android.app.TimePickerDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
-
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,24 +21,29 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import static com.ad340.whatdo.PickerUtils.setDatePicker;
 import static com.ad340.whatdo.PickerUtils.onDateSetListener;
 import static com.ad340.whatdo.PickerUtils.onTimeSetListener;
+import static com.ad340.whatdo.PickerUtils.setDatePickerShowOnClick;
 import static com.ad340.whatdo.PickerUtils.setTimePickerShowOnClick;
 
 
 public class ToDoItemRecyclerViewAdapter
         extends RecyclerView.Adapter<ToDoItemRecyclerViewAdapter.ToDoItemViewHolder>{
+    private static final String TAG = ToDoItemRecyclerViewAdapter.class.getName();
     private Context context;
     private List<Todo> todos;
     private TodoViewModel mTodoViewModel;
     private int mExpandedPosition = -1;
     private int previousExpandedPosition = -1;
     private OnTodoInteractionListener listener;
-    private static final String TAG = ToDoItemRecyclerViewAdapter.class.getName();
 
 
     ToDoItemRecyclerViewAdapter(Context context) {
@@ -54,6 +58,7 @@ public class ToDoItemRecyclerViewAdapter
     public ToDoItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.todo_item, parent, false);
+
         return new ToDoItemViewHolder(layoutView);
     }
 
@@ -61,6 +66,10 @@ public class ToDoItemRecyclerViewAdapter
     public void onBindViewHolder(@NonNull final ToDoItemViewHolder holder, int position) {
         if (todos != null && position < todos.size()) {
             Todo todo = todos.get(position);
+            Log.d(TAG, "onBindViewHolder: " + todo.getDate().getTime().toString());
+            // date comes in as Date, need to change to string to update
+            SimpleDateFormat sdf = new SimpleDateFormat("DD.mm.yy");
+            Calendar c = Calendar.getInstance();
             final boolean isExpanded = position==mExpandedPosition;
 
             // user sets date in DatePicker
@@ -72,7 +81,7 @@ public class ToDoItemRecyclerViewAdapter
             holder.todoDetail.setVisibility(isExpanded?View.VISIBLE:View.GONE);
             holder.itemView.setActivated(isExpanded);
             holder.toDoTaskName.setText(todo.getTitle());
-            holder.toDoDate.setText(todo.getDate());
+            holder.toDoDate.setText(new StringBuilder(DateFormat.getDateInstance(DateFormat.FULL).format(todo.getDate().getTime())));
             holder.toDoTime.setText(todo.getTime());
             holder.toDoNotesText.setText(todo.getNotes());
             if (todo.getNotes() == null || todo.getNotes().equals("")) {
@@ -83,7 +92,13 @@ public class ToDoItemRecyclerViewAdapter
             holder.toDoFinishedCheckbox.setChecked(false);
 
             holder.toDoFinishedCheckbox.setOnClickListener(view -> {
-                mTodoViewModel.updateTodo(todo, "", Constants.COMPLETE);
+                try {
+                    mTodoViewModel.updateTodo(todo, "", Constants.COMPLETE);
+                    Log.d(TAG, "onBindViewHolder: update complete");
+                } catch (ParseException e) {
+                    Log.d(TAG, "onBindViewHolder: update complete error");
+                    e.printStackTrace();
+                }
                 Intent updateWidgetIntent = new Intent(context, TodoListWidget.class);
                 updateWidgetIntent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
                 int ids[] = AppWidgetManager
@@ -124,6 +139,7 @@ public class ToDoItemRecyclerViewAdapter
                     }
                     return false;
                 });
+                //displaying the popup
                 popup.show();
             });
 
@@ -131,8 +147,14 @@ public class ToDoItemRecyclerViewAdapter
                     view -> toggleNotes(holder.toDoNotesText));
 
             holder.toDoNotesText.setOnFocusChangeListener((view, b) -> {
-                if (!b) listener.onUpdateTodo(
-                        todo, String.valueOf(holder.toDoNotesText.getText()), Constants.NOTES);
+                if (!b) {
+                    try {
+                        listener.onUpdateTodo(
+                                todo, String.valueOf(holder.toDoNotesText.getText()), Constants.NOTES);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
             });
 
             // show DatePicker and TimePicker
@@ -170,7 +192,8 @@ public class ToDoItemRecyclerViewAdapter
     }
 
     void setTodos(List<Todo> todos) {
-        this.todos = todos;
+        this.todos = new ArrayList<>();
+        this.todos.addAll(todos);
         notifyDataSetChanged();
     }
 

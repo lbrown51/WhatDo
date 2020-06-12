@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.Update;
 
+import java.util.Calendar;
 import java.util.List;
 
 @Dao
@@ -15,13 +15,19 @@ public interface TodoDao {
     void insert(Todo todo);
 
     @Query("SELECT * from todo_table ORDER BY title ASC")
-    LiveData<List<Todo>> getAllTodos();
+    List<Todo> getAllTodos();
 
     @Query("SELECT * FROM todo_table WHERE NOT isCompleted")
     LiveData<List<Todo>> getUncompletedTodos();
 
     @Query("SELECT title FROM todo_table WHERE NOT isCompleted")
     List<String> getStaticUncompletedTodoTitles();
+
+    @Query("SELECT * FROM todo_table WHERE date BETWEEN :start AND :end AND isCompleted = :completed")
+    LiveData<List<Todo>> getTodosInRange(Calendar start, Calendar end, boolean completed);
+
+    @Query("SELECT * FROM todo_table WHERE date BETWEEN :start AND :end")
+    LiveData<List<Todo>> getAllTodosInRange(Calendar start, Calendar end);
 
     @Query("DELETE FROM todo_table")
     void deleteAll();
@@ -33,7 +39,7 @@ public interface TodoDao {
     void updateTodoTitle(int id, String title);
 
     @Query("UPDATE todo_table SET date = :date WHERE id = :id")
-    void updateTodoDate(int id, String date);
+    void updateTodoDate(int id, Calendar date);
 
     @Query("UPDATE todo_table SET time = :time WHERE id = :id")
     void updateTodoTime(int id, String time);
