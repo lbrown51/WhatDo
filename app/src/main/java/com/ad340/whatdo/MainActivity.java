@@ -3,6 +3,9 @@ package com.ad340.whatdo;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -230,8 +233,6 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         dateRange.setDateRange(start, end);
     }
 
-    // CREATE TODO DIALOG
-
     private void showCreateDialog() {
         final View createView = View.inflate(this, R.layout.create_todo_dialog, null);
         final Dialog dialog = new Dialog(this, android.R.style.Theme_DeviceDefault_NoActionBar_Overscan);
@@ -265,17 +266,26 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
             }
         });
 
-        SimpleDateFormat sdf = new SimpleDateFormat("DD.mm.YY");
-
         finishNewTodoButton.setOnClickListener(view -> {
             String newTodoText = newTodoEditText.getText().toString();
             if (newTodoText.isEmpty()) {
-                newTodoEditText.setError("Cannot make an empty task");
+                newTodoEditText.setError(getString(R.string.empty_task_error));
             } else {
-                c.add(Calendar.SECOND, 1);
                 Todo newTodo = new Todo(null, newTodoText, c,
-                        String.valueOf(timeString), null, false, null);
+                        String.valueOf(timeString), String.valueOf(newTodoNotesText.getText()),
+                        false, null);
                 mTodoViewModel.insert(newTodo);
+
+                Intent updateWidgetIntent = new Intent(this, TodoListWidget.class);
+                updateWidgetIntent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+                int[] ids = AppWidgetManager
+                        .getInstance(getApplicationContext())
+                        .getAppWidgetIds(
+                                new ComponentName(getApplicationContext(), TodoListWidget.class)
+                        );
+                updateWidgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+                sendBroadcast(updateWidgetIntent);
+
                 dialog.dismiss();
             }
         });

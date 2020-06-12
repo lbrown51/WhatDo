@@ -92,16 +92,6 @@ public class MainActivityTest {
     }
 
     /*
-        Tests whether the recycler view has at least one of the tasks
-        we expect it to.
-    */
-    @Test
-    public void hasAtLeastOneTask() {
-        onView(withId(R.id.todo_list_recycler_view))
-                .check(matches(hasDescendant(withText("First Todo"))));
-    }
-
-    /*
         Tests whether the tasks have the correct content.
     */
     @Test
@@ -236,7 +226,7 @@ public class MainActivityTest {
      @Test
      public void canCreateNewTodo() throws InterruptedException {
          int hourOfDay = 16;
-         int minute = 30;
+         int minute = 37;
          int year = 2020;
          int month = 6;
          int dayOfMonth = 28;
@@ -259,7 +249,7 @@ public class MainActivityTest {
 
          Thread.sleep(500);
          onView(withId(R.id.create_todo_time_text))
-                 .check(matches(withText("4:30 PM")));
+                 .check(matches(withText("4:37 PM")));
 
          Thread.sleep(500);
          onView(withId(R.id.create_todo_date_btn)).perform(click());
@@ -291,7 +281,7 @@ public class MainActivityTest {
          onView(withText("New Task"))
                  .perform(click());
 
-         onView(withText("4:30 PM"))
+         onView(withText("4:37 PM"))
                  .check(matches(isDisplayed()));
 
          onView(withText("Sunday, June 28, 2020"))
