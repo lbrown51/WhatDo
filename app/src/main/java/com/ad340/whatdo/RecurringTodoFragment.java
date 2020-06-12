@@ -20,7 +20,6 @@ import androidx.fragment.app.DialogFragment;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,7 +29,6 @@ import static com.ad340.whatdo.PickerUtils.setDatePicker;
 public class RecurringTodoFragment extends DialogFragment {
     private static final String TAG = RecurringTodoFragment.class.getName();
     private DatePickerDialog.OnDateSetListener onDateSetListener;
-    private Calendar cRecurring;
 
     private Button dailyButton;
     private Button weeklyButton;
@@ -39,14 +37,11 @@ public class RecurringTodoFragment extends DialogFragment {
 
     private boolean isDaily = false;
     private boolean isWeekly = false;
-    private int rIntervalValue = 0;
-    private String rIntervalDays = "";
-    private String rEncoded = "";
 
 
-    public RecurringTodoFragment(DatePickerDialog.OnDateSetListener onDateSetListener, Calendar c) {
+
+    public RecurringTodoFragment(DatePickerDialog.OnDateSetListener onDateSetListener) {
         this.onDateSetListener = onDateSetListener;
-        this.cRecurring = c;
     }
 
     @NonNull
@@ -58,28 +53,26 @@ public class RecurringTodoFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.todo_recurring_dialog, null);
 
         builder.setView(view)
+            .setNegativeButton(R.string.cancel, (dialogInterface, i) -> { resetDate();dismiss(); })
             .setPositiveButton(R.string.confirm_recurring, (dialogInterface, i) -> {
                 String rIntVal = String.valueOf(rInterval.getText());
                 StringBuilder encodedString = new StringBuilder();
 
-
                 if (!rIntVal.equals("")) {
                     if (isDaily) {
-                        encodedString.append("D");
-                    } else {
-                        encodedString.append("W");
+                        encodedString.append(getString(R.string.RD)).append(rIntVal);
+                    } else if (isWeekly) {
+                        encodedString.append(getString(R.string.RW))
+                                .append(rIntVal).append(getString(R.string.symbol_dash));
+                        List<Integer> chipIds = chipGroupDays.getCheckedChipIds();
+                        for (int j = 0; j < chipIds.size(); j++) {
+                            Chip chip = view.findViewById(chipIds.get(j));
+                            encodedString.append(chip.getTag());
+                        }
                     }
-                    rIntervalValue = Integer.parseInt(String.valueOf(rInterval.getText()));
-                    Log.i(TAG, "onCreateDialog: chip tags");
-                    List<Integer> chipIds = chipGroupDays.getCheckedChipIds();
-                    for (int j = 0; j < chipIds.size(); j++) {
-                        Chip chip = view.findViewById(chipIds.get(j));
-                        Log.i(TAG, String.valueOf(chip.getTag()));
-                    }
-                    setDatePicker(getContext(), onDateSetListener, rEncoded);
+                    setDatePicker(getContext(), onDateSetListener, String.valueOf(encodedString));
                 }
-            })
-            .setNegativeButton(R.string.cancel, (dialogInterface, i) -> { resetDate();dismiss(); });
+            });
 
         dailyButton = view.findViewById(R.id.button_daily);
         weeklyButton = view.findViewById(R.id.button_weekly);

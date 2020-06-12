@@ -10,6 +10,7 @@ public class Constants {
     public static final int TAG = 6;
 
     public static final String TAG_RECURRING_FRAG = "recurringFragment";
+    public static final String NO_RECURRENCE = "N";
 
     public static final int SUNDAY = 0;
     public static final int MONDAY = 1;

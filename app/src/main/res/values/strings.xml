@@ -41,4 +41,9 @@
     <string name="SATURDAY">6</string>
     <string name="recurrence_interval">Recurrence interval</string>
     <string name="recurring_title">Make Todo Recurring</string>
+    <string name="RD">RD</string>
+    <string name="symbol_dash">-</string>
+    <string name="N">N</string>
+    <string name="RW">RW</string>
+    <string name="dd">N</string>
 </resources>
