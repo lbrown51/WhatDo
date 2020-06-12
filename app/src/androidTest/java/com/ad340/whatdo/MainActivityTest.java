@@ -14,6 +14,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
@@ -131,11 +132,13 @@ public class MainActivityTest {
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.reschedule_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+        closeSoftKeyboard();
 
         // Expand first task
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.name_text))
                 .perform(click());
+        closeSoftKeyboard();
 
         // Date and buttons are visible
         onView(withRecyclerView(R.id.todo_list_recycler_view)
@@ -158,11 +161,13 @@ public class MainActivityTest {
                 .atPositionOnView(0, R.id.date_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
+        closeSoftKeyboard();
         // Collapse first task
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.name_text))
                 .perform(click());
 
+        closeSoftKeyboard();
         Thread.sleep(500);
         // Date and buttons are invisible
         onView(withRecyclerView(R.id.todo_list_recycler_view)
@@ -211,12 +216,14 @@ public class MainActivityTest {
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.reschedule_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+        closeSoftKeyboard();
 
         // Expand second task
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.time_text))
                 .perform(click());
 
+        closeSoftKeyboard();
         // Date and buttons are visible
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.date_text))
@@ -238,11 +245,12 @@ public class MainActivityTest {
                 .atPositionOnView(0, R.id.date_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
+        closeSoftKeyboard();
         // Collapse second task
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.time_text))
                 .perform(click());
-
+        closeSoftKeyboard();
         Thread.sleep(1000);
 
         // Date and buttons are invisible
