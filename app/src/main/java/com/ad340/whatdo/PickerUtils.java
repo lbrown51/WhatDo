@@ -152,8 +152,4 @@ public class PickerUtils {
         });
         dialog.show();
     }
-
-    public static Calendar getCalendar() {
-        return c;
-    }
 }

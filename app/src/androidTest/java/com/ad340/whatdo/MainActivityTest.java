@@ -528,11 +528,13 @@ public class MainActivityTest {
         Tests whether tasks can be rescheduled
     */
     @Test
-    public void canRescheduleTask() {
+    public void canRescheduleTask() throws InterruptedException {
+        Thread.sleep(500);
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.name_text))
                 .perform(click());
 
+        Thread.sleep(500);
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.reschedule_btn))
                 .perform(click());
@@ -545,6 +547,7 @@ public class MainActivityTest {
         onView(withClassName(Matchers.equalTo(
                 DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
         onView(withId(android.R.id.button1)).perform(click());
+        Thread.sleep(500);
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.date_text))
                 .check(matches(withText("Sunday, June 28, 2020")));
