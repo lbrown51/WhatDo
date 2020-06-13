@@ -301,7 +301,7 @@ public class MainActivityTest {
     @Test
     public void canCancelTask() throws InterruptedException {
         Thread.sleep(500);
-
+        closeSoftKeyboard();
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.name_text))
                 .perform(click());
@@ -412,6 +412,7 @@ public class MainActivityTest {
         int hourOfDay = 16;
         int minute = 30;
         Thread.sleep(500);
+        closeSoftKeyboard();
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.name_text))
                 .perform(click());
