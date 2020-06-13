@@ -7,12 +7,14 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -250,9 +252,11 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         ImageButton newTodoDateButton = dialog.findViewById(R.id.create_todo_date_btn);
         ImageButton newTodoTimeButton = dialog.findViewById(R.id.create_todo_time_btn);
         ImageButton newTodoNotesButton = dialog.findViewById(R.id.create_todo_notes_btn);
+        ImageView newTodoIsRecurring = dialog.findViewById(R.id.create_todo_is_recurring);
+        newTodoIsRecurring.setVisibility(View.INVISIBLE);
         EditText newTodoNotesText = dialog.findViewById(R.id.create_todo_notes_text);
 
-        final DatePickerDialog.OnDateSetListener date = onDateSetListener(dateString, dateText);
+        final DatePickerDialog.OnDateSetListener date = onDateSetListener(dateString, dateText, newTodoIsRecurring);
         final TimePickerDialog.OnTimeSetListener time = onTimeSetListener(timeString, timeText);
 
         setDatePicker(this, newTodoDateButton, date);

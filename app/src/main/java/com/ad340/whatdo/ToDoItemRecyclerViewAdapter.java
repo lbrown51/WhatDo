@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -209,6 +210,7 @@ public class ToDoItemRecyclerViewAdapter
         ImageButton toDoNotesButton;
         CheckBox toDoFinishedCheckbox;
         EditText toDoNotesText;
+        ImageView recurringIV;
 
         ToDoItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -222,6 +224,7 @@ public class ToDoItemRecyclerViewAdapter
             toDoTimeButton = itemView.findViewById(R.id.time_btn);
             toDoNotesButton = itemView.findViewById(R.id.notes_btn);
             toDoNotesText = itemView.findViewById(R.id.notes_text);
+            recurringIV = itemView.findViewById(R.id.is_recurring);
         }
     }
 }

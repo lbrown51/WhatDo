@@ -59,4 +59,5 @@
     <string name="max_interval">Max interval: 999</string>
     <string name="daily">daily</string>
     <string name="weekly">weekly</string>
+    <string name="todo_reoccurs">todo reoccurs</string>
 </resources>

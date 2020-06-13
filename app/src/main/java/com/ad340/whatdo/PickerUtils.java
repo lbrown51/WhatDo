@@ -5,7 +5,9 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -37,12 +39,19 @@ public class PickerUtils {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+            if (!rEncoded.equals(Constants.NO_RECURRENCE)) {
+                Log.i(TAG, "onDateSetListener: viewadapter");
+                Log.i(TAG, String.valueOf(holder.recurringIV.getVisibility()));
+                holder.recurringIV.setVisibility(View.VISIBLE);
+            } else {
+                holder.recurringIV.setVisibility(View.INVISIBLE);
+            }
             resetDate();
         };
     }
 
     public static DatePickerDialog.OnDateSetListener onDateSetListener (  // MainActivity
-            StringBuilder dateString, TextView v) {
+            StringBuilder dateString, TextView v, ImageView iv) {
         return (view, year, monthOfYear, dayOfMonth) -> {
             setUserDate(year, monthOfYear, dayOfMonth);
 
@@ -53,6 +62,9 @@ public class PickerUtils {
             // I changed this to DateFormat.SHORT format so I can parse it more easily
             dateString.append(DateFormat.getDateInstance(DateFormat.SHORT).format(c.getTime()));
             v.setText(dateString);
+            if (!rEncoded.equals(Constants.NO_RECURRENCE)) {
+                iv.setVisibility(View.VISIBLE);
+            }
             resetDate();
         };
     }
