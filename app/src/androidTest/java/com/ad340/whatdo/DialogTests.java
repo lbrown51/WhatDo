@@ -303,6 +303,7 @@ public class DialogTests {
         int dayOfMonth = 14;
         onView(withId(R.id.fab)).perform(click());
         Thread.sleep(500);
+        onView(withId(R.id.create_todo_is_recurring)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
         onView(withId(R.id.create_todo_date_btn)).perform(click());
         onView(withClassName(Matchers.equalTo(
                 DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
@@ -313,6 +314,7 @@ public class DialogTests {
         onView(withId(android.R.id.button1)).perform(click());
         onView(withText("8/14/20"))
                 .check(matches(isDisplayed()));
+        onView(withId(R.id.create_todo_is_recurring)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
     }
 
     /*
@@ -356,4 +358,37 @@ public class DialogTests {
         onView(withId(R.id.r_interval)).perform(typeText("-3"));
         onView(withId(R.id.r_interval)).check(matches(withText("3")));
     }
+
+    // uncomment when backend of recurring is done
+//    @Test
+//    public void recurringDialogSetsIcon() throws InterruptedException {
+//        int year = 2020;
+//        int month = 12;
+//        int dayOfMonth = 13;
+//        onView(withRecyclerView(R.id.todo_list_recycler_view)
+//                .atPositionOnView(0, R.id.name_text))
+//                .perform(click());
+//        closeSoftKeyboard();
+//
+//        onView(withRecyclerView(R.id.todo_list_recycler_view)
+//                .atPositionOnView(0, R.id.is_recurring))
+//                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
+//
+//        Thread.sleep(500);
+//        onView(withRecyclerView(R.id.todo_list_recycler_view)
+//                .atPositionOnView(0, R.id.date_btn))
+//                .perform(click());
+//        onView(withClassName(Matchers.equalTo(
+//                DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
+//        onView(withId(android.R.id.button3)).perform(click());
+//
+//        Thread.sleep(500);
+//        onView(withId(R.id.r_interval)).perform(typeText("30"));
+//        onView(withId(R.id.r_confirm_button)).perform(click());
+//        onView(withId(android.R.id.button1)).perform(click());
+//
+//        onView(withRecyclerView(R.id.todo_list_recycler_view)
+//                .atPositionOnView(0, R.id.is_recurring))
+//                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+//    }
 }
