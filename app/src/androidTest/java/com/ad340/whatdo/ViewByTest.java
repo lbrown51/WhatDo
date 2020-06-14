@@ -93,6 +93,9 @@ public class ViewByTest {
         onView(withId(R.id.close_view_by_dialog)).perform(click());
         onView(withId(R.id.viewing_date_text))
                 .check(matches(withText("June 12, 2020")));
+
+        // go back to all upcoming (for other tests)
+        resetDateRange();
     }
 
     /*
@@ -116,6 +119,9 @@ Tests that the "viewing" bar updates
         onView(withId(R.id.close_view_by_dialog)).perform(click());
         onView(withId(R.id.viewing_date_text))
                 .check(matches(withText("June 12, 2020 to July 12, 2020")));
+
+        // go back to all upcoming (for other tests)
+        resetDateRange();
     }
 
     /*
@@ -161,5 +167,18 @@ Tests that the "viewing" bar updates
                 isDisplayed()
                 ))
                 .check(matches(withText("Test Task")));
+
+        // go back to all upcoming (for other tests)
+        resetDateRange();
+    }
+
+    public static void resetDateRange() throws InterruptedException {
+        // go back to all upcoming (for other tests)
+        onView(withId(R.id.top_app_bar))
+                .perform(click());
+        Thread.sleep(500);
+        onView(withId(R.id.view_by_all_upcoming))
+                .perform(click());
+        onView(withId(R.id.close_view_by_dialog)).perform(click());
     }
 }
