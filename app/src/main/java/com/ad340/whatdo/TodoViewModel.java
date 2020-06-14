@@ -21,6 +21,7 @@ public class TodoViewModel extends AndroidViewModel implements TodoHandler{
     private TodoRepository todoRepository;
     private TagRepository tagRepository;
     private LiveData<List<Tag>> allTags;
+    OnTodoInteractionListener emptyListHandler;
 
     public TodoViewModel(Application application) {
         super(application);
@@ -46,6 +47,11 @@ public class TodoViewModel extends AndroidViewModel implements TodoHandler{
             currentRange = range;
         }
         dateFilter.postValue(currentRange);
+    }
+
+    @Override
+    public void setEmptyList() {
+        emptyListHandler.emptyList();
     }
 
     LiveData<List<Tag>> getAllTags() { return allTags; }

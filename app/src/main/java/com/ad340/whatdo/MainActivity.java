@@ -27,7 +27,6 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -57,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         setContentView(R.layout.activity_main);
 
         mTodoViewModel = new ViewModelProvider(this).get(TodoViewModel.class);
+        mTodoViewModel.emptyListHandler = this;
         adapter = new ToDoItemRecyclerViewAdapter(this);
         RecyclerView toDoRecyclerView = findViewById(R.id.todo_list_recycler_view);
 
@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         Calendar start = Calendar.getInstance();
         Calendar end = Calendar.getInstance();
         setDateMinimum(start);
-        end.add(Calendar.YEAR, 1);
+        end.add(Calendar.YEAR, 1000);
         dateRange.setDateRange(start, end);
     }
 
@@ -313,5 +313,10 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         } catch (ParseException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void emptyList() {
+        adapter.emptyList();
     }
 }

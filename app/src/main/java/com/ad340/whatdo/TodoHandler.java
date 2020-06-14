@@ -4,4 +4,5 @@ import androidx.annotation.Nullable;
 
 public interface TodoHandler {
     void getTodosInRange(@Nullable TodoCalendar range);
+    void setEmptyList();
 }
