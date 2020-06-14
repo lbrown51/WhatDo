@@ -34,7 +34,7 @@ import static com.ad340.whatdo.PickerUtils.setTimePickerShowOnClick;
 
 
 public class ToDoItemRecyclerViewAdapter
-        extends RecyclerView.Adapter<ToDoItemRecyclerViewAdapter.ToDoItemViewHolder>{
+        extends RecyclerView.Adapter<ToDoItemRecyclerViewAdapter.ToDoItemViewHolder> {
     private static final String TAG = ToDoItemRecyclerViewAdapter.class.getName();
     private Context context;
     private List<Todo> todos;
@@ -197,6 +197,11 @@ public class ToDoItemRecyclerViewAdapter
         } else if (String.valueOf(notesText.getText()).equals("")){
             notesText.setVisibility(View.GONE);
         }
+    }
+
+    public void emptyList() {
+        this.todos = new ArrayList<>();
+        notifyDataSetChanged();
     }
 
     static class ToDoItemViewHolder extends RecyclerView.ViewHolder {
