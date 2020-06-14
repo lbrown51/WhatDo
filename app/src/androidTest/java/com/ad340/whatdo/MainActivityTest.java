@@ -1,11 +1,9 @@
 package com.ad340.whatdo;
 
-import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -13,17 +11,12 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.google.android.material.datepicker.MaterialDatePicker;
-
-import org.hamcrest.Matchers;
 import org.hamcrest.core.IsEqual;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.time.Month;
-import java.util.Calendar;
-import java.util.Locale;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -49,13 +42,17 @@ import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
+
+    static final Object MONTHS_VIEW_GROUP_TAG = "MONTHS_VIEW_GROUP_TAG";
+    static final Object CONFIRM_BUTTON_TAG = "CONFIRM_BUTTON_TAG";
+
     @Rule
     public ActivityScenarioRule<MainActivity> activityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
 
-    public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
-        return new RecyclerViewMatcher(recyclerViewId);
+    public static RecyclerViewMatcherTestUtil withRecyclerView(final int recyclerViewId) {
+        return new RecyclerViewMatcherTestUtil(recyclerViewId);
     }
 
     /*
@@ -639,48 +636,4 @@ public class MainActivityTest {
                 .atPositionOnView(0, R.id.notes_text))
                 .check(matches(withText("About my task")));
     }
-
-    /*
-    Tests that the "viewing" bar loads
-    */
-    @Test
-    public void viewingBarLoads() {
-        onView(withId(R.id.viewing_date_card))
-                .check(matches(isDisplayed()));
-    }
-
-    /*
-    Tests that the "viewing" bar updates
-    */
-    @Test
-    public void viewingBarUpdates() throws InterruptedException {
-        onView(withId(R.id.viewing_date_text))
-                .check(matches(withText(R.string.all_upcoming)));
-        onView(withId(R.id.top_app_bar))
-                .perform(click());
-        Thread.sleep(500);
-        int testRangeYear = 2020;
-        int testRangeMonth = 6;
-        int testRangeDay = 1;
-        onView(withId(R.id.view_by_date))
-                .perform(click());
-        Thread.sleep(3000);
-        onView(withClassName(equalTo(MaterialDatePicker.class.getName())))
-                .perform(setDate(testRangeYear, testRangeMonth, testRangeDay));
-        onView(withId(android.R.id.button1)).perform(click());
-        onView(withId(R.id.close_view_by_dialog)).perform(click());
-        onView(withId(R.id.viewing_date_text))
-                .check(matches(withText("June 01, 2020")));
-    }
-
-    // HELPERS FOR MATERIAL DATE PICKERS
-    public static void clickDay(Month month, int day) {
-        onView(
-                allOf(
-                        withTagValue(IsEqual.<Object>equalTo(month)),
-                        withText(String.valueOf(day))))
-                .perform(click());
-        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
-    }
-
 }

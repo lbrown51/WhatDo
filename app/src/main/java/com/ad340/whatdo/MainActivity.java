@@ -33,6 +33,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static androidx.fragment.app.DialogFragment.STYLE_NORMAL;
 import static com.ad340.whatdo.PickerUtils.onDateSetListener;
 import static com.ad340.whatdo.PickerUtils.onTimeSetListener;
 import static com.ad340.whatdo.PickerUtils.setDatePickerShowOnClick;
@@ -202,6 +203,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         MaterialDatePicker.Builder dateRangeBuilder = MaterialDatePicker.Builder.dateRangePicker();
         dateRangeBuilder.setTitleText(R.string.view_by_picker_date_range_title);
         MaterialDatePicker dateRangePicker = dateRangeBuilder.build();
+        //dateRangePicker.setStyle(STYLE_NORMAL, 0);
 
         dateRangePicker.show(this.getSupportFragmentManager(), dateRangePicker.toString());
 

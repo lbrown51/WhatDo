@@ -12,11 +12,11 @@ import org.hamcrest.TypeSafeMatcher;
 
 
 
-public class RecyclerViewMatcher {
+public class RecyclerViewMatcherTestUtil {
 
     private final int recyclerViewId;
 
-    public RecyclerViewMatcher(int recyclerViewId) {
+    public RecyclerViewMatcherTestUtil(int recyclerViewId) {
         this.recyclerViewId = recyclerViewId;
     }
 
