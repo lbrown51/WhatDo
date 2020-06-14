@@ -18,11 +18,13 @@ import static androidx.test.espresso.contrib.PickerActions.setDate;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withResourceName;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.ad340.whatdo.MaterialDatePickerTestUtils.clickCancel;
 import static com.ad340.whatdo.MaterialDatePickerTestUtils.clickDayDatePicker;
 import static com.ad340.whatdo.MaterialDatePickerTestUtils.clickDayDateRangePicker;
 import static com.ad340.whatdo.MaterialDatePickerTestUtils.clickOk;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 
 @RunWith(AndroidJUnit4.class)
@@ -153,7 +155,11 @@ Tests that the "viewing" bar updates
         onView(withId(R.id.close_view_by_dialog)).perform(click());
 
         Thread.sleep(500);
-        onView(withText("New Task"))
+        onView(allOf(
+                withText("New Task"),
+                withResourceName("name_text"),
+                isDisplayed()
+                ))
                 .check(matches(withText("New Task")));
     }
 }
