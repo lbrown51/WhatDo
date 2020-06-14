@@ -77,6 +77,7 @@
                 <Button
                     android:id="@+id/view_by_all_upcoming"
                     android:text="All Upcoming"
+                    android:layout_gravity="center"
                     android:onClick="allUpcomingHandler"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_height="@dimen/add_button_dimen"

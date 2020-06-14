@@ -1,32 +1,32 @@
 package com.ad340.whatdo;
 
+import android.widget.DatePicker;
+
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 
-import org.hamcrest.core.IsEqual;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.time.Month;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
+import static androidx.test.espresso.contrib.PickerActions.setDate;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
+import static com.ad340.whatdo.MaterialDatePickerTestUtils.clickCancel;
+import static com.ad340.whatdo.MaterialDatePickerTestUtils.clickDayDatePicker;
+import static com.ad340.whatdo.MaterialDatePickerTestUtils.clickDayDateRangePicker;
+import static com.ad340.whatdo.MaterialDatePickerTestUtils.clickOk;
 import static org.hamcrest.Matchers.equalTo;
 
 @RunWith(AndroidJUnit4.class)
 public class ViewByTest {
-
-    static final Object MONTHS_VIEW_GROUP_TAG = "MONTHS_VIEW_GROUP_TAG";
-    static final Object CONFIRM_BUTTON_TAG = "CONFIRM_BUTTON_TAG";
 
     @Rule
     public ActivityScenarioRule<MainActivity> activityScenarioRule =
@@ -42,44 +42,118 @@ public class ViewByTest {
     }
 
     /*
+    Tests that the "viewing by" dialog opens and closes with x button
+     */
+    @Test
+    public void viewByDialogOpenClose() {
+        onView(withId(R.id.top_app_bar))
+                .perform(click());
+        onView(withId(R.id.close_view_by_dialog))
+                .perform(click());
+        onView(withId(R.id.top_app_bar))
+                .check(matches(isDisplayed()));
+    }
+
+    /*
+    Tests that DatePickerDialog opens & closes
+     */
+    @Test
+    public void datePickerDialogsOpenClose() {
+        onView(withId(R.id.top_app_bar))
+            .perform(click());
+        onView(withId(R.id.view_by_date))
+            .perform(click());
+        clickCancel();
+        onView(withId(R.id.view_by_date_range))
+            .perform(click());
+        clickCancel();
+        onView(withId(R.id.view_by_dialog))
+            .check(matches(isDisplayed()));
+    }
+
+    /*
     Tests that the "viewing" bar updates
     */
     @Test
-    public void viewingBarUpdates() throws InterruptedException {
+    public void viewingBarUpdatesDate() throws InterruptedException {
         onView(withId(R.id.viewing_date_text))
                 .check(matches(withText(R.string.all_upcoming)));
         onView(withId(R.id.top_app_bar))
                 .perform(click());
         Thread.sleep(500);
-        int testRangeMonth = 6;
-        Month testRangeMo = Month.JUNE;
-        int testRangeDay = 1;
+        int testDay = 12;
         onView(withId(R.id.view_by_date))
                 .perform(click());
         Thread.sleep(3000);
-//        onView(withClassName(equalTo(DatePicker.class.getName())))
-//                .perform(setDate(testRangeYear, testRangeMonth, testRangeDay));
-//        onView(withId(android.R.id.button1)).perform(click());
-        clickDay(testRangeMo, testRangeDay);
+        clickDayDatePicker(testDay);
+        Thread.sleep(500);
         clickOk();
         onView(withId(R.id.close_view_by_dialog)).perform(click());
         onView(withId(R.id.viewing_date_text))
-                .check(matches(withText("June 01, 2020")));
+                .check(matches(withText("June 12, 2020")));
     }
 
-    // HELPERS FOR MATERIAL DATE PICKERS
-    public static void clickDay(Month month, int day) {
-        onView(
-                allOf(
-                        isDescendantOfA(withTagValue(equalTo(MONTHS_VIEW_GROUP_TAG))),
-                        withTagValue(IsEqual.<Object>equalTo(month)),
-                        withText(String.valueOf(day))))
+    /*
+Tests that the "viewing" bar updates
+*/
+    @Test
+    public void viewingBarUpdatesDateRange() throws InterruptedException {
+        onView(withId(R.id.viewing_date_text))
+                .check(matches(withText(R.string.all_upcoming)));
+        onView(withId(R.id.top_app_bar))
                 .perform(click());
-        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+        Thread.sleep(500);
+        int testDay = 12;
+        onView(withId(R.id.view_by_date_range))
+                .perform(click());
+        Thread.sleep(3000);
+        clickDayDateRangePicker(testDay, "June, 2020");
+        Thread.sleep(1500);
+        clickDayDateRangePicker(testDay, "July, 2020");
+        clickOk();
+        onView(withId(R.id.close_view_by_dialog)).perform(click());
+        onView(withId(R.id.viewing_date_text))
+                .check(matches(withText("June 12, 2020 to July 12, 2020")));
     }
 
-    static void clickOk() {
-        onView(withTagValue(equalTo(CONFIRM_BUTTON_TAG))).perform(click());
-        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+    /*
+    Test add a task on a date, then view only that date, and that task appears
+     */
+    @Test
+    public void newTodosFilter() throws InterruptedException {
+        int year = 2020;
+        int month = 6;
+        int dayOfMonth = 28;
+
+        closeSoftKeyboard();
+        Thread.sleep(500);
+        onView(withId(R.id.fab)).perform(click());
+        Thread.sleep(500);
+        onView(withId(R.id.create_todo_task_name_edit_text))
+                .perform(typeText("New Task"), closeSoftKeyboard());
+
+        Thread.sleep(500);
+        onView(withId(R.id.create_todo_date_btn)).perform(click());
+        onView(withClassName(equalTo(
+                DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
+        onView(withId(android.R.id.button1)).perform(click());
+
+        onView(withId(R.id.create_todo_finish_btn))
+                .perform(click());
+
+        // this will break in July - figure out how to change month
+        onView(withId(R.id.top_app_bar))
+                .perform(click());
+        Thread.sleep(500);
+        onView(withId(R.id.view_by_date))
+                .perform(click());
+        Thread.sleep(3000);
+        clickDayDatePicker(dayOfMonth);
+        clickOk();
+        onView(withId(R.id.close_view_by_dialog)).perform(click());
+
+        Thread.sleep(500);
+        onView(withText("New Task"))
+                .check(matches(withText("New Task")));
     }
 }
