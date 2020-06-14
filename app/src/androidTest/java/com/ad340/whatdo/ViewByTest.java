@@ -132,7 +132,7 @@ Tests that the "viewing" bar updates
         onView(withId(R.id.fab)).perform(click());
         Thread.sleep(500);
         onView(withId(R.id.create_todo_task_name_edit_text))
-                .perform(typeText("New Task"), closeSoftKeyboard());
+                .perform(typeText("Test Task"), closeSoftKeyboard());
 
         Thread.sleep(500);
         onView(withId(R.id.create_todo_date_btn)).perform(click());
@@ -156,10 +156,10 @@ Tests that the "viewing" bar updates
 
         Thread.sleep(500);
         onView(allOf(
-                withText("New Task"),
+                withText("Test Task"),
                 withResourceName("name_text"),
                 isDisplayed()
                 ))
-                .check(matches(withText("New Task")));
+                .check(matches(withText("Test Task")));
     }
 }
