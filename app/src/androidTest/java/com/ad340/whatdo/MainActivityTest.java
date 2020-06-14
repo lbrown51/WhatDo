@@ -431,7 +431,8 @@ public class MainActivityTest {
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.notes_text))
-                .perform(typeText("About my task"), closeSoftKeyboard());
+                .perform(typeText("About my task"));
+        closeSoftKeyboard();
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.notes_text))
