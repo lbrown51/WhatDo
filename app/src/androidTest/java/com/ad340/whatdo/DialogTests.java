@@ -198,6 +198,7 @@ public class DialogTests {
         Thread.sleep(500);
         onView(withId(R.id.create_todo_notes_text))
                 .perform(typeText("About my new task"));
+        Espresso.closeSoftKeyboard();
 
         onView(withId(R.id.create_todo_finish_btn))
                 .perform(click());
@@ -313,6 +314,7 @@ public class DialogTests {
         closeSoftKeyboard();
         Thread.sleep(500);
         onView(withId(R.id.r_interval)).perform(typeText("30"));
+        Espresso.closeSoftKeyboard();
         onView(withId(R.id.r_confirm_button)).perform(click());
         closeSoftKeyboard();
         onView(withId(android.R.id.button1)).perform(click());
@@ -338,6 +340,7 @@ public class DialogTests {
         Thread.sleep(500);
         onView(withId(R.id.chip_weekly)).perform(click());
         onView(withId(R.id.r_interval)).perform(typeText("4"));
+        Espresso.closeSoftKeyboard();
         onView(withId(R.id.r_confirm_button)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
         onView(withText("12/13/20"))
@@ -358,8 +361,10 @@ public class DialogTests {
         onView(withId(R.id.r_confirm_button)).perform(click());
         onView(withId(R.id.recurring_container)).check(matches(isDisplayed()));
         onView(withId(R.id.r_interval)).perform(typeText("0"));
+        Espresso.closeSoftKeyboard();
         onView(withId(R.id.r_interval)).check(matches(withText("")));
         onView(withId(R.id.r_interval)).perform(typeText("-3"));
+        Espresso.closeSoftKeyboard();
         onView(withId(R.id.r_interval)).check(matches(withText("3")));
     }
 
