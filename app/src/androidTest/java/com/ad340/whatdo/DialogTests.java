@@ -302,15 +302,19 @@ public class DialogTests {
         int month = 8;
         int dayOfMonth = 14;
         onView(withId(R.id.fab)).perform(click());
+        closeSoftKeyboard();
         Thread.sleep(500);
         onView(withId(R.id.create_todo_is_recurring)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
         onView(withId(R.id.create_todo_date_btn)).perform(click());
+        closeSoftKeyboard();
         onView(withClassName(Matchers.equalTo(
                 DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
         onView(withId(android.R.id.button3)).perform(click());
+        closeSoftKeyboard();
         Thread.sleep(500);
         onView(withId(R.id.r_interval)).perform(typeText("30"));
         onView(withId(R.id.r_confirm_button)).perform(click());
+        closeSoftKeyboard();
         onView(withId(android.R.id.button1)).perform(click());
         onView(withText("8/14/20"))
                 .check(matches(isDisplayed()));
