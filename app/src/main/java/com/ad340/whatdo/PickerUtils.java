@@ -3,7 +3,11 @@ package com.ad340.whatdo;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.util.Log;
+import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -13,54 +17,76 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class PickerUtils {
+    private static final String TAG = PickerUtils.class.getName();
+    private static final Calendar c = Calendar.getInstance();
+
+    private static String rEncoded = Constants.NO_RECURRENCE;
 
     public static DatePickerDialog.OnDateSetListener onDateSetListener ( // RecyclerViewAdapter
-            Calendar c, Todo todo, ToDoItemRecyclerViewAdapter.ToDoItemViewHolder holder,
+            Todo todo, ToDoItemRecyclerViewAdapter.ToDoItemViewHolder holder,
             OnTodoInteractionListener listener) {
         return (view, year, monthOfYear, dayOfMonth) -> {
-            c.set(Calendar.YEAR, year);
-            c.set(Calendar.MONTH, monthOfYear);
-            c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            setUserDate(year, monthOfYear, dayOfMonth);
 
-            StringBuilder dateString = new StringBuilder(DateFormat.getDateInstance(DateFormat.SHORT).format(c.getTime()));
+            Log.i(TAG, "onDateSetListener: RecyclerViewAdapter");
+            Log.i(TAG, rEncoded);
 
+            StringBuilder dateString = new StringBuilder(
+                    DateFormat.getDateInstance(DateFormat.SHORT).format(c.getTime()));
             holder.toDoDate.setText(dateString);
             try {
                 listener.onUpdateTodo(todo, String.valueOf(dateString), Constants.DATE);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
+            if (!rEncoded.equals(Constants.NO_RECURRENCE)) {
+                Log.i(TAG, "onDateSetListener: viewadapter");
+                Log.i(TAG, String.valueOf(holder.recurringIV.getVisibility()));
+                holder.recurringIV.setVisibility(View.VISIBLE);
+            } else {
+                holder.recurringIV.setVisibility(View.INVISIBLE);
+            }
+            resetDate();
         };
     }
 
     public static DatePickerDialog.OnDateSetListener onDateSetListener (  // MainActivity
-            Calendar c, StringBuilder dateString, TextView v) {
+            StringBuilder dateString, TextView v, ImageView iv) {
         return (view, year, monthOfYear, dayOfMonth) -> {
-            c.set(Calendar.YEAR, year);
-            c.set(Calendar.MONTH, monthOfYear);
-            c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            setUserDate(year, monthOfYear, dayOfMonth);
+
+            Log.i(TAG, "onDateSetListener: CreateDialog");
+            Log.i(TAG, rEncoded);
 
             dateString.setLength(0);
             // I changed this to DateFormat.SHORT format so I can parse it more easily
             dateString.append(DateFormat.getDateInstance(DateFormat.SHORT).format(c.getTime()));
             v.setText(dateString);
+            if (!rEncoded.equals(Constants.NO_RECURRENCE)) {
+                iv.setVisibility(View.VISIBLE);
+            }
+            resetDate();
         };
     }
 
-    public static void setDatePickerShowOnClick(Context context, Calendar c, ImageButton imageButton,
-                                                DatePickerDialog.OnDateSetListener date) {
-        imageButton.setOnClickListener(view ->
-                new DatePickerDialog(context, date,
-                        c.get(Calendar.YEAR),
-                        c.get(Calendar.MONTH),
-                        c.get(Calendar.DAY_OF_MONTH)).show()
-        );
+    public static void setDatePicker(
+            Context context, ImageButton imageButton, DatePickerDialog.OnDateSetListener date) {
+        imageButton.setOnClickListener(view -> {
+            initDatePicker(context, date);
+        });
     }
 
+    public static void setDatePicker(Context context, DatePickerDialog.OnDateSetListener date) {
+        initDatePicker(context, date);
+    }
+
+    public static void setDatePicker(Context context, DatePickerDialog.OnDateSetListener date, String recurrenceEncoded) {
+        rEncoded = recurrenceEncoded;
+        initDatePicker(context, date);
+    }
 
     public static TimePickerDialog.OnTimeSetListener onTimeSetListener ( // RecyclerViewAdapter
-            Calendar c, Todo todo, ToDoItemRecyclerViewAdapter.ToDoItemViewHolder holder,
+            Todo todo, ToDoItemRecyclerViewAdapter.ToDoItemViewHolder holder,
             OnTodoInteractionListener listener) {
         return (view, hourOfDay, minute) -> {
             c.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -75,12 +101,12 @@ public class PickerUtils {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
+            resetTime();
         };
     }
 
     public static TimePickerDialog.OnTimeSetListener onTimeSetListener ( // MainActivity
-            Calendar c, StringBuilder timeString, TextView v) {
+            StringBuilder timeString, TextView v) {
         return (view, hourOfDay, minute) -> {
             c.set(Calendar.HOUR_OF_DAY, hourOfDay);
             c.set(Calendar.MINUTE, minute);
@@ -89,11 +115,12 @@ public class PickerUtils {
             timeString.setLength(0);
             timeString.append(sdf.format(c.getTime()));
             v.setText(timeString);
+            resetTime();
         };
     }
 
 
-    public static void setTimePickerShowOnClick(Context context, Calendar c, ImageButton imageButton,
+    public static void setTimePickerShowOnClick(Context context, ImageButton imageButton,
                                                 TimePickerDialog.OnTimeSetListener time) {
         imageButton.setOnClickListener(view ->
                 new TimePickerDialog(context, time,
@@ -101,8 +128,40 @@ public class PickerUtils {
                         c.get(Calendar.MINUTE), false).show());
     }
 
+    // helpers
+    public static void resetDate() {
+        Calendar cTodayDate = Calendar.getInstance();
+        c.set(Calendar.YEAR, cTodayDate.get(Calendar.YEAR));
+        c.set(Calendar.MONTH, cTodayDate.get(Calendar.MONTH));
+        c.set(Calendar.DAY_OF_MONTH, cTodayDate.get(Calendar.DAY_OF_MONTH));
+        rEncoded = Constants.NO_RECURRENCE;
+    }
 
+    private static void setUserDate(int year, int month, int dayOfMonth) {
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, month);
+        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+    }
 
+    private static void resetTime() {
+        Calendar cTodayTime = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, cTodayTime.get(Calendar.HOUR_OF_DAY));
+        c.set(Calendar.MINUTE, cTodayTime.get(Calendar.MINUTE));
+    }
 
+    private static void initDatePicker(Context context, DatePickerDialog.OnDateSetListener date) {
+        DatePickerDialog dialog = new DatePickerDialog(
+                context, date, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+        dialog.setButton(DialogInterface.BUTTON_NEUTRAL, context.getString(R.string.set_recurring), (dialogInterface, i) -> {
+            c.set(Calendar.YEAR, dialog.getDatePicker().getYear());
+            c.set(Calendar.MONTH, dialog.getDatePicker().getMonth());
+            c.set(Calendar.DAY_OF_MONTH, dialog.getDatePicker().getDayOfMonth());
+            int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
 
+            RecurringTodoFragment recurringTodoFragment = new RecurringTodoFragment(date, dayOfWeek);
+            recurringTodoFragment.show(((MainActivity) context).getSupportFragmentManager(),
+                    Constants.TAG_RECURRING_FRAG);
+        });
+        dialog.show();
+    }
 }
