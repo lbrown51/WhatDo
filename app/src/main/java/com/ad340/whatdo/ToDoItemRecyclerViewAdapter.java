@@ -6,13 +6,13 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,19 +24,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
+import static com.ad340.whatdo.PickerUtils.setDatePicker;
 import static com.ad340.whatdo.PickerUtils.onDateSetListener;
 import static com.ad340.whatdo.PickerUtils.onTimeSetListener;
-import static com.ad340.whatdo.PickerUtils.setDatePickerShowOnClick;
 import static com.ad340.whatdo.PickerUtils.setTimePickerShowOnClick;
 
 
 public class ToDoItemRecyclerViewAdapter
-        extends RecyclerView.Adapter<ToDoItemRecyclerViewAdapter.ToDoItemViewHolder>{
+        extends RecyclerView.Adapter<ToDoItemRecyclerViewAdapter.ToDoItemViewHolder> {
     private static final String TAG = ToDoItemRecyclerViewAdapter.class.getName();
     private Context context;
     private List<Todo> todos;
@@ -66,17 +64,14 @@ public class ToDoItemRecyclerViewAdapter
     public void onBindViewHolder(@NonNull final ToDoItemViewHolder holder, int position) {
         if (todos != null && position < todos.size()) {
             Todo todo = todos.get(position);
-            Log.d(TAG, "onBindViewHolder: " + todo.getDate().getTime().toString());
             // date comes in as Date, need to change to string to update
-            SimpleDateFormat sdf = new SimpleDateFormat("DD.mm.yy");
-            Calendar c = Calendar.getInstance();
             final boolean isExpanded = position==mExpandedPosition;
 
             // user sets date in DatePicker
-            final DatePickerDialog.OnDateSetListener date = onDateSetListener(c, todo, holder, listener);
+            final DatePickerDialog.OnDateSetListener date = onDateSetListener(todo, holder, listener);
 
             // user sets time in TimePicker
-            final TimePickerDialog.OnTimeSetListener time = onTimeSetListener(c, todo, holder, listener);
+            final TimePickerDialog.OnTimeSetListener time = onTimeSetListener(todo, holder, listener);
 
             holder.todoDetail.setVisibility(isExpanded?View.VISIBLE:View.GONE);
             holder.itemView.setActivated(isExpanded);
@@ -94,9 +89,7 @@ public class ToDoItemRecyclerViewAdapter
             holder.toDoFinishedCheckbox.setOnClickListener(view -> {
                 try {
                     mTodoViewModel.updateTodo(todo, "", Constants.COMPLETE);
-                    Log.d(TAG, "onBindViewHolder: update complete");
                 } catch (ParseException e) {
-                    Log.d(TAG, "onBindViewHolder: update complete error");
                     e.printStackTrace();
                 }
                 Intent updateWidgetIntent = new Intent(context, TodoListWidget.class);
@@ -117,10 +110,7 @@ public class ToDoItemRecyclerViewAdapter
                 popup.setOnMenuItemClickListener(item -> {
                     switch (item.getItemId()) {
                         case R.id.reschedule:
-                            new DatePickerDialog(context, date,
-                                    c.get(Calendar.YEAR),
-                                    c.get(Calendar.MONTH),
-                                    c.get(Calendar.DAY_OF_MONTH)).show();
+                            setDatePicker(context, date);
                             break;
                         case R.id.cancel:
                             mTodoViewModel.removeTodo(todo);
@@ -161,8 +151,8 @@ public class ToDoItemRecyclerViewAdapter
             });
 
             // show DatePicker and TimePicker
-            setDatePickerShowOnClick(context, c, holder.toDoDateButton, date);
-            setTimePickerShowOnClick(context, c, holder.toDoTimeButton, time);
+            setDatePicker(context, holder.toDoDateButton, date);
+            setTimePickerShowOnClick(context, holder.toDoTimeButton, time);
 
             // if current task is expanded, previous = current
             if (isExpanded) previousExpandedPosition = position;
@@ -209,6 +199,11 @@ public class ToDoItemRecyclerViewAdapter
         }
     }
 
+    public void emptyList() {
+        this.todos = new ArrayList<>();
+        notifyDataSetChanged();
+    }
+
     static class ToDoItemViewHolder extends RecyclerView.ViewHolder {
         TextView toDoTaskName;
         TextView toDoTime;
@@ -220,6 +215,7 @@ public class ToDoItemRecyclerViewAdapter
         ImageButton toDoNotesButton;
         CheckBox toDoFinishedCheckbox;
         EditText toDoNotesText;
+        ImageView recurringIV;
 
         ToDoItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -233,6 +229,7 @@ public class ToDoItemRecyclerViewAdapter
             toDoTimeButton = itemView.findViewById(R.id.time_btn);
             toDoNotesButton = itemView.findViewById(R.id.notes_btn);
             toDoNotesText = itemView.findViewById(R.id.notes_text);
+            recurringIV = itemView.findViewById(R.id.is_recurring);
         }
     }
 }

@@ -7,12 +7,14 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +28,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -34,9 +37,9 @@ import java.util.List;
 import java.util.Locale;
 
 import static androidx.fragment.app.DialogFragment.STYLE_NORMAL;
+import static com.ad340.whatdo.PickerUtils.setDatePicker;
 import static com.ad340.whatdo.PickerUtils.onDateSetListener;
 import static com.ad340.whatdo.PickerUtils.onTimeSetListener;
-import static com.ad340.whatdo.PickerUtils.setDatePickerShowOnClick;
 import static com.ad340.whatdo.PickerUtils.setTimePickerShowOnClick;
 
 public class MainActivity extends AppCompatActivity implements OnTodoInteractionListener {
@@ -58,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         setContentView(R.layout.activity_main);
 
         mTodoViewModel = new ViewModelProvider(this).get(TodoViewModel.class);
+        mTodoViewModel.emptyListHandler = this;
         adapter = new ToDoItemRecyclerViewAdapter(this);
         RecyclerView toDoRecyclerView = findViewById(R.id.todo_list_recycler_view);
 
@@ -203,7 +207,6 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         MaterialDatePicker.Builder dateRangeBuilder = MaterialDatePicker.Builder.dateRangePicker();
         dateRangeBuilder.setTitleText(R.string.view_by_picker_date_range_title);
         MaterialDatePicker dateRangePicker = dateRangeBuilder.build();
-        //dateRangePicker.setStyle(STYLE_NORMAL, 0);
 
         dateRangePicker.show(this.getSupportFragmentManager(), dateRangePicker.toString());
 
@@ -235,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         Calendar start = Calendar.getInstance();
         Calendar end = Calendar.getInstance();
         setDateMinimum(start);
-        end.add(Calendar.YEAR, 1);
+        end.add(Calendar.YEAR, 1000);
         setAllUpcomingText(viewing);
         dateRange.setDateRange(start, end);
     }
@@ -246,7 +249,6 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(createView);
 
-        Calendar c = Calendar.getInstance();
         StringBuilder dateString = new StringBuilder();
         StringBuilder timeString = new StringBuilder();
 
@@ -257,13 +259,15 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         ImageButton newTodoDateButton = dialog.findViewById(R.id.create_todo_date_btn);
         ImageButton newTodoTimeButton = dialog.findViewById(R.id.create_todo_time_btn);
         ImageButton newTodoNotesButton = dialog.findViewById(R.id.create_todo_notes_btn);
+        ImageView newTodoIsRecurring = dialog.findViewById(R.id.create_todo_is_recurring);
+        newTodoIsRecurring.setVisibility(View.INVISIBLE);
         EditText newTodoNotesText = dialog.findViewById(R.id.create_todo_notes_text);
 
-        final DatePickerDialog.OnDateSetListener date = onDateSetListener(c, dateString, dateText);
-        final TimePickerDialog.OnTimeSetListener time = onTimeSetListener(c, timeString, timeText);
+        final DatePickerDialog.OnDateSetListener date = onDateSetListener(dateString, dateText, newTodoIsRecurring);
+        final TimePickerDialog.OnTimeSetListener time = onTimeSetListener(timeString, timeText);
 
-        setDatePickerShowOnClick(this, c, newTodoDateButton, date);
-        setTimePickerShowOnClick(this, c, newTodoTimeButton, time);
+        setDatePicker(this, newTodoDateButton, date);
+        setTimePickerShowOnClick(this, newTodoTimeButton, time);
 
         newTodoNotesButton.setOnClickListener(view -> {
             if (newTodoNotesText.getVisibility() == View.GONE) {
@@ -275,9 +279,18 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
 
         finishNewTodoButton.setOnClickListener(view -> {
             String newTodoText = newTodoEditText.getText().toString();
+            Calendar c = Calendar.getInstance();
+
             if (newTodoText.isEmpty()) {
                 newTodoEditText.setError(getString(R.string.empty_task_error));
             } else {
+                DateFormat df = new SimpleDateFormat("MM/dd/yy", Locale.US);
+                try {
+                    Date d = df.parse(String.valueOf(dateString));
+                    c.setTime(d);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 Todo newTodo = new Todo(null, newTodoText, c,
                         String.valueOf(timeString), String.valueOf(newTodoNotesText.getText()),
                         false, null);
@@ -320,5 +333,10 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         } catch (ParseException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void emptyList() {
+        adapter.emptyList();
     }
 }

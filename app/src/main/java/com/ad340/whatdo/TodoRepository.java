@@ -24,7 +24,10 @@ public class TodoRepository {
 
     LiveData<List<Todo>> getTodosInRange(Calendar start, Calendar end, boolean isCompleted) {
         Log.d(TAG, "getTodosInRange: " + start.getTime().toString() + " " + end.getTime().toString());
-        return todoDao.getTodosInRange(start, end, isCompleted);
+        LiveData<List<Todo>> temp = todoDao.getTodosInRange(start, end, isCompleted);
+        if (temp.getValue() == null)
+            handler.setEmptyList();
+        return temp;
     }
 
     LiveData<List<Todo>> getAllTodosInRange(Calendar start, Calendar end) {

@@ -1,6 +1,7 @@
 package com.ad340.whatdo;
 
 import android.view.KeyEvent;
+
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
@@ -10,10 +11,12 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -43,8 +46,8 @@ public class MainActivityTest {
             new ActivityScenarioRule<>(MainActivity.class);
 
 
-    public static RecyclerViewMatcherTestUtils withRecyclerView(final int recyclerViewId) {
-        return new RecyclerViewMatcherTestUtils(recyclerViewId);
+    public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
+        return new RecyclerViewMatcher(recyclerViewId);
     }
 
     /*
@@ -55,28 +58,6 @@ public class MainActivityTest {
         onView(withId(R.id.top_app_bar))
                 .check(matches(isDisplayed()));
     }
-
-    /*
-        Tests whether the header has the correct date
-     */
-//    @Test
-//    public void headerTextUpdates() throws InterruptedException {
-//        AppCompatActivity activity = (AppCompatActivity) TestUtils.getActivity();
-//        Calendar today = Calendar.getInstance();
-//        StringBuilder expectedText = new StringBuilder(TestUtils.getString(R.string.app_bar_title));
-//        expectedText.append("      ");
-//        expectedText.append(today.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH));
-//        expectedText.append(String.format(" %02d, %04d",
-//                today.get(Calendar.DAY_OF_MONTH),
-//                today.get(Calendar.YEAR)));
-//        MaterialToolbar appBar = activity.findViewById(R.id.top_app_bar);
-//        String displayText = appBar.getTitle().toString();
-//        Log.e("displayText", displayText);
-//        Log.e("expectedText", expectedText.toString());
-//        assertEquals(displayText, expectedText.toString());
-//
-//        Thread.sleep(250);
-//    }
 
     /*
         Tests whether the app loads the recycler view
@@ -93,14 +74,15 @@ public class MainActivityTest {
     @Test
     public void tasksDisplayCorrectViews() throws InterruptedException {
         Thread.sleep(250);
-        onView(withId(R.id.todo_list_recycler_view))
-                .check(matches(hasDescendant(withId(R.id.name_text))));
 
-        onView(withId(R.id.todo_list_recycler_view))
-                .check(matches(hasDescendant(withId(R.id.date_text))));
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPosition(0)).check(matches(hasDescendant(withId(R.id.name_text))));
 
-        onView(withId(R.id.todo_list_recycler_view))
-                .check(matches(hasDescendant(withId(R.id.todo_item_finished_checkbox))));
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPosition(0)).check(matches(hasDescendant(withId(R.id.date_text))));
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPosition(0)).check(matches(hasDescendant(withId(R.id.todo_item_finished_checkbox))));
     }
 
     /*
@@ -317,11 +299,13 @@ public class MainActivityTest {
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.reschedule_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+        closeSoftKeyboard();
 
         // Expand first task
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.name_text))
                 .perform(click());
+        closeSoftKeyboard();
 
         // Date and buttons are visible
         onView(withRecyclerView(R.id.todo_list_recycler_view)
@@ -344,11 +328,13 @@ public class MainActivityTest {
                 .atPositionOnView(0, R.id.date_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
+        closeSoftKeyboard();
         // Collapse first task
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.name_text))
                 .perform(click());
 
+        closeSoftKeyboard();
         Thread.sleep(500);
         // Date and buttons are invisible
         onView(withRecyclerView(R.id.todo_list_recycler_view)
@@ -371,7 +357,6 @@ public class MainActivityTest {
                 .atPositionOnView(0, R.id.date_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
     }
-
 
     /*
         Tests whether tasks can be expanded from the time TextView or not
@@ -398,12 +383,14 @@ public class MainActivityTest {
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.reschedule_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+        closeSoftKeyboard();
 
         // Expand second task
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.time_text))
                 .perform(click());
 
+        closeSoftKeyboard();
         // Date and buttons are visible
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.date_text))
@@ -425,11 +412,12 @@ public class MainActivityTest {
                 .atPositionOnView(0, R.id.date_btn))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
+        closeSoftKeyboard();
         // Collapse second task
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.time_text))
                 .perform(click());
-
+        closeSoftKeyboard();
         Thread.sleep(1000);
 
         // Date and buttons are invisible
@@ -454,7 +442,6 @@ public class MainActivityTest {
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
     }
 
-
     /*
         Tests whether tasks have a Cancel option
     */
@@ -468,7 +455,11 @@ public class MainActivityTest {
                 .atPositionOnView(0, R.id.reschedule_btn))
                 .perform(click());
 
-        onView(withText(R.string.cancel)).perform(click());
+        try {
+            onView(withText(R.string.cancel)).perform(click());
+        } catch (NoMatchingViewException e) {
+            e.printStackTrace();
+        }
     }
 
     /*
@@ -476,6 +467,8 @@ public class MainActivityTest {
     */
     @Test
     public void canCancelTask() throws InterruptedException {
+        Thread.sleep(500);
+        closeSoftKeyboard();
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.name_text))
                 .perform(click());
@@ -493,7 +486,6 @@ public class MainActivityTest {
                 .atPositionOnView(0, R.id.name_text))
                 .check(matches(not(withText("Second Todo"))));
     }
-
 
     /*
         Tests whether tasks have a Reschedule option
@@ -515,11 +507,13 @@ public class MainActivityTest {
         Tests whether tasks can be rescheduled
     */
     @Test
-    public void canRescheduleTask() {
+    public void canRescheduleTask() throws InterruptedException {
+        Thread.sleep(500);
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.name_text))
                 .perform(click());
 
+        Thread.sleep(500);
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.reschedule_btn))
                 .perform(click());
@@ -529,9 +523,10 @@ public class MainActivityTest {
         int year = 2020;
         int month = 6;
         int dayOfMonth = 28;
-        onView(withClassName(equalTo(
+        onView(withClassName(Matchers.equalTo(
                 DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
         onView(withId(android.R.id.button1)).perform(click());
+        Thread.sleep(500);
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.date_text))
                 .check(matches(withText("Sunday, June 28, 2020")));
@@ -541,14 +536,14 @@ public class MainActivityTest {
         Tests whether tasks can be finished
     */
     @Test
-    public void canFinishTask() {
+    public void canFinishTask() throws InterruptedException {
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(1, R.id.todo_item_finished_checkbox))
                 .perform(click());
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(1, R.id.name_text))
-                .check(matches(not(withText("Third Todo"))));
+                .check(matches(withText("Fourth Todo")));
     }
 
     /*
@@ -568,7 +563,7 @@ public class MainActivityTest {
                 .atPositionOnView(0, R.id.date_btn))
                 .perform(click());
 
-        onView(withClassName(equalTo(
+        onView(withClassName(Matchers.equalTo(
                 DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
         onView(withId(android.R.id.button1)).perform(click());
         onView(withRecyclerView(R.id.todo_list_recycler_view)
@@ -580,9 +575,11 @@ public class MainActivityTest {
         Tests that the TimePicker works
      */
     @Test
-    public void timePickerWorks() {
+    public void timePickerWorks() throws InterruptedException {
         int hourOfDay = 16;
         int minute = 30;
+        Thread.sleep(500);
+        closeSoftKeyboard();
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.name_text))
                 .perform(click());
@@ -591,7 +588,7 @@ public class MainActivityTest {
                 .atPositionOnView(0, R.id.time_btn))
                 .perform(click());
 
-        onView(withClassName(equalTo(
+        onView(withClassName(Matchers.equalTo(
                 TimePicker.class.getName()))).perform(setTime(hourOfDay, minute));
         onView(withId(android.R.id.button1)).perform(click());
 
@@ -624,9 +621,18 @@ public class MainActivityTest {
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.notes_text))
                 .perform(typeText("About my task"));
+        closeSoftKeyboard();
 
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.notes_text))
                 .check(matches(withText("About my task")));
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.name_text))
+                .perform(click());
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.notes_text))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
     }
 }

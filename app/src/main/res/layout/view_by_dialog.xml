@@ -76,13 +76,13 @@
 
                 <Button
                     android:id="@+id/view_by_all_upcoming"
-                    android:text="All Upcoming"
-                    android:layout_gravity="center"
-                    android:onClick="allUpcomingHandler"
                     android:layout_width="@dimen/match_constraint"
+                    android:layout_gravity="center"
                     android:layout_height="@dimen/add_button_dimen"
                     android:layout_marginHorizontal="@dimen/large_item_spacing"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:onClick="allUpcomingHandler"
+                    android:text="All Upcoming" />
 
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
