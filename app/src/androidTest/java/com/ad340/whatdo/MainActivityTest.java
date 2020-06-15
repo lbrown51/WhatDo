@@ -180,6 +180,7 @@ public class MainActivityTest {
      @Test
      public void createNewTodoHasCorrectFields() throws InterruptedException {
          Thread.sleep(1000);
+         closeSoftKeyboard();
          onView(withId(R.id.fab)).perform(click());
          Thread.sleep(2000);
          onView(withId(R.id.create_todo_dialog))
