@@ -40,8 +40,8 @@ public class DialogTests {
             new ActivityScenarioRule<>(MainActivity.class);
 
 
-    public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
-        return new RecyclerViewMatcher(recyclerViewId);
+    public static RecyclerViewMatcherTestUtils withRecyclerView(final int recyclerViewId) {
+        return new RecyclerViewMatcherTestUtils(recyclerViewId);
     }
 
     /*

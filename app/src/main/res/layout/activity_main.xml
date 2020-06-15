@@ -18,7 +18,6 @@
             android:id="@+id/top_app_bar"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             app:layout_constraintTop_toTopOf="parent"
-            android:paddingTop="@dimen/todo_item_margin"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:clickable="true"

@@ -19,8 +19,6 @@ import org.junit.runner.RunWith;
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.pressKey;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.PickerActions.setDate;
@@ -31,24 +29,16 @@ import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.equalTo;
+import static com.ad340.whatdo.DialogTests.withRecyclerView;
 import static org.hamcrest.Matchers.not;
 
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
 
-    static final Object MONTHS_VIEW_GROUP_TAG = "MONTHS_VIEW_GROUP_TAG";
-    static final Object CONFIRM_BUTTON_TAG = "CONFIRM_BUTTON_TAG";
-
     @Rule
     public ActivityScenarioRule<MainActivity> activityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
-
-
-    public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
-        return new RecyclerViewMatcher(recyclerViewId);
-    }
 
     /*
         Tests whether the app bar is displayed
@@ -94,187 +84,7 @@ public class MainActivityTest {
                 .check(matches(isDisplayed()));
     }
 
-    /*
-        Tests whether the floating action button opens a dialog on click,
-        and the x button in the dialog closes the dialog
-     */
-    @Test
-    public void openCloseDialog() {
-        onView(withId(R.id.fab)).perform(click());
-        onView(withId(R.id.create_todo_dialog))
-                .check(matches(isDisplayed()));
-        onView(withId(R.id.close_dialog)).perform(click());
-        try {
-            onView(withId(R.id.create_todo_dialog))
-                    .check(matches(not(isDisplayed())));
-            // TODO Add more add todo checks
-        } catch (NoMatchingViewException e) {
-            onView(withId(R.id.fab))
-                    .check(matches(isDisplayed()));
-        }
-    }
-
-    /*
-        Tests whether the floating action button opens a dialog on click,
-        and the x button in the dialog closes the dialog
-     */
-    @Test
-    public void openCloseDialogWithButton() {
-        onView(withId(R.id.fab)).perform(click());
-        onView(withId(R.id.create_todo_dialog))
-                .check(matches(isDisplayed()));
-        onView(withId(R.id.close_dialog)).perform(click());
-        try {
-            onView(withId(R.id.create_todo_dialog))
-                    .check(matches(not(isDisplayed())));
-            // TODO Add more add todo checks
-        } catch (NoMatchingViewException e) {
-            onView(withId(R.id.fab))
-                    .check(matches(isDisplayed()));
-        }
-    }
-
-    /*
-        Tests whether the create to-do dialog closes with back button
-    */
-    @Test
-    public void openCloseDialogWithBackKey() throws InterruptedException {
-        Thread.sleep(250);
-
-        onView(withId(R.id.fab)).perform(click());
-        onView(withId(R.id.create_todo_dialog))
-                .check(matches(isDisplayed()));
-        pressKey(KeyEvent.KEYCODE_0);
-        Espresso.pressBack();
-        try {
-            onView(withId(R.id.create_todo_dialog))
-                    .check(matches(not(isDisplayed())));
-            // TODO Add more add todo checks
-        } catch (NoMatchingViewException e) {
-            onView(withId(R.id.fab))
-                    .check(matches(isDisplayed()));
-        }
-    }
-
-     /*
-        Tests whether create new task form has correct fields
-     */
-     @Test
-     public void createNewTodoHasCorrectFields() throws InterruptedException {
-         Thread.sleep(1000);
-         closeSoftKeyboard();
-         onView(withId(R.id.fab)).perform(click());
-         Thread.sleep(2000);
-         onView(withId(R.id.create_todo_dialog))
-                 .check(matches(isDisplayed()));
-
-         onView(withId(R.id.create_todo_task_name_layout))
-                 .check(matches(isDisplayed()));
-         onView(withId(R.id.create_todo_finish_btn))
-                 .check(matches(isDisplayed()));
-         onView(withId(R.id.create_todo_title))
-                 .check(matches(isDisplayed()));
-         onView(withId(R.id.create_todo_time_btn))
-                 .check(matches(isDisplayed()));
-         onView(withId(R.id.create_todo_date_btn))
-                 .check(matches(isDisplayed()));
-         onView(withId(R.id.create_todo_notes_btn))
-                 .perform(click())
-                 .check(matches(isDisplayed()));
-         onView(withId(R.id.create_todo_notes_text))
-                 .check(matches(isDisplayed()));
-     }
-
-     /*
-        Tests if empty tasks won't be created.
-     */
-     @Test
-     public void emptyTaskStopsTodoCreate() throws InterruptedException {
-         Thread.sleep(1000);
-         onView(withId(R.id.fab)).perform(click());
-         onView(withId(R.id.create_todo_dialog))
-                 .check(matches(isDisplayed()));
-
-         onView(withId(R.id.create_todo_finish_btn))
-                 .perform(click());
-         onView(withId(R.id.create_todo_dialog))
-                 .check(matches(isDisplayed()));
-     }
-
-     /*
-        Tests if new tasks can be created.
-     */
-     @Test
-     public void canCreateNewTodo() throws InterruptedException {
-         int hourOfDay = 16;
-         int minute = 37;
-         int year = 2020;
-         int month = 6;
-         int dayOfMonth = 28;
-
-         closeSoftKeyboard();
-         Thread.sleep(500);
-         onView(withId(R.id.fab)).perform(click());
-         Thread.sleep(500);
-         onView(withId(R.id.create_todo_dialog))
-                 .check(matches(isDisplayed()));
-
-         onView(withId(R.id.create_todo_task_name_edit_text))
-                 .perform(typeText("New Task"), closeSoftKeyboard());
-
-         onView(withId(R.id.create_todo_time_btn)).perform(click());
-         Thread.sleep(500);
-         onView(withClassName(equalTo(
-                 TimePicker.class.getName()))).perform(setTime(hourOfDay, minute));
-         onView(withId(android.R.id.button1)).perform(click());
-
-         Thread.sleep(500);
-         onView(withId(R.id.create_todo_time_text))
-                 .check(matches(withText("4:37 PM")));
-
-         Thread.sleep(500);
-         onView(withId(R.id.create_todo_date_btn)).perform(click());
-         onView(withClassName(equalTo(
-                 DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
-         onView(withId(android.R.id.button1)).perform(click());
-
-         Thread.sleep(500);
-         onView(withId(R.id.create_todo_date_text))
-                 .check(matches(withText("6/28/20")));
-
-         Thread.sleep(500);
-         onView(withId(R.id.create_todo_notes_btn))
-                 .perform(click());
-
-         Thread.sleep(500);
-         onView(withId(R.id.create_todo_notes_text))
-                 .perform(typeText("About my new task"));
-
-         onView(withId(R.id.create_todo_finish_btn))
-                 .perform(click());
-
-         onView(withId(R.id.todo_list_recycler_view))
-                 .check(matches(isDisplayed()));
-
-         onView(withText("New Task"))
-                 .check(matches(withText("New Task")));
-
-         onView(withText("New Task"))
-                 .perform(click());
-
-         onView(withText("4:37 PM"))
-                 .check(matches(isDisplayed()));
-
-         onView(withText("Sunday, June 28, 2020"))
-                 .check(matches(isDisplayed()));
-
-         onView(withText("About my new task"))
-                 .check(matches(isDisplayed()));
-
-     }
-
-
-    /*
+       /*
         Tests whether tasks can be expanded from task name or not
      */
     @Test
