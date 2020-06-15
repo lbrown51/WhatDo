@@ -7,29 +7,45 @@ import android.widget.TimePicker;
 
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.format.TextStyle;
+import java.util.Locale;
+
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.pressKey;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.PickerActions.setDate;
 import static androidx.test.espresso.contrib.PickerActions.setTime;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withResourceName;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.ad340.whatdo.DialogTests.withRecyclerView;
+import static com.ad340.whatdo.MaterialDatePickerTestUtils.clickCancel;
+import static com.ad340.whatdo.MaterialDatePickerTestUtils.clickDayDatePicker;
+import static com.ad340.whatdo.MaterialDatePickerTestUtils.clickDayDateRangePicker;
+import static com.ad340.whatdo.MaterialDatePickerTestUtils.clickOk;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 
 
@@ -266,7 +282,8 @@ public class MainActivityTest {
                 .perform(click());
 
         try {
-            onView(withText(R.string.cancel)).perform(click());
+            onView(withText(R.string.cancel))
+                .check(matches(isDisplayed()));
         } catch (NoMatchingViewException e) {
             e.printStackTrace();
         }
@@ -294,7 +311,7 @@ public class MainActivityTest {
         Thread.sleep(500);
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.name_text))
-                .check(matches(not(withText("Second Todo"))));
+                .check(matches(not(withText("First Todo"))));
     }
 
     /*
@@ -340,20 +357,6 @@ public class MainActivityTest {
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.date_text))
                 .check(matches(withText("Sunday, June 28, 2020")));
-    }
-
-    /*
-        Tests whether tasks can be finished
-    */
-    @Test
-    public void canFinishTask() throws InterruptedException {
-        onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(1, R.id.todo_item_finished_checkbox))
-                .perform(click());
-
-        onView(withRecyclerView(R.id.todo_list_recycler_view)
-                .atPositionOnView(1, R.id.name_text))
-                .check(matches(withText("Fourth Todo")));
     }
 
     /*
@@ -445,4 +448,19 @@ public class MainActivityTest {
                 .atPositionOnView(0, R.id.notes_text))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
     }
+
+    /*
+    Tests whether tasks can be finished
+*/
+    @Test
+    public void canFinishTask() throws InterruptedException {
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(1, R.id.todo_item_finished_checkbox))
+                .perform(click());
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(1, R.id.name_text))
+                .check(matches(not(withText("Second Todo"))));
+    }
+    
 }
