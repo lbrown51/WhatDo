@@ -65,6 +65,7 @@ public class ViewByTest {
      */
     @Test
     public void datePickerDialogsOpenClose() {
+        closeSoftKeyboard();
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText("Single Day"))
             .perform(click());
@@ -102,6 +103,8 @@ Tests that the "viewing" bar updates
 */
     @Test
     public void viewingBarUpdatesDateRange() throws InterruptedException {
+        closeSoftKeyboard();
+        Thread.sleep(500);
         onView(withId(R.id.viewing_date_text)).check(matches(withText(R.string.all_upcoming)));
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         Thread.sleep(500);

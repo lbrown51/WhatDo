@@ -419,7 +419,9 @@ public class MainActivityTest {
     Tests that notes can be added and saved
     */
     @Test
-    public void notesWork() {
+    public void notesWork() throws InterruptedException {
+        closeSoftKeyboard();
+        Thread.sleep(500);
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.name_text))
                 .perform(click());
@@ -497,7 +499,6 @@ public class MainActivityTest {
 //        onView(withRecyclerView(R.id.todo_list_recycler_view)
 //                .atPositionOnView(0, R.id.tag_display))
 //                .check(matches(withText("maTestTag")));
-
     }
 
     /*

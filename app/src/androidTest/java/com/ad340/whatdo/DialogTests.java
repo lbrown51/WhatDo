@@ -337,9 +337,11 @@ public class DialogTests {
         onView(withId(R.id.fab)).perform(click());
         Thread.sleep(500);
         onView(withId(R.id.create_todo_date_btn)).perform(click());
+        Thread.sleep(500);
         onView(withClassName(Matchers.equalTo(
                 DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
         onView(withId(android.R.id.button3)).perform(click());
+        closeSoftKeyboard();
         Thread.sleep(500);
         onView(withId(R.id.chip_weekly)).perform(click());
         onView(withId(R.id.r_interval)).perform(typeText("4"));
