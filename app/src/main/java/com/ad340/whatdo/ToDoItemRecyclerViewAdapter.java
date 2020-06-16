@@ -67,10 +67,8 @@ public class ToDoItemRecyclerViewAdapter
             // date comes in as Date, need to change to string to update
             final boolean isExpanded = position==mExpandedPosition;
 
-            final StringBuilder recurString = new StringBuilder();
-
             // user sets date in DatePicker
-            final DatePickerDialog.OnDateSetListener date = onDateSetListener(todo, holder, listener, recurString);
+            final DatePickerDialog.OnDateSetListener date = onDateSetListener(todo, holder, listener);
 
             // user sets time in TimePicker
             final TimePickerDialog.OnTimeSetListener time = onTimeSetListener(todo, holder, listener);
@@ -90,7 +88,11 @@ public class ToDoItemRecyclerViewAdapter
 
             holder.toDoFinishedCheckbox.setOnClickListener(view -> {
                 try {
-                    mTodoViewModel.updateTodo(todo, "", Constants.COMPLETE);
+                    if (todo.getRecurrence().equals("N")) {
+                        mTodoViewModel.updateTodo(todo, "", Constants.COMPLETE);
+                    } else {
+
+                    }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

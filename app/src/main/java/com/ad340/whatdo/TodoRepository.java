@@ -74,6 +74,9 @@ public class TodoRepository {
             case Constants.TAG:
                 TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoTag(id, data));
                 break;
+            case Constants.RECUR:
+                TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoRecur(id, data));
+                break;
             default: // type not recognized
                 StringBuilder errMessage  = new StringBuilder("Data type of ")
                         .append(type).append(" not recognized.");

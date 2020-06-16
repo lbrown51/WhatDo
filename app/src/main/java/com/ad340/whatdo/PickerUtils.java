@@ -24,7 +24,7 @@ public class PickerUtils {
 
     public static DatePickerDialog.OnDateSetListener onDateSetListener ( // RecyclerViewAdapter
             Todo todo, ToDoItemRecyclerViewAdapter.ToDoItemViewHolder holder,
-            OnTodoInteractionListener listener, StringBuilder recurString) {
+            OnTodoInteractionListener listener) {
         return (view, year, monthOfYear, dayOfMonth) -> {
             setUserDate(year, monthOfYear, dayOfMonth);
 
@@ -34,17 +34,23 @@ public class PickerUtils {
             StringBuilder dateString = new StringBuilder(
                     DateFormat.getDateInstance(DateFormat.SHORT).format(c.getTime()));
             holder.toDoDate.setText(dateString);
+
             try {
                 listener.onUpdateTodo(todo, String.valueOf(dateString), Constants.DATE);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
 
-            recurString.setLength(0);
-            recurString.append(rEncoded);
             if (!rEncoded.equals(Constants.NO_RECURRENCE)) {
                 Log.i(TAG, "onDateSetListener: viewadapter");
                 Log.i(TAG, String.valueOf(holder.recurringIV.getVisibility()));
+
+                try {
+                    listener.onUpdateTodo(todo, rEncoded, Constants.RECUR);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
                 holder.recurringIV.setVisibility(View.VISIBLE);
             } else {
                 holder.recurringIV.setVisibility(View.INVISIBLE);
