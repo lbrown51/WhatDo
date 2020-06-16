@@ -112,6 +112,7 @@ public class DialogTests {
     @Test
     public void createNewTodoHasCorrectFields() throws InterruptedException {
         Thread.sleep(1000);
+        closeSoftKeyboard();
         onView(withId(R.id.fab)).perform(click());
         Thread.sleep(2000);
         onView(withId(R.id.create_todo_dialog))
@@ -139,8 +140,8 @@ public class DialogTests {
     */
     @Test
     public void emptyTaskStopsTodoCreate() throws InterruptedException {
-        Thread.sleep(1000);
         closeSoftKeyboard();
+        Thread.sleep(1000);
         onView(withId(R.id.fab)).perform(click());
         onView(withId(R.id.create_todo_dialog))
                 .check(matches(isDisplayed()));
@@ -304,6 +305,7 @@ public class DialogTests {
         int month = 8;
         int dayOfMonth = 14;
         closeSoftKeyboard();
+        Thread.sleep(500);
         onView(withId(R.id.fab)).perform(click());
         closeSoftKeyboard();
         Thread.sleep(500);
