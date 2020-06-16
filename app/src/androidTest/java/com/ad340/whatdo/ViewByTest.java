@@ -163,6 +163,9 @@ Tests that the "viewing" bar updates
         resetDateRange();
     }
 
+    /*
+        Tests that a tag filter can be applied to new todos and todos in the recyclerview
+    */
     @Test
     public void tagFilter() throws InterruptedException {
 
@@ -202,8 +205,8 @@ Tests that the "viewing" bar updates
         Thread.sleep(500);
         onView(allOf(withText("Test Task2"), withResourceName("name_text"), isDisplayed()))
                 .check(matches(withText("Test Task2")));
-        onView(allOf(withText("Third Todo"), withResourceName("name_text"), isDisplayed()))
-                .check(matches(withText("Third Todo")));
+        onView(allOf(withText("First Todo"), withResourceName("name_text"), isDisplayed()))
+                .check(matches(withText("First Todo")));
     }
 
     public static void resetDateRange() throws InterruptedException {

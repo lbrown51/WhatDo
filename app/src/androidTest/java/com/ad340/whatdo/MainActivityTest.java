@@ -336,6 +336,7 @@ public class MainActivityTest {
     @Test
     public void canRescheduleTask() throws InterruptedException {
         Thread.sleep(500);
+        closeSoftKeyboard();
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.name_text))
                 .perform(click());
@@ -450,8 +451,8 @@ public class MainActivityTest {
     }
 
     /*
-    Tests whether tasks can be finished
-*/
+        Tests whether tasks can be finished
+    */
     @Test
     public void canFinishTask() throws InterruptedException {
         onView(withRecyclerView(R.id.todo_list_recycler_view)
@@ -462,5 +463,26 @@ public class MainActivityTest {
                 .atPositionOnView(1, R.id.name_text))
                 .check(matches(not(withText("Second Todo"))));
     }
+
+    /*
+        Tests that an existing tag can be applied
+     */
+//    @Test
+//    public void addExisting() {
+//        onView(withRecyclerView(R.id.todo_list_recycler_view)
+//                .atPositionOnView(0, R.id.name_text))
+//                .perform(click());
+//        closeSoftKeyboard();
+//        onView(withRecyclerView(R.id.todo_list_recycler_view)
+//                .atPositionOnView(0, R.id.tag_btn))
+//                .perform(click());
+//        onView(withText("Add New Tag")).perform(click());
+//        onView(withId(R.id.add_tag_edit_text)).perform(typeText("maTestTag"), ViewActions.closeSoftKeyboard());
+//
+//    }
+
+    /*
+        Tests that a new tag can be applied
+     */
     
 }
