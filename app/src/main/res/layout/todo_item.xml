@@ -90,6 +90,18 @@
                 app:srcCompat="@drawable/ic_date_range_24dp" />
 
             <ImageButton
+                android:id="@+id/tag_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_16"
+                android:layout_marginBottom="@dimen/dp_8"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/tag_button_desc"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/time_btn"
+                app:srcCompat="@drawable/ic_outline_label_24" />
+
+            <ImageButton
                 android:id="@+id/reschedule_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -100,6 +112,20 @@
                 android:src="@drawable/ic_more_vert_24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/tag_display"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_16"
+                android:layout_marginBottom="@dimen/dp_8"
+                android:layout_marginEnd="@dimen/dp_16"
+                android:contentDescription="@string/tag_display_desc"
+                app:layout_constraintStart_toEndOf="@id/tag_btn"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/reschedule_btn"
+                android:textSize="20sp"
+                android:textColor="#000000" />
 
             <EditText
                 android:id="@+id/notes_text"

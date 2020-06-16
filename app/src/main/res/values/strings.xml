@@ -61,4 +61,6 @@
     <string name="weekly">weekly</string>
     <string name="todo_reoccurs">todo reoccurs</string>
     <string name="all_upcoming">all upcoming</string>
+    <string name="tag_button_desc">Tag Button</string>
+    <string name="tag_display_desc">tag display</string>
 </resources>

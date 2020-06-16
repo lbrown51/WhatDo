@@ -213,6 +213,7 @@ public class ToDoItemRecyclerViewAdapter
         ImageButton toDoDateButton;
         ImageButton toDoTimeButton;
         ImageButton toDoNotesButton;
+        ImageButton toDoTagButton;
         CheckBox toDoFinishedCheckbox;
         EditText toDoNotesText;
         ImageView recurringIV;
@@ -227,6 +228,7 @@ public class ToDoItemRecyclerViewAdapter
             rescheduleButton = itemView.findViewById(R.id.reschedule_btn);
             toDoDateButton = itemView.findViewById(R.id.date_btn);
             toDoTimeButton = itemView.findViewById(R.id.time_btn);
+            toDoTagButton = itemView.findViewById(R.id.tag_btn);
             toDoNotesButton = itemView.findViewById(R.id.notes_btn);
             toDoNotesText = itemView.findViewById(R.id.notes_text);
             recurringIV = itemView.findViewById(R.id.is_recurring);
