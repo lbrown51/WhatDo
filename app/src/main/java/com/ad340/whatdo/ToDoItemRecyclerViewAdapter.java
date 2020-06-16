@@ -115,15 +115,15 @@ public class ToDoItemRecyclerViewAdapter
             holder.toDoTagButton.setOnClickListener(view -> {
                 PopupMenu popupMenu = new PopupMenu(context, holder.toDoTagButton);
 
-                // add code for populating from tag DB
-
                 popupMenu.getMenu().add(Menu.NONE, 1, 1, "Add New Tag");
 
                 for (int i = 0; i < 5 && i < tags.size(); i++) {
                     popupMenu.getMenu().add(Menu.NONE, i + 1, i + 1, tags.get(i));
                 }
 
-                popupMenu.getMenu().add(Menu.NONE, tags.size() + 2, tags.size() + 2, "See All Tags");
+                if (tags.size() > 0) {
+                    popupMenu.getMenu().add(Menu.NONE, tags.size() + 2, tags.size() + 2, "See All Tags");
+                }
                 popupMenu.setOnMenuItemClickListener(item -> {
                     switch (item.getTitle().toString()) {
                         case "Add New Tag":

@@ -5,11 +5,14 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -18,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 import androidx.lifecycle.Observer;
@@ -28,7 +32,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -38,10 +41,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static androidx.fragment.app.DialogFragment.STYLE_NORMAL;
-import static com.ad340.whatdo.PickerUtils.setDatePicker;
 import static com.ad340.whatdo.PickerUtils.onDateSetListener;
 import static com.ad340.whatdo.PickerUtils.onTimeSetListener;
+import static com.ad340.whatdo.PickerUtils.setDatePicker;
 import static com.ad340.whatdo.PickerUtils.setTimePickerShowOnClick;
 
 public class MainActivity extends AppCompatActivity implements OnTodoInteractionListener {
@@ -164,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         dialog.show();
     }
 
-    public void launchSingleDatePicker(View rootView) {
+    public void launchSingleDatePicker() {
         //Single Date Picker
         MaterialDatePicker.Builder dateBuilder = MaterialDatePicker.Builder.datePicker();
         dateBuilder.setTitleText(R.string.view_by_picker_date_title);
@@ -172,9 +174,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
 
         datePicker.show(this.getSupportFragmentManager(), datePicker.toString());
 
-        datePicker.addOnCancelListener ((dialogInterface) -> {
-            dialogInterface.cancel();
-        });
+        datePicker.addOnCancelListener (DialogInterface::cancel);
         datePicker.addOnNegativeButtonClickListener ((view) -> {
             view.setVisibility(View.GONE);
         });
@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         date.set(Calendar.SECOND, date.getActualMaximum(Calendar.SECOND));
     }
 
-    public void launchDateRangePicker(View rootView) {
+    public void launchDateRangePicker() {
         //Date Range Picker
         MaterialDatePicker.Builder dateRangeBuilder = MaterialDatePicker.Builder.dateRangePicker();
         dateRangeBuilder.setTitleText(R.string.view_by_picker_date_range_title);
@@ -212,9 +212,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
 
         dateRangePicker.show(this.getSupportFragmentManager(), dateRangePicker.toString());
 
-        dateRangePicker.addOnCancelListener ((dialogInterface) -> {
-            dialogInterface.cancel();
-        });
+        dateRangePicker.addOnCancelListener (DialogInterface::cancel);
         dateRangePicker.addOnNegativeButtonClickListener ((view) -> {
             view.setVisibility(View.GONE);
         });
@@ -236,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         });
     }
 
-    public void allUpcomingHandler(View rootView) {
+    public void allUpcomingHandler() {
         Calendar start = Calendar.getInstance();
         Calendar end = Calendar.getInstance();
         setDateMinimum(start);
@@ -346,5 +344,37 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
     public void onPause() {
         mTodoViewModel.saveTags();
         super.onPause();
+    }
+
+    private void launchTagFilter() {
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.top_app_bar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Log.d(TAG, "onOptionsItemSelected: " + item.getItemId());
+        switch (item.getItemId()) {
+            case R.id.single_day:
+                launchSingleDatePicker();
+                return true;
+            case R.id.date_range_menu:
+                launchDateRangePicker();
+                return true;
+            case R.id.all_upcoming:
+                allUpcomingHandler();
+                return true;
+            case R.id.tag_filter:
+                launchTagFilter();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

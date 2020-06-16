@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/single_day"
+        android:title="@string/single_day_menu" />
+    <item
+        android:id="@+id/date_range_menu"
+        android:title="@string/date_range_menu" />
+    <item
+        android:id="@+id/all_upcoming"
+        android:title="@string/all_upcoming_menu" />
+    <item
+        android:id="@+id/tag_filter"
+        android:title="@string/tag_filter_menu" />
+</menu>
