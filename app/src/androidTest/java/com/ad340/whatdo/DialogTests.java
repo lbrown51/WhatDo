@@ -203,6 +203,7 @@ public class DialogTests {
         onView(withId(R.id.create_todo_finish_btn))
                 .perform(click());
 
+        Thread.sleep(500);
         onView(withId(R.id.todo_list_recycler_view))
                 .check(matches(isDisplayed()));
 
@@ -212,6 +213,7 @@ public class DialogTests {
         onView(withText("New Task"))
                 .perform(click());
 
+        Thread.sleep(500);
         onView(withText("4:37 PM"))
                 .check(matches(isDisplayed()));
 
