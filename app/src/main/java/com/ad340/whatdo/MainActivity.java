@@ -20,8 +20,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toolbar;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,11 +29,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -53,10 +49,8 @@ import static com.ad340.whatdo.PickerUtils.setTimePickerShowOnClick;
 public class MainActivity extends AppCompatActivity implements OnTodoInteractionListener, TagListener {
 
     private static final String TAG = MainActivity.class.getName();
-    private MaterialToolbar header;
     private TodoViewModel mTodoViewModel;
     ToDoItemRecyclerViewAdapter adapter;
-    public static final int NEW_TODO_ACTIVITY_REQUEST_CODE = 1;
     public FloatingActionButton fab;
     private TodoCalendar dateRange;
     private Calendar startDate;
@@ -116,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                 showCreateDialog();
             });
 
-        header = findViewById(R.id.top_app_bar);
+        MaterialToolbar header = findViewById(R.id.top_app_bar);
         header.setOverflowIcon(getDrawable(R.drawable.ic_baseline_more_horiz_24));
         setSupportActionBar(header);
         viewing = findViewById(R.id.viewing_date_text);
