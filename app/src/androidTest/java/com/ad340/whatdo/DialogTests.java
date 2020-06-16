@@ -170,7 +170,7 @@ public class DialogTests {
                 .check(matches(isDisplayed()));
 
         onView(withId(R.id.create_todo_task_name_edit_text))
-                .perform(typeText("New Task"), closeSoftKeyboard());
+                .perform(typeText("New Task3"), closeSoftKeyboard());
 
         onView(withId(R.id.create_todo_time_btn)).perform(click());
         Thread.sleep(500);
@@ -208,15 +208,12 @@ public class DialogTests {
         onView(withId(R.id.todo_list_recycler_view))
                 .check(matches(isDisplayed()));
 
-        onView(withText("New Task"))
-                .check(matches(withText("New Task")));
+        onView(withText("New Task3")).check(matches(withText("New Task3")));
 
-        onView(withText("New Task"))
-                .perform(click());
+        onView(withText("New Task3")).perform(click());
 
         Thread.sleep(500);
-        onView(withText("4:37 PM"))
-                .check(matches(isDisplayed()));
+        onView(withText("4:37 PM")).check(matches(isDisplayed()));
 
         onView(withText("Sunday, June 28, 2020"))
                 .check(matches(isDisplayed()));
@@ -235,10 +232,11 @@ public class DialogTests {
     @Test
     public void canOpenRecurringDialog() throws InterruptedException {
         closeSoftKeyboard();
-        Thread.sleep(500);
+        Thread.sleep(1000);
         onView(withId(R.id.fab)).perform(click());
         Thread.sleep(500);
         onView(withId(R.id.create_todo_date_btn)).perform(click());
+        Thread.sleep(500);
         onView(withId(android.R.id.button3)).perform(click());
         Thread.sleep(500);
         onView(withId(R.id.recurring_container)).check(matches(isDisplayed()));

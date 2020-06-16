@@ -473,8 +473,30 @@ public class MainActivityTest {
         Tests that an existing tag can be applied
      */
     @Test
-    public void addExistingTag() {
-
+    public void addNexistingTag() throws InterruptedException {
+//        closeSoftKeyboard();
+//        Thread.sleep(500);
+//        onView(withRecyclerView(R.id.todo_list_recycler_view)
+//                .atPositionOnView(0, R.id.name_text))
+//                .perform(click());
+//        closeSoftKeyboard();
+//        onView(withRecyclerView(R.id.todo_list_recycler_view)
+//                .atPositionOnView(0, R.id.tag_btn))
+//                .perform(click());
+//        onView(withText("Show All Tags")).perform(click());
+//        onView(withText("maTestTag")).perform(click());
+//        onView(withRecyclerView(R.id.todo_list_recycler_view)
+//                .atPositionOnView(0, R.id.tag_display))
+//                .check(matches(withText("maTestTag")));
+//
+//        closeSoftKeyboard();
+//        onView(withRecyclerView(R.id.todo_list_recycler_view)
+//                .atPositionOnView(0, R.id.tag_btn))
+//                .perform(click());
+//        onView(withText("maTestTag")).perform(click());
+//        onView(withRecyclerView(R.id.todo_list_recycler_view)
+//                .atPositionOnView(0, R.id.tag_display))
+//                .check(matches(withText("maTestTag")));
 
     }
 
@@ -493,8 +515,8 @@ public class MainActivityTest {
 //                .atPositionOnView(0, R.id.tag_btn))
 //                .perform(click());
 //        onView(withText("Add New Tag")).perform(click());
-//        onView(withId(R.id.add_tag_finish_btn)).perform(click());
 //        onView(withId(R.id.add_tag_edit_text)).perform(typeText("maTestTag"), ViewActions.closeSoftKeyboard());
+//        onView(withId(R.id.add_tag_finish_btn)).perform(click());
 //        onView(withRecyclerView(R.id.todo_list_recycler_view)
 //                .atPositionOnView(0, R.id.tag_display))
 //                .check(matches(withText("maTestTag")));
