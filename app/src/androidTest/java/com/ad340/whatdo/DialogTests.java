@@ -89,11 +89,19 @@ public class DialogTests {
     */
     @Test
     public void openCloseDialogWithBackKey() throws InterruptedException {
-        Thread.sleep(250);
-
+        // includes test originally made in emptyTaskStopsTodoCreate()
+        closeSoftKeyboard();
+        Thread.sleep(500);
         onView(withId(R.id.fab)).perform(click());
         onView(withId(R.id.create_todo_dialog))
                 .check(matches(isDisplayed()));
+
+        onView(withId(R.id.create_todo_finish_btn))
+                .perform(click());
+
+        onView(withId(R.id.create_todo_dialog))
+                .check(matches(isDisplayed()));
+
         pressKey(KeyEvent.KEYCODE_0);
         Espresso.pressBack();
         try {
@@ -138,19 +146,19 @@ public class DialogTests {
     /*
        Tests if empty tasks won't be created.
     */
-    @Test
-    public void emptyTaskStopsTodoCreate() throws InterruptedException {
-        closeSoftKeyboard();
-        Thread.sleep(1000);
-        onView(withId(R.id.fab)).perform(click());
-        onView(withId(R.id.create_todo_dialog))
-                .check(matches(isDisplayed()));
-
-        onView(withId(R.id.create_todo_finish_btn))
-                .perform(click());
-        onView(withId(R.id.create_todo_dialog))
-                .check(matches(isDisplayed()));
-    }
+//    @Test
+//    public void emptyTaskStopsTodoCreate() throws InterruptedException {
+//        closeSoftKeyboard();
+//        Thread.sleep(1000);
+//        onView(withId(R.id.fab)).perform(click());
+//        onView(withId(R.id.create_todo_dialog))
+//                .check(matches(isDisplayed()));
+//
+//        onView(withId(R.id.create_todo_finish_btn))
+//                .perform(click());
+//        onView(withId(R.id.create_todo_dialog))
+//                .check(matches(isDisplayed()));
+//    }
 
     /*
        Tests if new tasks can be created.
