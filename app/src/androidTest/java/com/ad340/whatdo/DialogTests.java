@@ -163,7 +163,7 @@ public class DialogTests {
         int dayOfMonth = 28;
 
         closeSoftKeyboard();
-        Thread.sleep(500);
+        Thread.sleep(1000);
         onView(withId(R.id.fab)).perform(click());
         Thread.sleep(500);
         onView(withId(R.id.create_todo_dialog))
@@ -303,6 +303,7 @@ public class DialogTests {
         int year = 2020;
         int month = 8;
         int dayOfMonth = 14;
+        closeSoftKeyboard();
         onView(withId(R.id.fab)).perform(click());
         closeSoftKeyboard();
         Thread.sleep(500);
@@ -322,6 +323,7 @@ public class DialogTests {
         onView(withText("8/14/20"))
                 .check(matches(isDisplayed()));
         onView(withId(R.id.create_todo_is_recurring)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        closeSoftKeyboard();
     }
 
     /*
