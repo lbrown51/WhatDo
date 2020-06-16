@@ -36,6 +36,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static androidx.fragment.app.DialogFragment.STYLE_NORMAL;
 import static com.ad340.whatdo.PickerUtils.setDatePicker;
 import static com.ad340.whatdo.PickerUtils.onDateSetListener;
 import static com.ad340.whatdo.PickerUtils.onTimeSetListener;
@@ -77,7 +78,6 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         });
 
         viewing = findViewById(R.id.viewing_date_text);
-        setSingleDateText(viewing);
 
         final Observer<List<Todo>> todoObserver = newTodos -> {
             if (newTodos == null || newTodos.size() <= 0) {
@@ -130,6 +130,11 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                 dateRange.getEndDate().get(Calendar.DAY_OF_MONTH),
                 dateRange.getEndDate().get(Calendar.YEAR)));
 
+        view.setText(displayText);
+    }
+
+    private void setAllUpcomingText(TextView view) {
+        StringBuilder displayText = new StringBuilder(getString(R.string.all_upcoming));
         view.setText(displayText);
     }
 
@@ -234,6 +239,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         Calendar end = Calendar.getInstance();
         setDateMinimum(start);
         end.add(Calendar.YEAR, 1000);
+        setAllUpcomingText(viewing);
         dateRange.setDateRange(start, end);
     }
 

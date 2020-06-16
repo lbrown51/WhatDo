@@ -41,7 +41,7 @@
                 android:layout_height="match_parent"
                 android:contentDescription="@string/viewing_date_text"
                 app:layout_constraintTop_toTopOf="parent"
-                android:text="@string/viewing_default_text"
+                android:text="@string/all_upcoming"
                 android:textAlignment="center"
                 android:textColor="@color/plusIcon"
                 android:textStyle="bold" />
