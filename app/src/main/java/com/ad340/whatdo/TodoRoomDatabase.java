@@ -72,7 +72,7 @@ public abstract class TodoRoomDatabase extends RoomDatabase {
                 todoDao.insert(todo);
                 todo = new Todo(null, "Second Todo", c, null, null, false, null, "N");
                 todoDao.insert(todo);
-                todo = new Todo(null, "Third Todo", c, null, null, false, null, "N");
+                todo = new Todo(null, "Third Todo", c, null, null, false, null, "RD10");
                 todoDao.insert(todo);
                 todo = new Todo(null, "Fourth Todo", c, null, null, false, null, "N");
                 todoDao.insert(todo);

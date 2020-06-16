@@ -368,7 +368,44 @@ public class DialogTests {
         onView(withId(R.id.r_interval)).check(matches(withText("3")));
     }
 
-    // uncomment when backend of recurring is done
+    /*
+        Tests if the recurring dialog confirms a weekly recurrence correctly
+    */
+    @Test
+    public void recurringDialogWeeklySubmitAndTodoSubmit() throws InterruptedException {
+        int year = 2020;
+        int month = 12;
+        int dayOfMonth = 13;
+        onView(withId(R.id.fab)).perform(click());
+        Thread.sleep(500);
+        onView(withId(R.id.create_todo_date_btn)).perform(click());
+        onView(withClassName(Matchers.equalTo(
+                DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
+        onView(withId(android.R.id.button3)).perform(click());
+        Thread.sleep(500);
+        onView(withId(R.id.chip_weekly)).perform(click());
+        onView(withId(R.id.r_interval)).perform(typeText("4"));
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.r_confirm_button)).perform(click());
+        onView(withId(android.R.id.button1)).perform(click());
+        onView(withText("12/13/20"))
+                .check(matches(isDisplayed()));
+
+
+        onView(withId(R.id.create_todo_task_name_edit_text))
+                .perform(typeText("New Task"), closeSoftKeyboard());
+
+        onView(withId(R.id.create_todo_finish_btn))
+                .perform(click());
+        onView(withId(R.id.todo_list_recycler_view))
+                .check(matches(isDisplayed()));
+        onView(withText("New Task"))
+                .check(matches(withText("New Task")));
+        onView(withText("New Task"))
+                .perform(click());
+
+    }
+
 //    @Test
 //    public void recurringDialogSetsIcon() throws InterruptedException {
 //        int year = 2020;
@@ -400,4 +437,93 @@ public class DialogTests {
 //                .atPositionOnView(0, R.id.is_recurring))
 //                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 //    }
+
+    @Test
+    public void recurringCheckRecurrenceDaily() throws InterruptedException {
+        int year = 2020;
+        int month = 12;
+        int dayOfMonth = 13;
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.name_text))
+                .perform(click());
+        closeSoftKeyboard();
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.is_recurring))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
+
+        Thread.sleep(500);
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.date_btn))
+                .perform(click());
+        onView(withClassName(Matchers.equalTo(
+                DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
+        onView(withId(android.R.id.button3)).perform(click());
+
+        Thread.sleep(500);
+        onView(withId(R.id.r_interval)).perform(typeText("30"));
+        onView(withId(R.id.r_confirm_button)).perform(click());
+        onView(withId(android.R.id.button1)).perform(click());
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.todo_item_finished_checkbox))
+                .perform(click());
+
+        onView(withText("First Todo"))
+                .check(matches(isDisplayed()));
+
+        onView(withText("Tuesday, January 12, 2021"))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void recurringCheckRecurrenceWeekly() throws InterruptedException {
+        int year = 2020;
+        int month = 12;
+        int dayOfMonth = 13;
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.name_text))
+                .perform(click());
+        closeSoftKeyboard();
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.is_recurring))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
+
+        Thread.sleep(500);
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.date_btn))
+                .perform(click());
+        onView(withClassName(Matchers.equalTo(
+                DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
+        onView(withId(android.R.id.button3)).perform(click());
+
+        Thread.sleep(500);
+        onView(withId(R.id.chip_weekly)).perform(click());
+        onView(withId(R.id.chip_tuesday)).perform(click());
+        onView(withId(R.id.chip_thursday)).perform(click());
+        onView(withId(R.id.r_interval)).perform(typeText("1"));
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.r_confirm_button)).perform(click());
+        onView(withId(android.R.id.button1)).perform(click());
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.todo_item_finished_checkbox))
+                .perform(click());
+
+        onView(withText("First Todo"))
+                .check(matches(isDisplayed()));
+
+        onView(withText("Tuesday, December 15, 2020"))
+                .check(matches(isDisplayed()));
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.todo_item_finished_checkbox))
+                .perform(click());
+
+        onView(withText("First Todo"))
+                .check(matches(isDisplayed()));
+        onView(withText("Thursday, December 17, 2020"))
+                .check(matches(isDisplayed()));
+    }
 }
