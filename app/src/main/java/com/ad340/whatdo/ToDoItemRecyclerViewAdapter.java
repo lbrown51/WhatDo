@@ -25,6 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static com.ad340.whatdo.PickerUtils.setDatePicker;
@@ -91,7 +93,44 @@ public class ToDoItemRecyclerViewAdapter
                     if (todo.getRecurrence().equals("N")) {
                         mTodoViewModel.updateTodo(todo, "", Constants.COMPLETE);
                     } else {
+                        String[] recurStringArr = todo.getRecurrence().split("");
 
+                        if (recurStringArr[1].equals("D")) {
+                            StringBuilder waitDurationStr = new StringBuilder();
+                            for (int i = 2; i < recurStringArr.length; i++) {
+                                waitDurationStr.append(recurStringArr[i]);
+                            }
+                            int waitDuration = Integer.parseInt(waitDurationStr.toString());
+                            Calendar newDueDate = todo.getDate();
+                            newDueDate.add(Calendar.DATE, waitDuration);
+                            mTodoViewModel.updateTodo(todo, newDueDate.toString(), Constants.DATE);
+                        } else {
+                            Calendar todoDate = todo.getDate();
+                            int todayOfWeek = todoDate.get(Calendar.DAY_OF_WEEK);
+                            int numWeeksToSkip = 1;
+
+                            int numDaysTillNext = 0;
+                            int indexDOW = 4;
+                            while (numDaysTillNext == 0) {
+                                if (todayOfWeek < Integer.parseInt(recurStringArr[indexDOW])) {
+                                    numDaysTillNext = Integer.parseInt(recurStringArr[indexDOW]) - todayOfWeek;
+                                } else {
+                                    if (indexDOW == recurStringArr.length - 1) {
+                                        numDaysTillNext = Integer.parseInt(recurStringArr[4]) + 7 - todayOfWeek;
+                                        numWeeksToSkip = Integer.parseInt(recurStringArr[2]);
+                                    }
+                                    else {
+                                        indexDOW += 1;
+                                    }
+                                }
+                            }
+
+                            todoDate.add(Calendar.DATE, 7 * (numWeeksToSkip - 1) + numDaysTillNext);
+                            String newDueDate = DateFormat.getDateInstance(DateFormat.SHORT).format(todoDate.getTime());
+
+                            mTodoViewModel.updateTodo(todo, newDueDate, Constants.DATE);
+
+                        }
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
