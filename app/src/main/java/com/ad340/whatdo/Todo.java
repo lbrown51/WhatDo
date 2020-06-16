@@ -39,6 +39,7 @@ public class Todo {
     @ColumnInfo(name = "tag")
     private String tag;
     public String getTag() { return this.tag; }
+    public void setTag(String tag) { this.tag = tag; }
 
     public Todo(Integer id, @NonNull String title, Calendar date, String time, String notes, Boolean isCompleted, String tag) {
         this.id = id;

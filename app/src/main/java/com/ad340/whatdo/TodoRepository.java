@@ -72,7 +72,10 @@ public class TodoRepository {
                 });
                 break;
             case Constants.TAG:
-                TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoTag(id, data));
+                TodoRoomDatabase.databaseWriteExecutor.execute(() -> {
+                        todoDao.updateTodoTag(id, data);
+                        handler.getTodosInRange(null);
+                });
                 break;
             default: // type not recognized
                 StringBuilder errMessage  = new StringBuilder("Data type of ")

@@ -31,11 +31,20 @@
         <TextView
             style="@style/TextAppearance.Datetime.Body"
             android:id="@+id/time_text"
-            android:layout_width="@dimen/match_constraint"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tag_display"
             app:layout_constraintStart_toEndOf="@id/todo_item_finished_checkbox"
             app:layout_constraintTop_toBottomOf="@id/name_text" />
+
+        <TextView
+            android:id="@+id/tag_display"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/time_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name_text" />
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/todo_detail"
@@ -43,7 +52,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/time_text">
+            app:layout_constraintTop_toBottomOf="@id/tag_display">
 
             <TextView
                 android:id="@+id/date_text"
@@ -112,20 +121,6 @@
                 android:src="@drawable/ic_more_vert_24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
-
-            <TextView
-                android:id="@+id/tag_display"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp_16"
-                android:layout_marginBottom="@dimen/dp_8"
-                android:layout_marginEnd="@dimen/dp_16"
-                android:contentDescription="@string/tag_display_desc"
-                app:layout_constraintStart_toEndOf="@id/tag_btn"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/reschedule_btn"
-                android:textSize="20sp"
-                android:textColor="#000000" />
 
             <EditText
                 android:id="@+id/notes_text"

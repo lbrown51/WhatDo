@@ -58,6 +58,8 @@ public class TodoViewModel extends AndroidViewModel implements TodoHandler{
 
     public void insert(Todo todo) { todoRepository.insert(todo);}
 
+    public void insertTag(Tag tag) { tagRepository.insert(tag);}
+
     public void updateTodo(Todo todo, String data, int type) throws ParseException { todoRepository.updateTodo(todo, data, type);
         Log.d(TAG, "updateTodo: viewmodel complete");
     }

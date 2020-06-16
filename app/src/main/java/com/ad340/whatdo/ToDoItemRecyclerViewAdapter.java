@@ -1,14 +1,19 @@
 package com.ad340.whatdo;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -79,6 +84,9 @@ public class ToDoItemRecyclerViewAdapter
             holder.toDoDate.setText(new StringBuilder(DateFormat.getDateInstance(DateFormat.FULL).format(todo.getDate().getTime())));
             holder.toDoTime.setText(todo.getTime());
             holder.toDoNotesText.setText(todo.getNotes());
+            if (todo.getTag() != null) {
+                holder.toDoTag.setText(todo.getTag());
+            }
             if (todo.getNotes() == null || todo.getNotes().equals("")) {
                 holder.toDoNotesText.setVisibility(View.GONE);
             } else {
@@ -102,6 +110,28 @@ public class ToDoItemRecyclerViewAdapter
                 updateWidgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
                 context.sendBroadcast(updateWidgetIntent);
                 notifyDataSetChanged();
+            });
+
+            holder.toDoTagButton.setOnClickListener(view -> {
+                PopupMenu popupMenu = new PopupMenu(context, holder.toDoTagButton);
+
+                // add code for populating from tag DB
+
+                popupMenu.getMenu().add(Menu.NONE, 1, 1, "Add New Tag");
+                popupMenu.setOnMenuItemClickListener(item -> {
+                    switch (item.getTitle().toString()) {
+                        case "Add New Tag":
+                            Log.d(TAG, "onBindViewHolder: add tag");
+                            showAddTodoDialog(view, todo);
+                            break;
+                        case "Grocery":
+                        default:
+                            break;
+                    }
+                    return false;
+                });
+                popupMenu.show();
+
             });
 
             holder.rescheduleButton.setOnClickListener(view -> {
@@ -173,6 +203,13 @@ public class ToDoItemRecyclerViewAdapter
                 notifyItemChanged(previousExpandedPosition);
                 notifyItemChanged(position);
             });
+
+            holder.toDoTag.setOnClickListener(v -> {
+                mExpandedPosition = isExpanded ? -1:position;
+                holder.toDoNotesText.setVisibility(View.GONE);
+                notifyItemChanged(previousExpandedPosition);
+                notifyItemChanged(position);
+            });
         }
     }
 
@@ -188,6 +225,40 @@ public class ToDoItemRecyclerViewAdapter
         this.todos = new ArrayList<>();
         this.todos.addAll(todos);
         notifyDataSetChanged();
+    }
+
+    void showAddTodoDialog(View view, Todo todo) {
+        final View tagView = View.inflate(context, R.layout.add_tag_dialog, null);
+        final Dialog dialog = new Dialog(context, android.R.style.Theme_DeviceDefault_NoActionBar_Overscan);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(tagView);
+
+        EditText tagEdit = dialog.findViewById(R.id.add_tag_edit_text);
+        Button addTag = dialog.findViewById(R.id.add_tag_finish_btn);
+        ImageButton tagClose = dialog.findViewById(R.id.close_tag_dialog);
+
+        tagClose.setOnClickListener((v) -> {
+            v.setVisibility(View.INVISIBLE);
+            dialog.dismiss();
+        });
+
+        addTag.setOnClickListener(v -> {
+//            Tag tag = new Tag(null, tagEdit.getText().toString());
+//            mTodoViewModel.insertTag(tag);
+            try {
+                mTodoViewModel.updateTodo(todo, tagEdit.getText().toString(), Constants.TAG);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            dialog.dismiss();
+//            tag = null;
+        });
+
+        tagClose.setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+
+        dialog.show();
     }
 
     void toggleNotes(EditText notesText) {
@@ -208,6 +279,7 @@ public class ToDoItemRecyclerViewAdapter
         TextView toDoTaskName;
         TextView toDoTime;
         TextView toDoDate;
+        TextView toDoTag;
         ConstraintLayout todoDetail;
         ImageButton rescheduleButton;
         ImageButton toDoDateButton;
@@ -223,6 +295,7 @@ public class ToDoItemRecyclerViewAdapter
             toDoTaskName = itemView.findViewById(R.id.name_text);
             toDoTime = itemView.findViewById(R.id.time_text);
             toDoDate = itemView.findViewById(R.id.date_text);
+            toDoTag = itemView.findViewById(R.id.tag_display);
             todoDetail = itemView.findViewById(R.id.todo_detail);
             toDoFinishedCheckbox = itemView.findViewById(R.id.todo_item_finished_checkbox);
             rescheduleButton = itemView.findViewById(R.id.reschedule_btn);
