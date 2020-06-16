@@ -272,8 +272,9 @@ public class MainActivityTest {
         Tests whether tasks have a Cancel option
     */
     @Test
-    public void hasCancelOption() {
+    public void hasCancelOption() throws InterruptedException {
         closeSoftKeyboard();
+        Thread.sleep(1000);
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.name_text))
                 .perform(click());
