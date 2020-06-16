@@ -2,6 +2,8 @@ package com.ad340.whatdo;
 
 import android.widget.DatePicker;
 
+import androidx.test.espresso.Espresso;
+import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -24,6 +26,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withResourceName;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static com.ad340.whatdo.DialogTests.withRecyclerView;
 import static com.ad340.whatdo.MaterialDatePickerTestUtils.clickCancel;
 import static com.ad340.whatdo.MaterialDatePickerTestUtils.clickDayDatePicker;
 import static com.ad340.whatdo.MaterialDatePickerTestUtils.clickDayDateRangePicker;
@@ -158,6 +161,51 @@ Tests that the "viewing" bar updates
                 .check(matches(withText("Test Task")));
         // go back to all upcoming (for other tests)
         resetDateRange();
+    }
+
+    /*
+        Tests that a tag filter can be applied to new todos and todos in the recyclerview
+    */
+    @Test
+    public void tagFilter() throws InterruptedException {
+
+        // add new todo
+        closeSoftKeyboard();
+        Thread.sleep(500);
+        onView(withId(R.id.fab)).perform(click());
+        Thread.sleep(500);
+        onView(withId(R.id.create_todo_task_name_edit_text))
+                .perform(typeText("Test Task2"), closeSoftKeyboard());
+
+        Thread.sleep(500);
+        onView(withId(R.id.create_todo_tag_btn)).perform(click());
+        Thread.sleep(500);
+        onView(withText("Add New Tag")).inRoot(RootMatchers.isPlatformPopup()).perform(click());
+        onView(withId(R.id.add_tag_edit_text)).perform(typeText("test tag2"), closeSoftKeyboard());
+        onView(withId(R.id.add_tag_finish_btn)).perform(click());
+        onView(withId(R.id.create_todo_finish_btn)).perform(click());
+
+        // add tag to an existing todo
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.name_text))
+                .perform(click());
+        closeSoftKeyboard();
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.tag_btn))
+                .perform(click());
+        onView(withText("test tag2"))
+                .perform(click());
+        // this will break in July - figure out how to change month
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+
+        Thread.sleep(500);
+        onView(withText("Tag Filter")).perform(click());
+        onView(withText("test tag2")).perform(click());
+
+        Thread.sleep(500);
+        onView(allOf(withText("Test Task2"), withResourceName("name_text"), isDisplayed()))
+                .check(matches(withText("Test Task2")));
+        onView(withText("Third Todo")).check(matches(isDisplayed()));
     }
 
     public static void resetDateRange() throws InterruptedException {

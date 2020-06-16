@@ -140,6 +140,7 @@ public class DialogTests {
     @Test
     public void emptyTaskStopsTodoCreate() throws InterruptedException {
         Thread.sleep(1000);
+        closeSoftKeyboard();
         onView(withId(R.id.fab)).perform(click());
         onView(withId(R.id.create_todo_dialog))
                 .check(matches(isDisplayed()));
@@ -281,8 +282,8 @@ public class DialogTests {
         int year = 2020;
         int month = 7;
         int dayOfMonth = 25;
-        Thread.sleep(500);
         closeSoftKeyboard();
+        Thread.sleep(1000);
         onView(withId(R.id.fab)).perform(click());
         Thread.sleep(500);
         onView(withId(R.id.create_todo_date_btn)).perform(click());
