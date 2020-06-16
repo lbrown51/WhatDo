@@ -140,6 +140,7 @@ public class DialogTests {
     @Test
     public void emptyTaskStopsTodoCreate() throws InterruptedException {
         Thread.sleep(1000);
+        closeSoftKeyboard();
         onView(withId(R.id.fab)).perform(click());
         onView(withId(R.id.create_todo_dialog))
                 .check(matches(isDisplayed()));
