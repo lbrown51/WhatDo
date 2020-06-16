@@ -273,6 +273,7 @@ public class MainActivityTest {
     */
     @Test
     public void hasCancelOption() {
+        closeSoftKeyboard();
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.name_text))
                 .perform(click());
@@ -319,6 +320,7 @@ public class MainActivityTest {
     */
     @Test
     public void hasRescheduleOption() {
+        closeSoftKeyboard();
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.name_text))
                 .perform(click());
@@ -369,6 +371,7 @@ public class MainActivityTest {
         int year = 2020;
         int month = 6;
         int dayOfMonth = 28;
+        closeSoftKeyboard();
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.name_text))
                 .perform(click());
@@ -455,6 +458,7 @@ public class MainActivityTest {
     */
     @Test
     public void canFinishTask() throws InterruptedException {
+        closeSoftKeyboard();
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(1, R.id.todo_item_finished_checkbox))
                 .perform(click());
@@ -467,8 +471,19 @@ public class MainActivityTest {
     /*
         Tests that an existing tag can be applied
      */
-//    @Test
-//    public void addExisting() {
+    @Test
+    public void addExistingTag() {
+
+
+    }
+
+    /*
+        Tests that a new tag can be applied
+     */
+    @Test
+    public void addNewTag() throws InterruptedException {
+//        closeSoftKeyboard();
+//        Thread.sleep(500);
 //        onView(withRecyclerView(R.id.todo_list_recycler_view)
 //                .atPositionOnView(0, R.id.name_text))
 //                .perform(click());
@@ -477,12 +492,11 @@ public class MainActivityTest {
 //                .atPositionOnView(0, R.id.tag_btn))
 //                .perform(click());
 //        onView(withText("Add New Tag")).perform(click());
+//        onView(withId(R.id.add_tag_finish_btn)).perform(click());
 //        onView(withId(R.id.add_tag_edit_text)).perform(typeText("maTestTag"), ViewActions.closeSoftKeyboard());
-//
-//    }
-
-    /*
-        Tests that a new tag can be applied
-     */
+//        onView(withRecyclerView(R.id.todo_list_recycler_view)
+//                .atPositionOnView(0, R.id.tag_display))
+//                .check(matches(withText("maTestTag")));
+    }
     
 }

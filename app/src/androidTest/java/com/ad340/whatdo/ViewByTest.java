@@ -205,8 +205,8 @@ Tests that the "viewing" bar updates
         Thread.sleep(500);
         onView(allOf(withText("Test Task2"), withResourceName("name_text"), isDisplayed()))
                 .check(matches(withText("Test Task2")));
-        onView(allOf(withText("First Todo"), withResourceName("name_text"), isDisplayed()))
-                .check(matches(withText("First Todo")));
+        onView(allOf(withText("Second Todo"), withResourceName("name_text"), isDisplayed()))
+                .check(matches(withText("Second Todo")));
     }
 
     public static void resetDateRange() throws InterruptedException {
