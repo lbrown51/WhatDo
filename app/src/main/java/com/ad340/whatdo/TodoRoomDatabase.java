@@ -14,7 +14,7 @@ import java.util.Calendar;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Todo.class}, version = 6, exportSchema = false)
+@Database(entities = {Todo.class}, version = 7, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class TodoRoomDatabase extends RoomDatabase {
 
@@ -66,17 +66,17 @@ public abstract class TodoRoomDatabase extends RoomDatabase {
                 Calendar c = Calendar.getInstance();
                 c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE));
 
-                Todo todo = new Todo(null, "First Todo", c, null, null, false, "");
+                Todo todo = new Todo(null, "First Todo", c, null, null, false, "", "N");
                 todoDao.insert(todo);
-                todo = new Todo(null, "Second Todo", c, null, null, false, "");
+                todo = new Todo(null, "Second Todo", c, null, null, false, "", "N");
                 todoDao.insert(todo);
-                todo = new Todo(null, "Third Todo", c, null, null, false, "");
+                todo = new Todo(null, "Third Todo", c, null, null, false, "", "N");
                 todoDao.insert(todo);
-                todo = new Todo(null, "Fourth Todo", c, null, null, false, "");
+                todo = new Todo(null, "Fourth Todo", c, null, null, false, "", "N");
                 todoDao.insert(todo);
-                todo = new Todo(null, "Fifth Todo", c, null, null, false, "");
+                todo = new Todo(null, "Fifth Todo", c, null, null, false, "", "N");
                 todoDao.insert(todo);
-                todo = new Todo(null, "Finished Todo", c, null, null, true, "");
+                todo = new Todo(null, "Finished Todo", c, null, null, true, "", "N");
                 todoDao.insert(todo);
 
                 Log.d(TAG, "onOpen: dummys made");
