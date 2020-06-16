@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
     private Calendar startDate;
     private Calendar endDate;
     private TextView viewing;
+    private StringBuilder recurString;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +107,8 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         header = findViewById(R.id.top_app_bar);
         header.setOnClickListener(view -> { showViewByDialog(); });
         viewing = findViewById(R.id.viewing_date_text);
+
+        recurString = new StringBuilder();
     }
 
     // EDIT TEXT BY VIEW BOUNDS
@@ -263,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         newTodoIsRecurring.setVisibility(View.INVISIBLE);
         EditText newTodoNotesText = dialog.findViewById(R.id.create_todo_notes_text);
 
-        final DatePickerDialog.OnDateSetListener date = onDateSetListener(dateString, dateText, newTodoIsRecurring);
+        final DatePickerDialog.OnDateSetListener date = onDateSetListener(dateString, dateText, newTodoIsRecurring, recurString);
         final TimePickerDialog.OnTimeSetListener time = onTimeSetListener(timeString, timeText);
 
         setDatePicker(this, newTodoDateButton, date);
@@ -293,7 +297,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                 }
                 Todo newTodo = new Todo(null, newTodoText, c,
                         String.valueOf(timeString), String.valueOf(newTodoNotesText.getText()),
-                        false, null);
+                        false, null, this.recurString.toString());
                 mTodoViewModel.insert(newTodo);
 
                 Intent updateWidgetIntent = new Intent(this, TodoListWidget.class);

@@ -67,8 +67,10 @@ public class ToDoItemRecyclerViewAdapter
             // date comes in as Date, need to change to string to update
             final boolean isExpanded = position==mExpandedPosition;
 
+            final StringBuilder recurString = new StringBuilder();
+
             // user sets date in DatePicker
-            final DatePickerDialog.OnDateSetListener date = onDateSetListener(todo, holder, listener);
+            final DatePickerDialog.OnDateSetListener date = onDateSetListener(todo, holder, listener, recurString);
 
             // user sets time in TimePicker
             final TimePickerDialog.OnTimeSetListener time = onTimeSetListener(todo, holder, listener);

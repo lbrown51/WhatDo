@@ -24,7 +24,7 @@ public class PickerUtils {
 
     public static DatePickerDialog.OnDateSetListener onDateSetListener ( // RecyclerViewAdapter
             Todo todo, ToDoItemRecyclerViewAdapter.ToDoItemViewHolder holder,
-            OnTodoInteractionListener listener) {
+            OnTodoInteractionListener listener, StringBuilder recurString) {
         return (view, year, monthOfYear, dayOfMonth) -> {
             setUserDate(year, monthOfYear, dayOfMonth);
 
@@ -39,6 +39,9 @@ public class PickerUtils {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+
+            recurString.setLength(0);
+            recurString.append(rEncoded);
             if (!rEncoded.equals(Constants.NO_RECURRENCE)) {
                 Log.i(TAG, "onDateSetListener: viewadapter");
                 Log.i(TAG, String.valueOf(holder.recurringIV.getVisibility()));
@@ -51,7 +54,7 @@ public class PickerUtils {
     }
 
     public static DatePickerDialog.OnDateSetListener onDateSetListener (  // MainActivity
-            StringBuilder dateString, TextView v, ImageView iv) {
+            StringBuilder dateString, TextView v, ImageView iv, StringBuilder recurString) {
         return (view, year, monthOfYear, dayOfMonth) -> {
             setUserDate(year, monthOfYear, dayOfMonth);
 
@@ -62,6 +65,9 @@ public class PickerUtils {
             // I changed this to DateFormat.SHORT format so I can parse it more easily
             dateString.append(DateFormat.getDateInstance(DateFormat.SHORT).format(c.getTime()));
             v.setText(dateString);
+
+            recurString.setLength(0);
+            recurString.append(rEncoded);
             if (!rEncoded.equals(Constants.NO_RECURRENCE)) {
                 iv.setVisibility(View.VISIBLE);
             }
