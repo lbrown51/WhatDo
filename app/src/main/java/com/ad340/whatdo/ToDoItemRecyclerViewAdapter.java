@@ -47,6 +47,7 @@ public class ToDoItemRecyclerViewAdapter
     private int mExpandedPosition = -1;
     private int previousExpandedPosition = -1;
     private OnTodoInteractionListener listener;
+    private ArrayList<String> tags;
 
 
     ToDoItemRecyclerViewAdapter(Context context) {
@@ -54,6 +55,7 @@ public class ToDoItemRecyclerViewAdapter
         listener = (OnTodoInteractionListener) this.context;
         mTodoViewModel = new ViewModelProvider((ViewModelStoreOwner) context)
                 .get(TodoViewModel.class);
+        tags = mTodoViewModel.getTags();
     }
 
     @NonNull
@@ -84,9 +86,7 @@ public class ToDoItemRecyclerViewAdapter
             holder.toDoDate.setText(new StringBuilder(DateFormat.getDateInstance(DateFormat.FULL).format(todo.getDate().getTime())));
             holder.toDoTime.setText(todo.getTime());
             holder.toDoNotesText.setText(todo.getNotes());
-            if (todo.getTag() != null) {
-                holder.toDoTag.setText(todo.getTag());
-            }
+            holder.toDoTag.setText(todo.getTag());
             if (todo.getNotes() == null || todo.getNotes().equals("")) {
                 holder.toDoNotesText.setVisibility(View.GONE);
             } else {
@@ -118,14 +118,27 @@ public class ToDoItemRecyclerViewAdapter
                 // add code for populating from tag DB
 
                 popupMenu.getMenu().add(Menu.NONE, 1, 1, "Add New Tag");
+
+                for (int i = 0; i < 5 && i < tags.size(); i++) {
+                    popupMenu.getMenu().add(Menu.NONE, i + 1, i + 1, tags.get(i));
+                }
+
+                popupMenu.getMenu().add(Menu.NONE, tags.size() + 2, tags.size() + 2, "See All Tags");
                 popupMenu.setOnMenuItemClickListener(item -> {
                     switch (item.getTitle().toString()) {
                         case "Add New Tag":
                             Log.d(TAG, "onBindViewHolder: add tag");
                             showAddTodoDialog(view, todo);
                             break;
-                        case "Grocery":
+                        case "See All Tags":
+                            break;
                         default:
+                            try {
+                                mTodoViewModel.updateTodo(todo, item.getTitle().toString(), Constants.TAG);
+                                mTodoViewModel.updateTag(item.getItemId() - 1);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
                             break;
                     }
                     return false;
@@ -243,15 +256,14 @@ public class ToDoItemRecyclerViewAdapter
         });
 
         addTag.setOnClickListener(v -> {
-//            Tag tag = new Tag(null, tagEdit.getText().toString());
-//            mTodoViewModel.insertTag(tag);
+            String tag = tagEdit.getText().toString();
+            mTodoViewModel.addTag(tag);
             try {
-                mTodoViewModel.updateTodo(todo, tagEdit.getText().toString(), Constants.TAG);
+                mTodoViewModel.updateTodo(todo, tag, Constants.TAG);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
             dialog.dismiss();
-//            tag = null;
         });
 
         tagClose.setOnClickListener(v -> {

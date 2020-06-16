@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -27,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -338,5 +340,11 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
     @Override
     public void emptyList() {
         adapter.emptyList();
+    }
+
+    @Override
+    public void onPause() {
+        mTodoViewModel.saveTags();
+        super.onPause();
     }
 }
