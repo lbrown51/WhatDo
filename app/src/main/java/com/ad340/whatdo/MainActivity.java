@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
     private MaterialToolbar header;
     private TodoViewModel mTodoViewModel;
     ToDoItemRecyclerViewAdapter adapter;
+    public static final int NEW_TODO_ACTIVITY_REQUEST_CODE = 1;
     public FloatingActionButton fab;
     private TodoCalendar dateRange;
     private Calendar startDate;
@@ -64,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
     private TextView viewing;
     TagListDialog tagListDialog;
     TagRecyclerAdapter tagAdapter;
+    private StringBuilder recurString;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +120,8 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         header.setOverflowIcon(getDrawable(R.drawable.ic_baseline_more_horiz_24));
         setSupportActionBar(header);
         viewing = findViewById(R.id.viewing_date_text);
+
+        recurString = new StringBuilder();
     }
 
     // EDIT TEXT BY VIEW BOUNDS
@@ -273,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         newTodoIsRecurring.setVisibility(View.INVISIBLE);
         EditText newTodoNotesText = dialog.findViewById(R.id.create_todo_notes_text);
 
-        final DatePickerDialog.OnDateSetListener date = onDateSetListener(dateString, dateText, newTodoIsRecurring);
+        final DatePickerDialog.OnDateSetListener date = onDateSetListener(dateString, dateText, newTodoIsRecurring, recurString);
         final TimePickerDialog.OnTimeSetListener time = onTimeSetListener(timeString, timeText);
 
         setDatePicker(this, newTodoDateButton, date);
@@ -334,7 +339,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
                 }
                 Todo newTodo = new Todo(null, newTodoText, c,
                         String.valueOf(timeString), String.valueOf(newTodoNotesText.getText()),
-                        false, String.valueOf(tagText.getText()));
+                        false, String.valueOf(tagText.getText()), this.recurString.toString());
                 mTodoViewModel.insert(newTodo);
 
                 Intent updateWidgetIntent = new Intent(this, TodoListWidget.class);

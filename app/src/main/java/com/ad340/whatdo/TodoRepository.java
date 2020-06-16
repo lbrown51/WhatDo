@@ -77,6 +77,9 @@ public class TodoRepository {
                         handler.getTodosInRange(null);
                 });
                 break;
+            case Constants.RECUR:
+                TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoRecur(id, data));
+                break;
             default: // type not recognized
                 StringBuilder errMessage  = new StringBuilder("Data type of ")
                         .append(type).append(" not recognized.");

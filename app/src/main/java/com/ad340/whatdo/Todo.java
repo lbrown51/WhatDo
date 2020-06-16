@@ -41,7 +41,16 @@ public class Todo {
     public String getTag() { return this.tag; }
     public void setTag(String tag) { this.tag = tag; }
 
-    public Todo(Integer id, @NonNull String title, Calendar date, String time, String notes, Boolean isCompleted, String tag) {
+    @ColumnInfo(name = "recurrence")
+    private String recurrence;
+    public String getRecurrence() { return this.recurrence; }
+
+    public Todo(
+            Integer id, @NonNull String title,
+            Calendar date, String time,
+            String notes, Boolean isCompleted,
+            String tag, String recurrence) {
+
         this.id = id;
         this.title = title;
         this.date = date;
@@ -49,5 +58,6 @@ public class Todo {
         this.notes = notes;
         this.isCompleted = isCompleted;
         this.tag = tag;
+        this.recurrence = recurrence;
     }
 }

@@ -55,4 +55,7 @@ public interface TodoDao {
 
     @Query("UPDATE todo_table SET isCompleted = 1 WHERE id = :id")
     void setTodoCompleted(int id);
+
+    @Query("UPDATE todo_table SET recurrence = :recurrence WHERE id = :id ")
+    void updateTodoRecur(int id, String recurrence);
 }
