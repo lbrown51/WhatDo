@@ -59,7 +59,6 @@
                 <Button
                     android:id="@+id/view_by_date"
                     android:text="Single Date"
-                    android:onClick="launchSingleDatePicker"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_height="@dimen/add_button_dimen"
                     android:layout_margin="@dimen/large_item_spacing"
@@ -68,7 +67,6 @@
                 <Button
                     android:id="@+id/view_by_date_range"
                     android:text="Date Range"
-                    android:onClick="launchDateRangePicker"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_height="@dimen/add_button_dimen"
                     android:layout_margin="@dimen/large_item_spacing"
@@ -81,7 +79,6 @@
                     android:layout_height="@dimen/add_button_dimen"
                     android:layout_marginHorizontal="@dimen/large_item_spacing"
                     android:layout_weight="1"
-                    android:onClick="allUpcomingHandler"
                     android:text="All Upcoming" />
 
             </LinearLayout>
