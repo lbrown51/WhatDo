@@ -26,8 +26,6 @@ public class TodoViewModel extends AndroidViewModel implements TodoHandler{
     LiveData<List<Todo>> allTodos;
     TodoCalendar currentRange;
     private TodoRepository todoRepository;
-    private TagRepository tagRepository;
-    private LiveData<List<Tag>> allTags;
     OnTodoInteractionListener emptyListHandler;
     private ArrayList<String> tags;
 
@@ -35,10 +33,10 @@ public class TodoViewModel extends AndroidViewModel implements TodoHandler{
         super(application);
         dateFilter = new MutableLiveData<>();
         todoRepository = new TodoRepository(application, this);
-        tagRepository = new TagRepository(application);
         allTodos = Transformations.switchMap(dateFilter, filter -> {
             if (!filter.getShowAll())
-                return todoRepository.getTodosInRange(filter.getStartDate(), filter.getEndDate(), filter.getIsCompleted());
+                {Log.d(TAG, "TodoViewModel: " + filter.getTag());
+                return todoRepository.getTodosInRange(filter.getStartDate(), filter.getEndDate(), filter.getIsCompleted(), filter.getTag());}
             else
                 return todoRepository.getAllTodosInRange(filter.getStartDate(), filter.getEndDate());
         });
@@ -61,8 +59,6 @@ public class TodoViewModel extends AndroidViewModel implements TodoHandler{
     public void setEmptyList() {
         emptyListHandler.emptyList();
     }
-
-    LiveData<List<Tag>> getAllTags() { return allTags; }
 
     public void insert(Todo todo) { todoRepository.insert(todo);}
 
@@ -101,8 +97,8 @@ public class TodoViewModel extends AndroidViewModel implements TodoHandler{
         return tags;
     }
 
-    public void updateTag(int tagPos) {
-        tags.add(0, tags.remove(tagPos));
+    public void updateTag(String tag) {
+        tags.add(0, tags.remove(tags.indexOf(tag)));
     }
 
 

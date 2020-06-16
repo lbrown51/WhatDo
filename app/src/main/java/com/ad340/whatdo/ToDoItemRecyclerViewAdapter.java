@@ -47,12 +47,14 @@ public class ToDoItemRecyclerViewAdapter
     private int mExpandedPosition = -1;
     private int previousExpandedPosition = -1;
     private OnTodoInteractionListener listener;
+    private TagListener tagListener;
     private ArrayList<String> tags;
 
 
     ToDoItemRecyclerViewAdapter(Context context) {
         this.context = context;
         listener = (OnTodoInteractionListener) this.context;
+        tagListener = (TagListener) this.context;
         mTodoViewModel = new ViewModelProvider((ViewModelStoreOwner) context)
                 .get(TodoViewModel.class);
         tags = mTodoViewModel.getTags();
@@ -115,27 +117,27 @@ public class ToDoItemRecyclerViewAdapter
             holder.toDoTagButton.setOnClickListener(view -> {
                 PopupMenu popupMenu = new PopupMenu(context, holder.toDoTagButton);
 
-                popupMenu.getMenu().add(Menu.NONE, 1, 1, "Add New Tag");
+                popupMenu.getMenu().add(Menu.NONE, 1, 1, R.string.add_new_tag);
 
                 for (int i = 0; i < 5 && i < tags.size(); i++) {
                     popupMenu.getMenu().add(Menu.NONE, i + 1, i + 1, tags.get(i));
                 }
 
                 if (tags.size() > 0) {
-                    popupMenu.getMenu().add(Menu.NONE, tags.size() + 2, tags.size() + 2, "See All Tags");
+                    popupMenu.getMenu().add(Menu.NONE, tags.size() + 2, tags.size() + 2, R.string.show_all_tags);
                 }
                 popupMenu.setOnMenuItemClickListener(item -> {
                     switch (item.getTitle().toString()) {
                         case "Add New Tag":
-                            Log.d(TAG, "onBindViewHolder: add tag");
                             showAddTodoDialog(view, todo);
                             break;
-                        case "See All Tags":
+                        case "Show All Tags":
+                            tagListener.launchAllTags(Constants.TAG_ADD, null, todo);
                             break;
                         default:
                             try {
                                 mTodoViewModel.updateTodo(todo, item.getTitle().toString(), Constants.TAG);
-                                mTodoViewModel.updateTag(item.getItemId() - 1);
+                                mTodoViewModel.updateTag(item.getTitle().toString());
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
@@ -271,6 +273,10 @@ public class ToDoItemRecyclerViewAdapter
         });
 
         dialog.show();
+    }
+
+    void showAllTags() {
+
     }
 
     void toggleNotes(EditText notesText) {

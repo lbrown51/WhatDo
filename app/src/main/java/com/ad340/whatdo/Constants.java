@@ -19,4 +19,8 @@ public class Constants {
     public static final int THURSDAY = 4;
     public static final int FRIDAY = 5;
     public static final int SATURDAY = 6;
+
+    public static final int TAG_FILTER = 1;
+    public static final int TAG_CREATE = 2;
+    public static final int TAG_ADD = 3;
 }

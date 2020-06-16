@@ -71,4 +71,12 @@
     <string name="all_upcoming_menu">All Upcoming</string>
     <string name="tag_filter_menu">Tag Filter</string>
     <string name="overflow_menu_icon">overflow menu icon</string>
+    <string name="top_menu_icon_btn">top menu icon</string>
+    <string name="show_all_tags">Show All Tags</string>
+    <string name="add_new_tag">Add New Tag</string>
+    <string name="tags_dialog_title">Tags</string>
+    <string name="all_tags">All Tags</string>
+    <string name="close_all_tags_dialog">close all tags dialog</string>
+    <string name="search_tags_hint">Search Tags</string>
+    <string name="tag_button_desc_create">Tag button</string>
 </resources>
