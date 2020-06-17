@@ -50,6 +50,7 @@ public class DialogTests {
  */
     @Test
     public void openCloseDialog() {
+        closeSoftKeyboard();
         onView(withId(R.id.fab)).perform(click());
         onView(withId(R.id.create_todo_dialog))
                 .check(matches(isDisplayed()));
@@ -70,6 +71,7 @@ public class DialogTests {
      */
     @Test
     public void openCloseDialogWithButton() {
+        closeSoftKeyboard();
         onView(withId(R.id.fab)).perform(click());
         onView(withId(R.id.create_todo_dialog))
                 .check(matches(isDisplayed()));
