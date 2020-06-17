@@ -498,6 +498,8 @@ public class DialogTests {
         int year = 2020;
         int month = 12;
         int dayOfMonth = 13;
+        closeSoftKeyboard();
+        Thread.sleep(500);
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.name_text))
                 .perform(click());
