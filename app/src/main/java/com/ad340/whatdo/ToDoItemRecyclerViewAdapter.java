@@ -1,14 +1,19 @@
 package com.ad340.whatdo;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -25,6 +30,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static com.ad340.whatdo.PickerUtils.setDatePicker;
@@ -42,13 +49,17 @@ public class ToDoItemRecyclerViewAdapter
     private int mExpandedPosition = -1;
     private int previousExpandedPosition = -1;
     private OnTodoInteractionListener listener;
+    private TagListener tagListener;
+    private ArrayList<String> tags;
 
 
     ToDoItemRecyclerViewAdapter(Context context) {
         this.context = context;
         listener = (OnTodoInteractionListener) this.context;
+        tagListener = (TagListener) this.context;
         mTodoViewModel = new ViewModelProvider((ViewModelStoreOwner) context)
                 .get(TodoViewModel.class);
+        tags = mTodoViewModel.getTags();
     }
 
     @NonNull
@@ -79,6 +90,7 @@ public class ToDoItemRecyclerViewAdapter
             holder.toDoDate.setText(new StringBuilder(DateFormat.getDateInstance(DateFormat.FULL).format(todo.getDate().getTime())));
             holder.toDoTime.setText(todo.getTime());
             holder.toDoNotesText.setText(todo.getNotes());
+            holder.toDoTag.setText(todo.getTag());
             if (todo.getNotes() == null || todo.getNotes().equals("")) {
                 holder.toDoNotesText.setVisibility(View.GONE);
             } else {
@@ -88,7 +100,48 @@ public class ToDoItemRecyclerViewAdapter
 
             holder.toDoFinishedCheckbox.setOnClickListener(view -> {
                 try {
-                    mTodoViewModel.updateTodo(todo, "", Constants.COMPLETE);
+                    if (todo.getRecurrence().equals("N")) {
+                        mTodoViewModel.updateTodo(todo, "", Constants.COMPLETE);
+                    } else {
+                        String[] recurStringArr = todo.getRecurrence().split("");
+
+                        if (recurStringArr[1].equals("D")) {
+                            StringBuilder waitDurationStr = new StringBuilder();
+                            for (int i = 2; i < recurStringArr.length; i++) {
+                                waitDurationStr.append(recurStringArr[i]);
+                            }
+                            int waitDuration = Integer.parseInt(waitDurationStr.toString());
+                            Calendar newDueDate = todo.getDate();
+                            newDueDate.add(Calendar.DATE, waitDuration);
+                            mTodoViewModel.updateTodo(todo, newDueDate.toString(), Constants.DATE);
+                        } else {
+                            Calendar todoDate = todo.getDate();
+                            int todayOfWeek = todoDate.get(Calendar.DAY_OF_WEEK);
+                            int numWeeksToSkip = 1;
+
+                            int numDaysTillNext = 0;
+                            int indexDOW = 4;
+                            while (numDaysTillNext == 0) {
+                                if (todayOfWeek < Integer.parseInt(recurStringArr[indexDOW])) {
+                                    numDaysTillNext = Integer.parseInt(recurStringArr[indexDOW]) - todayOfWeek;
+                                } else {
+                                    if (indexDOW == recurStringArr.length - 1) {
+                                        numDaysTillNext = Integer.parseInt(recurStringArr[4]) + 7 - todayOfWeek;
+                                        numWeeksToSkip = Integer.parseInt(recurStringArr[2]);
+                                    }
+                                    else {
+                                        indexDOW += 1;
+                                    }
+                                }
+                            }
+
+                            todoDate.add(Calendar.DATE, 7 * (numWeeksToSkip - 1) + numDaysTillNext);
+                            String newDueDate = DateFormat.getDateInstance(DateFormat.SHORT).format(todoDate.getTime());
+
+                            mTodoViewModel.updateTodo(todo, newDueDate, Constants.DATE);
+
+                        }
+                    }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -102,6 +155,41 @@ public class ToDoItemRecyclerViewAdapter
                 updateWidgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
                 context.sendBroadcast(updateWidgetIntent);
                 notifyDataSetChanged();
+            });
+
+            holder.toDoTagButton.setOnClickListener(view -> {
+                PopupMenu popupMenu = new PopupMenu(context, holder.toDoTagButton);
+
+                popupMenu.getMenu().add(Menu.NONE, 1, 1, R.string.add_new_tag);
+
+                for (int i = 0; i < 5 && i < tags.size(); i++) {
+                    popupMenu.getMenu().add(Menu.NONE, i + 1, i + 1, tags.get(i));
+                }
+
+                if (tags.size() > 0) {
+                    popupMenu.getMenu().add(Menu.NONE, tags.size() + 2, tags.size() + 2, R.string.show_all_tags);
+                }
+                popupMenu.setOnMenuItemClickListener(item -> {
+                    switch (item.getTitle().toString()) {
+                        case "Add New Tag":
+                            showAddTodoDialog(view, todo);
+                            break;
+                        case "Show All Tags":
+                            tagListener.launchAllTags(Constants.TAG_ADD, null, todo);
+                            break;
+                        default:
+                            try {
+                                mTodoViewModel.updateTodo(todo, item.getTitle().toString(), Constants.TAG);
+                                mTodoViewModel.updateTag(item.getTitle().toString());
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            break;
+                    }
+                    return false;
+                });
+                popupMenu.show();
+
             });
 
             holder.rescheduleButton.setOnClickListener(view -> {
@@ -173,6 +261,13 @@ public class ToDoItemRecyclerViewAdapter
                 notifyItemChanged(previousExpandedPosition);
                 notifyItemChanged(position);
             });
+
+            holder.toDoTag.setOnClickListener(v -> {
+                mExpandedPosition = isExpanded ? -1:position;
+                holder.toDoNotesText.setVisibility(View.GONE);
+                notifyItemChanged(previousExpandedPosition);
+                notifyItemChanged(position);
+            });
         }
     }
 
@@ -188,6 +283,43 @@ public class ToDoItemRecyclerViewAdapter
         this.todos = new ArrayList<>();
         this.todos.addAll(todos);
         notifyDataSetChanged();
+    }
+
+    void showAddTodoDialog(View view, Todo todo) {
+        final View tagView = View.inflate(context, R.layout.add_tag_dialog, null);
+        final Dialog dialog = new Dialog(context, android.R.style.Theme_DeviceDefault_NoActionBar_Overscan);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(tagView);
+
+        EditText tagEdit = dialog.findViewById(R.id.add_tag_edit_text);
+        Button addTag = dialog.findViewById(R.id.add_tag_finish_btn);
+        ImageButton tagClose = dialog.findViewById(R.id.close_tag_dialog);
+
+        tagClose.setOnClickListener((v) -> {
+            v.setVisibility(View.INVISIBLE);
+            dialog.dismiss();
+        });
+
+        addTag.setOnClickListener(v -> {
+            String tag = tagEdit.getText().toString();
+            mTodoViewModel.addTag(tag);
+            try {
+                mTodoViewModel.updateTodo(todo, tag, Constants.TAG);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            dialog.dismiss();
+        });
+
+        tagClose.setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
+    void showAllTags() {
+
     }
 
     void toggleNotes(EditText notesText) {
@@ -208,11 +340,13 @@ public class ToDoItemRecyclerViewAdapter
         TextView toDoTaskName;
         TextView toDoTime;
         TextView toDoDate;
+        TextView toDoTag;
         ConstraintLayout todoDetail;
         ImageButton rescheduleButton;
         ImageButton toDoDateButton;
         ImageButton toDoTimeButton;
         ImageButton toDoNotesButton;
+        ImageButton toDoTagButton;
         CheckBox toDoFinishedCheckbox;
         EditText toDoNotesText;
         ImageView recurringIV;
@@ -222,11 +356,13 @@ public class ToDoItemRecyclerViewAdapter
             toDoTaskName = itemView.findViewById(R.id.name_text);
             toDoTime = itemView.findViewById(R.id.time_text);
             toDoDate = itemView.findViewById(R.id.date_text);
+            toDoTag = itemView.findViewById(R.id.tag_display);
             todoDetail = itemView.findViewById(R.id.todo_detail);
             toDoFinishedCheckbox = itemView.findViewById(R.id.todo_item_finished_checkbox);
             rescheduleButton = itemView.findViewById(R.id.reschedule_btn);
             toDoDateButton = itemView.findViewById(R.id.date_btn);
             toDoTimeButton = itemView.findViewById(R.id.time_btn);
+            toDoTagButton = itemView.findViewById(R.id.tag_btn);
             toDoNotesButton = itemView.findViewById(R.id.notes_btn);
             toDoNotesText = itemView.findViewById(R.id.notes_text);
             recurringIV = itemView.findViewById(R.id.is_recurring);

@@ -50,6 +50,7 @@ public class DialogTests {
  */
     @Test
     public void openCloseDialog() {
+        closeSoftKeyboard();
         onView(withId(R.id.fab)).perform(click());
         onView(withId(R.id.create_todo_dialog))
                 .check(matches(isDisplayed()));
@@ -70,6 +71,7 @@ public class DialogTests {
      */
     @Test
     public void openCloseDialogWithButton() {
+        closeSoftKeyboard();
         onView(withId(R.id.fab)).perform(click());
         onView(withId(R.id.create_todo_dialog))
                 .check(matches(isDisplayed()));
@@ -89,11 +91,19 @@ public class DialogTests {
     */
     @Test
     public void openCloseDialogWithBackKey() throws InterruptedException {
-        Thread.sleep(250);
-
+        // includes test originally made in emptyTaskStopsTodoCreate()
+        closeSoftKeyboard();
+        Thread.sleep(500);
         onView(withId(R.id.fab)).perform(click());
         onView(withId(R.id.create_todo_dialog))
                 .check(matches(isDisplayed()));
+
+        onView(withId(R.id.create_todo_finish_btn))
+                .perform(click());
+
+        onView(withId(R.id.create_todo_dialog))
+                .check(matches(isDisplayed()));
+
         pressKey(KeyEvent.KEYCODE_0);
         Espresso.pressBack();
         try {
@@ -112,6 +122,7 @@ public class DialogTests {
     @Test
     public void createNewTodoHasCorrectFields() throws InterruptedException {
         Thread.sleep(1000);
+        closeSoftKeyboard();
         onView(withId(R.id.fab)).perform(click());
         Thread.sleep(2000);
         onView(withId(R.id.create_todo_dialog))
@@ -137,18 +148,19 @@ public class DialogTests {
     /*
        Tests if empty tasks won't be created.
     */
-    @Test
-    public void emptyTaskStopsTodoCreate() throws InterruptedException {
-        Thread.sleep(1000);
-        onView(withId(R.id.fab)).perform(click());
-        onView(withId(R.id.create_todo_dialog))
-                .check(matches(isDisplayed()));
-
-        onView(withId(R.id.create_todo_finish_btn))
-                .perform(click());
-        onView(withId(R.id.create_todo_dialog))
-                .check(matches(isDisplayed()));
-    }
+//    @Test
+//    public void emptyTaskStopsTodoCreate() throws InterruptedException {
+//        closeSoftKeyboard();
+//        Thread.sleep(1000);
+//        onView(withId(R.id.fab)).perform(click());
+//        onView(withId(R.id.create_todo_dialog))
+//                .check(matches(isDisplayed()));
+//
+//        onView(withId(R.id.create_todo_finish_btn))
+//                .perform(click());
+//        onView(withId(R.id.create_todo_dialog))
+//                .check(matches(isDisplayed()));
+//    }
 
     /*
        Tests if new tasks can be created.
@@ -162,14 +174,14 @@ public class DialogTests {
         int dayOfMonth = 28;
 
         closeSoftKeyboard();
-        Thread.sleep(500);
+        Thread.sleep(1000);
         onView(withId(R.id.fab)).perform(click());
         Thread.sleep(500);
         onView(withId(R.id.create_todo_dialog))
                 .check(matches(isDisplayed()));
 
         onView(withId(R.id.create_todo_task_name_edit_text))
-                .perform(typeText("New Task"), closeSoftKeyboard());
+                .perform(typeText("New Task3"), closeSoftKeyboard());
 
         onView(withId(R.id.create_todo_time_btn)).perform(click());
         Thread.sleep(500);
@@ -203,17 +215,16 @@ public class DialogTests {
         onView(withId(R.id.create_todo_finish_btn))
                 .perform(click());
 
+        Thread.sleep(500);
         onView(withId(R.id.todo_list_recycler_view))
                 .check(matches(isDisplayed()));
 
-        onView(withText("New Task"))
-                .check(matches(withText("New Task")));
+        onView(withText("New Task3")).check(matches(withText("New Task3")));
 
-        onView(withText("New Task"))
-                .perform(click());
+        onView(withText("New Task3")).perform(click());
 
-        onView(withText("4:37 PM"))
-                .check(matches(isDisplayed()));
+        Thread.sleep(500);
+        onView(withText("4:37 PM")).check(matches(isDisplayed()));
 
         onView(withText("Sunday, June 28, 2020"))
                 .check(matches(isDisplayed()));
@@ -232,10 +243,11 @@ public class DialogTests {
     @Test
     public void canOpenRecurringDialog() throws InterruptedException {
         closeSoftKeyboard();
-        Thread.sleep(500);
+        Thread.sleep(1000);
         onView(withId(R.id.fab)).perform(click());
         Thread.sleep(500);
         onView(withId(R.id.create_todo_date_btn)).perform(click());
+        Thread.sleep(500);
         onView(withId(android.R.id.button3)).perform(click());
         Thread.sleep(500);
         onView(withId(R.id.recurring_container)).check(matches(isDisplayed()));
@@ -279,8 +291,8 @@ public class DialogTests {
         int year = 2020;
         int month = 7;
         int dayOfMonth = 25;
-        Thread.sleep(500);
         closeSoftKeyboard();
+        Thread.sleep(1000);
         onView(withId(R.id.fab)).perform(click());
         Thread.sleep(500);
         onView(withId(R.id.create_todo_date_btn)).perform(click());
@@ -302,6 +314,8 @@ public class DialogTests {
         int year = 2020;
         int month = 8;
         int dayOfMonth = 14;
+        closeSoftKeyboard();
+        Thread.sleep(500);
         onView(withId(R.id.fab)).perform(click());
         closeSoftKeyboard();
         Thread.sleep(500);
@@ -321,6 +335,7 @@ public class DialogTests {
         onView(withText("8/14/20"))
                 .check(matches(isDisplayed()));
         onView(withId(R.id.create_todo_is_recurring)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        closeSoftKeyboard();
     }
 
     /*
@@ -334,9 +349,11 @@ public class DialogTests {
         onView(withId(R.id.fab)).perform(click());
         Thread.sleep(500);
         onView(withId(R.id.create_todo_date_btn)).perform(click());
+        Thread.sleep(500);
         onView(withClassName(Matchers.equalTo(
                 DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
         onView(withId(android.R.id.button3)).perform(click());
+        closeSoftKeyboard();
         Thread.sleep(500);
         onView(withId(R.id.chip_weekly)).perform(click());
         onView(withId(R.id.r_interval)).perform(typeText("4"));
@@ -368,7 +385,44 @@ public class DialogTests {
         onView(withId(R.id.r_interval)).check(matches(withText("3")));
     }
 
-    // uncomment when backend of recurring is done
+    /*
+        Tests if the recurring dialog confirms a weekly recurrence correctly
+    */
+    @Test
+    public void recurringDialogWeeklySubmitAndTodoSubmit() throws InterruptedException {
+        int year = 2020;
+        int month = 12;
+        int dayOfMonth = 13;
+        onView(withId(R.id.fab)).perform(click());
+        Thread.sleep(500);
+        onView(withId(R.id.create_todo_date_btn)).perform(click());
+        onView(withClassName(Matchers.equalTo(
+                DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
+        onView(withId(android.R.id.button3)).perform(click());
+        Thread.sleep(500);
+        onView(withId(R.id.chip_weekly)).perform(click());
+        onView(withId(R.id.r_interval)).perform(typeText("4"));
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.r_confirm_button)).perform(click());
+        onView(withId(android.R.id.button1)).perform(click());
+        onView(withText("12/13/20"))
+                .check(matches(isDisplayed()));
+
+
+        onView(withId(R.id.create_todo_task_name_edit_text))
+                .perform(typeText("New Task"), closeSoftKeyboard());
+
+        onView(withId(R.id.create_todo_finish_btn))
+                .perform(click());
+        onView(withId(R.id.todo_list_recycler_view))
+                .check(matches(isDisplayed()));
+        onView(withText("New Task"))
+                .check(matches(withText("New Task")));
+        onView(withText("New Task"))
+                .perform(click());
+
+    }
+
 //    @Test
 //    public void recurringDialogSetsIcon() throws InterruptedException {
 //        int year = 2020;
@@ -400,4 +454,95 @@ public class DialogTests {
 //                .atPositionOnView(0, R.id.is_recurring))
 //                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 //    }
+
+    @Test
+    public void recurringCheckRecurrenceDaily() throws InterruptedException {
+        int year = 2020;
+        int month = 12;
+        int dayOfMonth = 13;
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.name_text))
+                .perform(click());
+        closeSoftKeyboard();
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.is_recurring))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
+
+        Thread.sleep(500);
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.date_btn))
+                .perform(click());
+        onView(withClassName(Matchers.equalTo(
+                DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
+        onView(withId(android.R.id.button3)).perform(click());
+
+        Thread.sleep(500);
+        onView(withId(R.id.r_interval)).perform(typeText("30"));
+        onView(withId(R.id.r_confirm_button)).perform(click());
+        onView(withId(android.R.id.button1)).perform(click());
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.todo_item_finished_checkbox))
+                .perform(click());
+
+        onView(withText("First Todo"))
+                .check(matches(isDisplayed()));
+
+        onView(withText("Tuesday, January 12, 2021"))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void recurringCheckRecurrenceWeekly() throws InterruptedException {
+        int year = 2020;
+        int month = 12;
+        int dayOfMonth = 13;
+        closeSoftKeyboard();
+        Thread.sleep(500);
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.name_text))
+                .perform(click());
+        closeSoftKeyboard();
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.is_recurring))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
+
+        Thread.sleep(500);
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.date_btn))
+                .perform(click());
+        onView(withClassName(Matchers.equalTo(
+                DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
+        onView(withId(android.R.id.button3)).perform(click());
+
+        Thread.sleep(500);
+        onView(withId(R.id.chip_weekly)).perform(click());
+        onView(withId(R.id.chip_tuesday)).perform(click());
+        onView(withId(R.id.chip_thursday)).perform(click());
+        onView(withId(R.id.r_interval)).perform(typeText("1"));
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.r_confirm_button)).perform(click());
+        onView(withId(android.R.id.button1)).perform(click());
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.todo_item_finished_checkbox))
+                .perform(click());
+
+        onView(withText("First Todo"))
+                .check(matches(isDisplayed()));
+
+        onView(withText("Tuesday, December 15, 2020"))
+                .check(matches(isDisplayed()));
+
+        onView(withRecyclerView(R.id.todo_list_recycler_view)
+                .atPositionOnView(0, R.id.todo_item_finished_checkbox))
+                .perform(click());
+
+        onView(withText("First Todo"))
+                .check(matches(isDisplayed()));
+        onView(withText("Thursday, December 17, 2020"))
+                .check(matches(isDisplayed()));
+    }
 }

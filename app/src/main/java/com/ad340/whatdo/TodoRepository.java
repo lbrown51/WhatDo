@@ -22,9 +22,9 @@ public class TodoRepository {
         todoDao = db.todoDao();
     }
 
-    LiveData<List<Todo>> getTodosInRange(Calendar start, Calendar end, boolean isCompleted) {
+    LiveData<List<Todo>> getTodosInRange(Calendar start, Calendar end, boolean isCompleted, String tag) {
         Log.d(TAG, "getTodosInRange: " + start.getTime().toString() + " " + end.getTime().toString());
-        LiveData<List<Todo>> temp = todoDao.getTodosInRange(start, end, isCompleted);
+        LiveData<List<Todo>> temp = todoDao.getTodosInRange(start, end, isCompleted, tag);
         if (temp.getValue() == null)
             handler.setEmptyList();
         return temp;
@@ -72,7 +72,13 @@ public class TodoRepository {
                 });
                 break;
             case Constants.TAG:
-                TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoTag(id, data));
+                TodoRoomDatabase.databaseWriteExecutor.execute(() -> {
+                        todoDao.updateTodoTag(id, data);
+                        handler.getTodosInRange(null);
+                });
+                break;
+            case Constants.RECUR:
+                TodoRoomDatabase.databaseWriteExecutor.execute(() -> todoDao.updateTodoRecur(id, data));
                 break;
             default: // type not recognized
                 StringBuilder errMessage  = new StringBuilder("Data type of ")

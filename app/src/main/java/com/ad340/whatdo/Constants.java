@@ -8,6 +8,7 @@ public class Constants {
     public static final int NOTES = 4;
     public static final int COMPLETE = 5;
     public static final int TAG = 6;
+    public static final int RECUR = 7;
 
     public static final String TAG_RECURRING_FRAG = "recurringFragment";
     public static final String NO_RECURRENCE = "N";
@@ -19,4 +20,8 @@ public class Constants {
     public static final int THURSDAY = 4;
     public static final int FRIDAY = 5;
     public static final int SATURDAY = 6;
+
+    public static final int TAG_FILTER = 1;
+    public static final int TAG_CREATE = 2;
+    public static final int TAG_ADD = 3;
 }

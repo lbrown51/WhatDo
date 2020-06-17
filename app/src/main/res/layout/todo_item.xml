@@ -31,11 +31,20 @@
         <TextView
             style="@style/TextAppearance.Datetime.Body"
             android:id="@+id/time_text"
-            android:layout_width="@dimen/match_constraint"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tag_display"
             app:layout_constraintStart_toEndOf="@id/todo_item_finished_checkbox"
             app:layout_constraintTop_toBottomOf="@id/name_text" />
+
+        <TextView
+            android:id="@+id/tag_display"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/time_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name_text" />
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/todo_detail"
@@ -43,7 +52,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/time_text">
+            app:layout_constraintTop_toBottomOf="@id/tag_display">
 
             <TextView
                 android:id="@+id/date_text"
@@ -88,6 +97,18 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/notes_btn"
                 app:srcCompat="@drawable/ic_date_range_24dp" />
+
+            <ImageButton
+                android:id="@+id/tag_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_16"
+                android:layout_marginBottom="@dimen/dp_8"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/tag_button_desc"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/time_btn"
+                app:srcCompat="@drawable/ic_outline_label_24" />
 
             <ImageButton
                 android:id="@+id/reschedule_btn"
