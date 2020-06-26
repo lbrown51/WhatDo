@@ -10,7 +10,7 @@
         android:icon="@drawable/temp_app_icon"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_temp_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WhatDo">
         <receiver android:name=".TodoListWidget">
