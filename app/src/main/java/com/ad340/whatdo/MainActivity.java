@@ -259,6 +259,8 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         StringBuilder dateString = new StringBuilder();
         StringBuilder timeString = new StringBuilder();
 
+        //Date date = new Date();
+
         EditText newTodoEditText = dialog.findViewById(R.id.create_todo_task_name_edit_text);
         TextView dateText = dialog.findViewById(R.id.create_todo_date_text);
         TextView timeText = dialog.findViewById(R.id.create_todo_time_text);
@@ -271,6 +273,29 @@ public class MainActivity extends AppCompatActivity implements OnTodoInteraction
         ImageView newTodoIsRecurring = dialog.findViewById(R.id.create_todo_is_recurring);
         newTodoIsRecurring.setVisibility(View.INVISIBLE);
         EditText newTodoNotesText = dialog.findViewById(R.id.create_todo_notes_text);
+
+        // set time start, round up to next 30 minutes
+        Date defaultTime = new Date();
+        Calendar defaultCal = Calendar.getInstance();
+        defaultCal.setTime(defaultTime);
+        int hours = defaultCal.get(Calendar.HOUR_OF_DAY);
+        int minutes = defaultCal.get(Calendar.MINUTE);
+        minutes = (minutes / 30 + 1) * 30;
+        if (minutes == 60) {
+            hours++;
+            minutes = 0;
+        }
+        defaultCal.set(Calendar.HOUR_OF_DAY, hours);
+        defaultCal.set(Calendar.MINUTE, minutes);
+        SimpleDateFormat sdf = new SimpleDateFormat("h:mm a", Locale.US);
+        timeString.setLength(0);
+        timeString.append(sdf.format(defaultCal.getTime()));
+        timeText.setText(timeString);
+
+        // set date start, for continuity - this breaks it and prevents new todos from being added?
+//        dateString.setLength(0);
+//        dateString.append(DateFormat.getDateInstance(DateFormat.SHORT).format(defaultCal.getTime()));
+//        dateText.setText(dateString);
 
         final DatePickerDialog.OnDateSetListener date = onDateSetListener(dateString, dateText, newTodoIsRecurring, recurString);
         final TimePickerDialog.OnTimeSetListener time = onTimeSetListener(timeString, timeText);

@@ -17,7 +17,9 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class TodoViewModel extends AndroidViewModel implements TodoHandler{
 
@@ -88,10 +90,20 @@ public class TodoViewModel extends AndroidViewModel implements TodoHandler{
         if (tags == null) {
             tags = new ArrayList<>();
         }
+        removeDuplicates();
+    }
+
+    private void removeDuplicates() {
+        // turn tags into set to remove duplicates
+        Set<String> set = new LinkedHashSet<>();
+        set.addAll(tags);
+        tags.clear();
+        tags.addAll(set);
     }
 
     public void addTag(String tag) {
-        tags.add(0, tag);
+        if (!tags.contains(tag)) {
+            tags.add(0, tag); }
     }
 
     public ArrayList<String> getTags() {

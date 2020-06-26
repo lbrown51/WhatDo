@@ -34,6 +34,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
 
+// 14 tests
 public class DialogTests {
     @Rule
     public ActivityScenarioRule<MainActivity> activityScenarioRule =

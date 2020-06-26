@@ -48,7 +48,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 
-
+// 16 tests
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
 

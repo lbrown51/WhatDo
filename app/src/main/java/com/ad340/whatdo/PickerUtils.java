@@ -157,8 +157,17 @@ public class PickerUtils {
 
     private static void resetTime() {
         Calendar cTodayTime = Calendar.getInstance();
-        c.set(Calendar.HOUR_OF_DAY, cTodayTime.get(Calendar.HOUR_OF_DAY));
-        c.set(Calendar.MINUTE, cTodayTime.get(Calendar.MINUTE));
+        int minutes = cTodayTime.get(Calendar.MINUTE);
+        int hours = cTodayTime.get(Calendar.HOUR_OF_DAY);
+        // doesn't work
+        // round up to the next 15 minutes
+//        minutes = (minutes % 15 + 1) * 15;
+//        if (minutes == 60) {
+//            hours ++;
+//            minutes = 0;
+//        }
+        c.set(Calendar.HOUR_OF_DAY, hours);
+        c.set(Calendar.MINUTE, minutes);
     }
 
     private static void initDatePicker(Context context, DatePickerDialog.OnDateSetListener date) {
