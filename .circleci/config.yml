@@ -88,10 +88,6 @@ references:
 
 jobs:
 
-  # Make tests run in parallel
-  test:
-    parallelism: 4
-
   # Build debug APK for unit tests and an instrumented test APK
 
   build_debug:
@@ -140,6 +136,7 @@ jobs:
   # Run unit tests
 
   test_unit:
+    parallelism: 4
     <<: *android_config
     steps:
       - checkout
