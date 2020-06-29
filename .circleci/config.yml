@@ -136,7 +136,6 @@ jobs:
   # Run unit tests
 
   test_unit:
-    parallelism: 4
     <<: *android_config
     steps:
       - checkout
@@ -161,6 +160,7 @@ jobs:
   # Run instrumented tests
 
   test_instrumented:
+    parallelism: 4
     <<: *gcloud_config
     steps:
       - *attach_debug_workspace
