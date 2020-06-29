@@ -91,7 +91,6 @@ jobs:
   # Make tests run in parallel
   test:
     docker:
-      - image: circleci/<language>:<version TAG>
     parallelism: 4
 
   # Build debug APK for unit tests and an instrumented test APK
