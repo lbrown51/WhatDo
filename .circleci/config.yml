@@ -88,10 +88,6 @@ references:
 
 jobs:
 
-  # Make tests run in parallel
-  test:
-    parallelism: 4
-
   # Build debug APK for unit tests and an instrumented test APK
 
   build_debug:
