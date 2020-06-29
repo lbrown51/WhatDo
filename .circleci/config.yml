@@ -1,4 +1,4 @@
-  version: 2
+version: 2
 references:
 
   ## Cache
@@ -87,6 +87,10 @@ references:
       command: echo $GCLOUD_SERVICE_KEY | base64 -di > ${HOME}/client-secret.json
 
 jobs:
+
+  # Make tests run in parallel
+  test:
+    parallelism: 4
 
   # Build debug APK for unit tests and an instrumented test APK
 
