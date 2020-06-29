@@ -160,7 +160,7 @@ jobs:
   # Run instrumented tests
 
   test_instrumented:
-    parallelism: 6
+    parallelism: 8
     <<: *gcloud_config
     steps:
       - *attach_debug_workspace
