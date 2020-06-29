@@ -475,7 +475,7 @@ public class MainActivityTest {
         Tests that an existing tag can be applied
      */
     @Test
-    public void addNexistingTag() throws InterruptedException {
+    public void addNextExistingTag() throws InterruptedException {
 //        closeSoftKeyboard();
 //        Thread.sleep(500);
 //        onView(withRecyclerView(R.id.todo_list_recycler_view)

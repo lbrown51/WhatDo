@@ -34,6 +34,7 @@ import static com.ad340.whatdo.MaterialDatePickerTestUtils.clickOk;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 
+// 7 tests
 @RunWith(AndroidJUnit4.class)
 public class ViewByTest {
 
