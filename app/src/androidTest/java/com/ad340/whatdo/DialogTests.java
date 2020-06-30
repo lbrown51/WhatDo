@@ -72,8 +72,9 @@ public class DialogTests {
         and the x button in the dialog closes the dialog
      */
     @Test
-    public void openCloseDialogWithButton() {
+    public void openCloseDialogWithButton() throws InterruptedException {
         closeSoftKeyboard();
+        Thread.sleep(500);
         onView(withId(R.id.fab)).perform(click());
         onView(withId(R.id.create_todo_dialog))
                 .check(matches(isDisplayed()));
@@ -126,7 +127,7 @@ public class DialogTests {
         Thread.sleep(1000);
         closeSoftKeyboard();
         onView(withId(R.id.fab)).perform(click());
-        Thread.sleep(2000);
+        Thread.sleep(1000);
         onView(withId(R.id.create_todo_dialog))
                 .check(matches(isDisplayed()));
 
@@ -318,7 +319,7 @@ public class DialogTests {
         int month = 8;
         int dayOfMonth = 14;
         closeSoftKeyboard();
-        Thread.sleep(500);
+        Thread.sleep(1000);
         onView(withId(R.id.fab)).perform(click());
         closeSoftKeyboard();
         Thread.sleep(500);

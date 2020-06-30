@@ -352,15 +352,15 @@ public class MainActivityTest {
         onView(withText(R.string.reschedule)).perform(click());
 
         int year = 2020;
-        int month = 6;
-        int dayOfMonth = 28;
+        int month = 8;
+        int dayOfMonth = 29;
         onView(withClassName(Matchers.equalTo(
                 DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
         onView(withId(android.R.id.button1)).perform(click());
         Thread.sleep(500);
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.date_text))
-                .check(matches(withText("Sunday, June 28, 2020")));
+                .check(matches(withText("Saturday, August 29, 2020")));
     }
 
     /*
@@ -370,8 +370,8 @@ public class MainActivityTest {
     public void datePickerWorks() throws InterruptedException {
         Thread.sleep(1000);
         int year = 2020;
-        int month = 6;
-        int dayOfMonth = 28;
+        int month = 8;
+        int dayOfMonth = 29;
         closeSoftKeyboard();
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.name_text))
@@ -381,12 +381,13 @@ public class MainActivityTest {
                 .atPositionOnView(0, R.id.date_btn))
                 .perform(click());
 
+        closeSoftKeyboard();
         onView(withClassName(Matchers.equalTo(
                 DatePicker.class.getName()))).perform(setDate(year, month, dayOfMonth));
         onView(withId(android.R.id.button1)).perform(click());
         onView(withRecyclerView(R.id.todo_list_recycler_view)
                 .atPositionOnView(0, R.id.date_text))
-                .check(matches(withText("Sunday, June 28, 2020")));
+                .check(matches(withText("Saturday, August 29, 2020")));
     }
 
     /*

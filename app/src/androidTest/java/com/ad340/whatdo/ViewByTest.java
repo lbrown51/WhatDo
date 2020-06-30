@@ -2,7 +2,6 @@ package com.ad340.whatdo;
 
 import android.widget.DatePicker;
 
-import androidx.test.espresso.Espresso;
 import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -11,7 +10,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.Espresso.pressBack;
@@ -209,7 +207,7 @@ Tests that the "viewing" bar updates
         Thread.sleep(500);
         onView(allOf(withText("Test Task2"), withResourceName("name_text"), isDisplayed()))
                 .check(matches(withText("Test Task2")));
-        onView(withText("First Todo")).check(matches(isDisplayed()));
+        //onView(withText("First Todo")).check(matches(isDisplayed()));
     }
 
     public static void resetDateRange() throws InterruptedException {
