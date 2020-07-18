@@ -91,7 +91,7 @@ public class ViewByTest {
         clickDayDatePicker(testDay);
         Thread.sleep(500);
         clickOk();
-        onView(withId(R.id.viewing_date_text)).check(matches(withText("June 28, 2020")));
+        onView(withId(R.id.viewing_date_text)).check(matches(withText("July 28, 2020")));
 
         // go back to all upcoming (for other tests)
         resetDateRange();
@@ -110,12 +110,12 @@ Tests that the "viewing" bar updates
         int testDay = 12;
         onView(withText("Date Range")).perform(click());
         Thread.sleep(3000);
-        clickDayDateRangePicker(testDay, "June, 2020");
-        Thread.sleep(1500);
         clickDayDateRangePicker(testDay, "July, 2020");
+        Thread.sleep(1500);
+        clickDayDateRangePicker(testDay, "August, 2020");
         clickOk();
         onView(withId(R.id.viewing_date_text))
-                .check(matches(withText("June 12, 2020 to July 12, 2020")));
+                .check(matches(withText("July 12, 2020 to August 12, 2020")));
         // go back to all upcoming (for other tests)
         resetDateRange();
     }
@@ -126,7 +126,7 @@ Tests that the "viewing" bar updates
     @Test
     public void newTodosFilter() throws InterruptedException {
         int year = 2020;
-        int month = 6;
+        int month = 7;
         int dayOfMonth = 28;
 
         closeSoftKeyboard();
@@ -156,11 +156,9 @@ Tests that the "viewing" bar updates
 
         Thread.sleep(500);
         onView(allOf(
-                withText("Test Task"),
-                withResourceName("name_text"),
-                isDisplayed()
+                withText("Test Task")
                 ))
-                .check(matches(withText("Test Task")));
+                .check(matches(isDisplayed()));
         // go back to all upcoming (for other tests)
         resetDateRange();
     }
